@@ -1,4 +1,4 @@
-#include "stm32l476xx.h"
+#include "stm32l4xx.h"
 
 void delay(volatile unsigned dly)
 {
