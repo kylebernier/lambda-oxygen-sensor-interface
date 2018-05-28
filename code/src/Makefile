@@ -2,7 +2,7 @@ TARGET = main
 
 INCDIR = ../inc
 
-OBJS  = $(INCDIR)/startup_$(ARCH).o $(INCDIR)/system_stm32l4xx.o main.o
+OBJS  = $(INCDIR)/startup_$(ARCH).o $(INCDIR)/system_stm32l4xx.o main.o adc.o
 
 ARCH = stm32l476xx
 ARCH_DEF = STM32L476xx
