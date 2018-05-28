@@ -1,6 +1,6 @@
-#Lambda Oxygen Sensor Interface
+# Lambda Oxygen Sensor Interface
 
-##TODO
+## TODO
 
 * **UART Interface:** USART, UART, or LPUART - Page 1332 or 1400
 * **SPI Master:** Single Mode - Page 475
@@ -9,7 +9,7 @@
 * **PWM:** Timer PWM Mode - Page 1036
 
 
-##Other less important stuff
+## Other less important stuff
 
 * **VREFBUF:** 2.048V or 2.5V - Page 679
 * **OPAMPS:** Two internal, could be input impedance buffers - Page 694
