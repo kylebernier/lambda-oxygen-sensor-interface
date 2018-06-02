@@ -15,6 +15,8 @@
 #include "task.h"
 #include "timers.h"
 
+#include "adc.h"
+
 /* Simple delay, will use systick at some point */
 void delay(volatile unsigned delay)
 {
@@ -24,6 +26,8 @@ void delay(volatile unsigned delay)
 /* Main function */
 int main(void)
 {
+	int ADC_value = 0;
+
 	// Enable GPIOB
 	SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_GPIOBEN);
 	// Enable GPIOE
@@ -32,6 +36,8 @@ int main(void)
 	// Set GPIOB_2 and GPIOE_8 as outputs
 	MODIFY_REG(GPIOB->MODER, GPIO_MODER_MODE2, GPIO_MODER_MODE2_0);
 	MODIFY_REG(GPIOE->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
+
+	Init_ADC();
 
 	// Alternate blinking of two leds
 	while (1) {
@@ -50,6 +56,8 @@ int main(void)
 
 		// Delay a bit
 		delay(200000);
+
+		ADC_value = Read_ADC();
 	}
 }
 
