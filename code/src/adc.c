@@ -1,10 +1,12 @@
 #include "stm32l4xx.h"
 
-static void ADC_Wakeup(void);
+static void Wakeup_ADC(void);
 
 // Initializes the ADC to PA1
-void ADC_Init(void)
+void Init_ADC(void)
 {
+	SET_BIT(GPIOA->ASCR, GPIO_ASCR_EN_1);
+
 	// Enable ADC clock
 	SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_ADCEN);
 	
@@ -12,7 +14,7 @@ void ADC_Init(void)
 	CLEAR_BIT(ADC1->CR, ADC_CR_ADEN);
 	
 	// Enable I/O analog switches voltage booster
-	//SET_BIT(ADC123_COMMON->CCR, SYSCFG_CFGR1_BOOSTEN);
+	SET_BIT(ADC123_COMMON->CCR, SYSCFG_CFGR1_BOOSTEN);
 	
 	// Enable conversion of internal channels
 	SET_BIT(ADC123_COMMON->CCR, ADC_CCR_VREFEN);
@@ -27,7 +29,7 @@ void ADC_Init(void)
 	CLEAR_BIT(ADC123_COMMON->CCR, ADC_CCR_DUAL);
 	
 	// Wake up ADC
-	ADC_Wakeup();
+	Wakeup_ADC();
 	
 	// Configure RES bits to set resolution as 12 bits
 	CLEAR_BIT(ADC1->CFGR, ADC_CFGR_RES);
@@ -67,7 +69,7 @@ void ADC_Init(void)
 	SET_BIT(GPIOA->ASCR, GPIO_ASCR_EN_1);
 }
 
-static void ADC_Wakeup(void)
+static void Wakeup_ADC(void)
 {
 	int wait_time;
 	
@@ -76,13 +78,13 @@ static void ADC_Wakeup(void)
 	// DEEPPWD = 1: ADC in deep-power-down (default reset state)
 	if ((ADC1->CR & ADC_CR_DEEPPWD) == ADC_CR_DEEPPWD)
 		
-	ADC1->CR &= ~ADC_CR_DEEPPWD; // Exit deep power down mode if still in that state
+	CLEAR_BIT(ADC1->CR , ADC_CR_DEEPPWD); // Exit deep power down mode if still in that state
 	
 	// Enable the ADC internal voltage regulator
 	// Before performing any operation such as launching a calibration or enabling the ADC,
 	// the ADC voltage regulator must first be enabled and the software must wait for the
 	// regulator start-up time.
-	ADC1->CR |= ADC_CR_ADVREGEN;
+	SET_BIT(ADC1->CR, ADC_CR_ADVREGEN);
 	
 	// Wait for ADC voltage regulator start-up time
 	// The software must wait for the startup time of the ADC voltage regulator
@@ -92,4 +94,13 @@ static void ADC_Wakeup(void)
 	while(wait_time != 0) {
 		wait_time--;
 	}
+}
+
+int Read_ADC(void) {
+	// Start a ADC conversion
+	SET_BIT(ADC1->CR, ADC_CR_ADSTART);
+	// Wait for the conversion to complete
+	while ((ADC123_COMMON->CSR & ADC_CSR_EOC_MST) == 0);
+	// Return the ADC value
+	return ADC1->DR;
 }

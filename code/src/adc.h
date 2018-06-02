@@ -1,2 +1,2 @@
-void ADC_Init(void);
-
+void Init_ADC(void);
+int Read_ADC(void);
