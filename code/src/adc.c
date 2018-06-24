@@ -1,95 +1,74 @@
 #include "stm32l4xx.h"
+#include "stm32l4xx_hal.h"
 
-static void ADC_Wakeup(void);
+uint32_t ADC_CHANNELS[16] = {
+    ADC_CHANNEL_0,
+    ADC_CHANNEL_1,
+    ADC_CHANNEL_2,
+    ADC_CHANNEL_3,
+    ADC_CHANNEL_4,
+    ADC_CHANNEL_5,
+    ADC_CHANNEL_6,
+    ADC_CHANNEL_7,
+    ADC_CHANNEL_8,
+    ADC_CHANNEL_9,
+    ADC_CHANNEL_10,
+    ADC_CHANNEL_11,
+    ADC_CHANNEL_12,
+    ADC_CHANNEL_13,
+    ADC_CHANNEL_14,
+    ADC_CHANNEL_15
+};
+uint32_t ADC_RANKS[16] = {
+    ADC_REGULAR_RANK_1,
+    ADC_REGULAR_RANK_2,
+    ADC_REGULAR_RANK_3,
+    ADC_REGULAR_RANK_4,
+    ADC_REGULAR_RANK_5,
+    ADC_REGULAR_RANK_6,
+    ADC_REGULAR_RANK_7,
+    ADC_REGULAR_RANK_8,
+    ADC_REGULAR_RANK_9,
+    ADC_REGULAR_RANK_10,
+    ADC_REGULAR_RANK_11,
+    ADC_REGULAR_RANK_12,
+    ADC_REGULAR_RANK_13,
+    ADC_REGULAR_RANK_14,
+    ADC_REGULAR_RANK_15,
+    ADC_REGULAR_RANK_16
+};
 
-// Initializes the ADC to PA1
-void ADC_Init(void)
+void Init_ADC(
+    ADC_TypeDef * inst,
+    uint32_t channels,
+    uint32_t * values,
+    int numValues
+)
 {
-	// Enable ADC clock
-	SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_ADCEN);
-	
-	// Disable ADC1
-	CLEAR_BIT(ADC1->CR, ADC_CR_ADEN);
-	
-	// Enable I/O analog switches voltage booster
-	//SET_BIT(ADC123_COMMON->CCR, SYSCFG_CFGR1_BOOSTEN);
-	
-	// Enable conversion of internal channels
-	SET_BIT(ADC123_COMMON->CCR, ADC_CCR_VREFEN);
-	
-	// ADC Prescaler
-	SET_BIT(ADC123_COMMON->CCR, ADC_CCR_PRESC_0);
-	
-	// Set ADC clock mode as synchronous clock mode
-	SET_BIT(ADC123_COMMON->CCR, ADC_CCR_CKMODE_0);
-	
-	// Configure all ADCs as independent
-	CLEAR_BIT(ADC123_COMMON->CCR, ADC_CCR_DUAL);
-	
-	// Wake up ADC
-	ADC_Wakeup();
-	
-	// Configure RES bits to set resolution as 12 bits
-	CLEAR_BIT(ADC1->CFGR, ADC_CFGR_RES);
-	
-	// Select right alignment
-	CLEAR_BIT(ADC1->CFGR, ADC_CFGR_ALIGN);
-	
-	// Select 1 conversion in regular channel conversion sequence
-	CLEAR_BIT(ADC1->SQR1, ADC_SQR1_L);
-	
-	// Specify channel 6 as the 1st conversion in regular sequence
-	SET_BIT(ADC1->SQR1, ADC_SQR1_SQ1_1);
-	SET_BIT(ADC1->SQR1, ADC_SQR1_SQ1_2);
-	
-	// Configure channel 6 as single-ended
-	SET_BIT(ADC1->DIFSEL, ADC_DIFSEL_DIFSEL);
+    int i, j;
+    ADC_HandleTypeDef hadc;
+    ADC_ChannelConfTypeDef sConfig;
 
-	// Select ADC sample time
-	// Must allow input voltage to charge embedded capacitor
-	CLEAR_BIT(ADC1->SMPR1, ADC_SMPR1_SMP6);
-	SET_BIT(ADC1->SMPR1, ADC_SMPR1_SMP6_0);
-	SET_BIT(ADC1->SMPR1, ADC_SMPR1_SMP6_1);
-	
-	// Select ADC as discontinuous mode
-	CLEAR_BIT(ADC1->CFGR, ADC_CFGR_CONT);
-	
-	// Select software trigger
-	CLEAR_BIT(ADC1->CFGR, ADC_CFGR_EXTEN);
-	
-	// Enable ADC1
-	SET_BIT(ADC1->CR, ADC_CR_ADEN);
-	
-	// Wait until ADC1 is ready
-	while ((ADC1->ISR & (uint32_t) ADC_ISR_ADRDY) == 0);
-	
-	// Connects PA1 to ADC
-	SET_BIT(GPIOA->ASCR, GPIO_ASCR_EN_1);
-}
+    hadc.Instance = inst;
+    hadc.Init.ScanConvMode = ADC_SCAN_ENABLE;
+    hadc.Init.ContinuousConvMode = ENABLE;
+    hadc.Init.DiscontinuousConvMode = DISABLE;
+    hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    hadc.Init.NbrOfDiscConversion = 0;
+    hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    hadc.Init.NbrOfConversion = 2;
 
-static void ADC_Wakeup(void)
-{
-	int wait_time;
-	
-	// To start ADC operations, the following sequence should be applied
-	// DEEPPWD = 0: ADC not in deep-power down
-	// DEEPPWD = 1: ADC in deep-power-down (default reset state)
-	if ((ADC1->CR & ADC_CR_DEEPPWD) == ADC_CR_DEEPPWD)
-		
-	ADC1->CR &= ~ADC_CR_DEEPPWD; // Exit deep power down mode if still in that state
-	
-	// Enable the ADC internal voltage regulator
-	// Before performing any operation such as launching a calibration or enabling the ADC,
-	// the ADC voltage regulator must first be enabled and the software must wait for the
-	// regulator start-up time.
-	ADC1->CR |= ADC_CR_ADVREGEN;
-	
-	// Wait for ADC voltage regulator start-up time
-	// The software must wait for the startup time of the ADC voltage regulator
-	// (T_ADCVREG_STUP, i.e. 20 us) before launching a calibration or enabling the ADC.
-	wait_time = 20 * (80000000 / 1000000);
-	
-	while(wait_time != 0) {
-		wait_time--;
-	}
+    sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+
+    for (i = 0; i < 12; i++) {
+        if (channels & (1 << i)) {
+            sConfig.Channel = ADC_CHANNELS[i];
+            sConfig.Rank = ADC_RANKS[j];
+            HAL_ADC_ConfigChannel(&hadc, &sConfig);
+            j++;
+        }
+        if (j == numValues) break;
+    }
+
+    HAL_ADC_Start_DMA(&hadc, values, numValues);
 }
