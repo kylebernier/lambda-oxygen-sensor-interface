@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/usr/include",
+                "/usr/local/include",
+                "${workspaceRoot}",
+                "${workspaceFolder}/lib/cmsis/device",
+                "${workspaceFolder}/lib/cmsis/inc",
+                "${workspaceFolder}/lib/hal/inc",
+                "${workspaceFolder}/lib/freertos/include",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/lib/freertos/portable"
+            ],
+            "defines": [
+                "STM32L476xx"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/local/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}

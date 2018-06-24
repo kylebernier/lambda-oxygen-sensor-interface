@@ -1,17 +1,17 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"preLaunchTask": "make",
-			"cwd": "${workspaceRoot}",
-			"executable": "./bin/main.elf",
-			"name": "Debug STM32L4",
-			"request": "launch",
-			"type": "cortex-debug",
-			"servertype": "openocd",
-			"configFiles": [
-				"openocd.cfg"
-			]
-		}
-	],
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "preLaunchTask": "make",
+            "cwd": "${workspaceRoot}",
+            "executable": "./bin/main.elf",
+            "name": "Debug STM32L4",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": [
+                "openocd.cfg"
+            ]
+        }
+    ],
 }
