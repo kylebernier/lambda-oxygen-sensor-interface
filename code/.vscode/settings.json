@@ -1,8 +1,14 @@
 {
-	"editor.insertSpaces": false,
-	"editor.renderWhitespace": "all",
-	"editor.rulers": [80],
-	"editor.wordWrap": "wordWrapColumn",
-	"editor.wrappingIndent": "same",
-	"editor.wordWrapColumn": 80,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [80],
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wrappingIndent": "same",
+    "editor.wordWrapColumn": 80,
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "semphr.h": "c"
+    },
 }
