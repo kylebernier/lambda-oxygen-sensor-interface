@@ -3,18 +3,23 @@
  * @author Kyle Bernier and Daeghan Elkin
  * @date 2018 May 27
  * 
- * @brief Blinks an led at the moment. Using macros to increase readability.
+ * @brief Blinks an led and updates variables with the ADC.
  *        Has basic functions to us FreeRTOS
  *
  */
 
-#include "FreeRTOS.h"
-#include "queue.h"
-#include "semphr.h"
-#include "task.h"
-#include "timers.h"
 
 #include "stm32l4xx.h"
+#include "stm32l4xx_hal.h"
+
+#include "adc.h"
+
+
+void SystemClock_Config(void);
+
+
+uint32_t aResultDMA[3];
+
 
 /* Simple delay, will use systick at some point */
 void delay(volatile unsigned delay)
@@ -22,9 +27,14 @@ void delay(volatile unsigned delay)
     while (delay--);
 }
 
-/* Main function */
 int main(void)
 {
+    HAL_Init();
+
+    SystemClock_Config();
+
+    Init_ADC(0xE0, (uint32_t *)aResultDMA, 3);
+
     // Enable GPIOB
     SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_GPIOBEN);
     // Enable GPIOE
@@ -54,89 +64,72 @@ int main(void)
     }
 }
 
-
-/* Stuff for FreeRTOS (Not Used Yet)*/
-static xSemaphoreHandle xEventSemaphore = NULL;
-
-void vApplicationTickHook( void )
+/**
+ * @brief  System Clock Configuration
+ * 
+ * Hummels Config to give 80 MHz SYSCLK, with PLL48M1CLK=48 MHz
+ *         The system Clock is configured as follows :
+ *            System Clock source            = PLL (MSI)
+ *            SYSCLK(Hz)                     = 80000000
+ *            HCLK(Hz)                       = 80000000
+ *            AHB Prescaler                  = 1
+ *            APB1 Prescaler                 = 1
+ *            APB2 Prescaler                 = 1
+ *            MSI Frequency(Hz)              = 16000000 (MSI Range=8) 
+ *            PLL_M                          = 2
+ *            PLL_N                          = 20
+ *            PLL_R                          = 2 ( SYSCLK = PLLCLK = (16MHz)*N/M/R = 80 MHz )
+ *            PLL_P                          = 7 (No reason for this...)
+ *            PLL_Q                          = 5 ( PLL48M1CLK = (16MHz)(N/M/Q) = 32 MHz ?! )
+ *            Flash Latency(WS)              = 4
+ * 
+ * HSE: Not assumed active (xtal not populated on STM32L476G-Discovery)
+ * MSI: 16 MHz (multiple speed internal RC Oscillator, configured using Range=8)
+ * HSI: 16 MHz (Fixed frequency high speed internal Oscillator)
+ * LSI: 32.768 kHz (Low freq internal oscillator)
+ *    ( MSI *N/M = 160 MHz )
+ * SYSCLK: 80 MHz  (= 160/R)
+ * HCLK (AHB Bus, Core, Memory, and DMA): 80 MHz (Max value)
+ * PCLK1 (APB1 Periferals, some USARTs and Timers): 80 MHz (Max value)
+ * PCLK2 (APB2 Periferals, some USARTs and Timers): 80 MHz (Max value)
+ * 
+ * (ALTERNATIVE???  Use the HSI as the reference oscillator.  Change N to 15.)
+ * 
+ * @param  None
+ * @retval None
+ */
+void SystemClock_Config(void)
 {
-    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-    static uint32_t ulCount = 0;
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
-    /* The RTOS tick hook function is enabled by setting configUSE_TICK_HOOK to
-    1 in FreeRTOSConfig.h.
+    /* MSI is enabled after System reset, activate PLL with MSI as source */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
+    RCC_OscInitStruct.MSIState = RCC_MSI_ON;
+    RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_8;
+    RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
 
-    "Give" the semaphore on every 500th tick interrupt. */
-    ulCount++;
-    if( ulCount >= 500UL )
-    {
-        /* This function is called from an interrupt context (the RTOS tick
-        interrupt),	so only ISR safe API functions can be used (those that end
-        in "FromISR()".
-
-        xHigherPriorityTaskWoken was initialised to pdFALSE, and will be set to
-        pdTRUE by xSemaphoreGiveFromISR() if giving the semaphore unblocked a
-        task that has equal or higher priority than the interrupted task.
-        http://www.freertos.org/a00124.html */
-        xSemaphoreGiveFromISR( xEventSemaphore, &xHigherPriorityTaskWoken );
-        ulCount = 0UL;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
+    RCC_OscInitStruct.PLL.PLLM = 2;
+    RCC_OscInitStruct.PLL.PLLN = 20; 
+    RCC_OscInitStruct.PLL.PLLR = 2;  
+    RCC_OscInitStruct.PLL.PLLP = 7;
+    RCC_OscInitStruct.PLL.PLLQ = 5;
+    if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+        /* Initialization Error */
+        while(1);
     }
 
-    /* If xHigherPriorityTaskWoken is pdTRUE then a context switch should
-    normally be performed before leaving the interrupt (because during the
-    execution of the interrupt a task of equal or higher priority than the
-    running task was unblocked).  The syntax required to context switch from
-    an interrupt is port dependent, so check the documentation of the port you
-    are using.  http://www.freertos.org/a00090.html
-
-    In this case, the function is running in the context of the tick interrupt,
-    which will automatically check for the higher priority task to run anyway,
-    so no further action is required. */
-}
-
-void vApplicationMallocFailedHook( void )
-{
-    /* The malloc failed hook is enabled by setting
-    configUSE_MALLOC_FAILED_HOOK to 1 in FreeRTOSConfig.h.
-
-    Called if a call to pvPortMalloc() fails because there is insufficient
-    free memory available in the FreeRTOS heap.  pvPortMalloc() is called
-    internally by FreeRTOS API functions that create tasks, queues, software
-    timers, and semaphores.  The size of the FreeRTOS heap is set by the
-    configTOTAL_HEAP_SIZE configuration constant in FreeRTOSConfig.h. */
-    for( ;; );
-}
-
-void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
-{
-    (void) pcTaskName;
-    (void) pxTask;
-
-    /* Run time stack overflow checking is performed if
-    configconfigCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
-    function is called if a stack overflow is detected.  pxCurrentTCB can be
-    inspected in the debugger if the task name passed into this function is
-    corrupt. */
-    for( ;; );
-}
-
-void vApplicationIdleHook(void)
-{
-    volatile size_t xFreeStackSpace;
-
-    /* The idle task hook is enabled by setting configUSE_IDLE_HOOK to 1 in
-    FreeRTOSConfig.h.
-
-    This function is called on each cycle of the idle task.  In this case it
-    does nothing useful, other than report the amount of FreeRTOS heap that
-    remains unallocated. */
-    xFreeStackSpace = xPortGetFreeHeapSize();
-
-    if(xFreeStackSpace > 100)
-    {
-        /* By now, the kernel has allocated everything it is going to, so
-        if there is a lot of heap remaining unallocated then
-        the value of configTOTAL_HEAP_SIZE in FreeRTOSConfig.h can be
-        reduced accordingly. */
+    /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
+    clocks dividers */
+    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;  
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;  
+    if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK) {
+        /* Initialization Error */
+        while(1);
     }
 }

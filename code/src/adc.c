@@ -1,6 +1,18 @@
+/**
+ * @file adc.c
+ * @author Kyle Bernier and Daeghan Elkin
+ * @date 2018 July 15
+ * 
+ * @brief Provides basic ADC functionality
+ *
+ */
+
+
 #include "stm32l4xx.h"
 #include "stm32l4xx_hal.h"
 
+
+/* Array of ADC channels */
 uint32_t ADC_CHANNELS[16] = {
     ADC_CHANNEL_0,
     ADC_CHANNEL_1,
@@ -19,6 +31,8 @@ uint32_t ADC_CHANNELS[16] = {
     ADC_CHANNEL_14,
     ADC_CHANNEL_15
 };
+
+/* Array of ADC channel ranks */
 uint32_t ADC_RANKS[16] = {
     ADC_REGULAR_RANK_1,
     ADC_REGULAR_RANK_2,
@@ -38,37 +52,72 @@ uint32_t ADC_RANKS[16] = {
     ADC_REGULAR_RANK_16
 };
 
+/* Global ADC configuration variables */
+ADC_HandleTypeDef AdcHandle;
+ADC_ChannelConfTypeDef sConfig;
+
+
+/* Initialize the ADC with DMA */
 void Init_ADC(
-    ADC_TypeDef * inst,
     uint32_t channels,
     uint32_t * values,
     int numValues
 )
 {
     int i, j;
-    ADC_HandleTypeDef hadc;
-    ADC_ChannelConfTypeDef sConfig;
 
-    hadc.Instance = inst;
-    hadc.Init.ScanConvMode = ADC_SCAN_ENABLE;
-    hadc.Init.ContinuousConvMode = ENABLE;
-    hadc.Init.DiscontinuousConvMode = DISABLE;
-    hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-    hadc.Init.NbrOfDiscConversion = 0;
-    hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    hadc.Init.NbrOfConversion = 2;
+    // Use ADC1
+    AdcHandle.Instance = ADC1;
+    if (HAL_ADC_DeInit(&AdcHandle) != HAL_OK) {
+        while (1);
+    }
 
-    sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
+    // Set the ADC configuration
+    AdcHandle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+    AdcHandle.Init.Resolution = ADC_RESOLUTION_12B;
+    AdcHandle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    AdcHandle.Init.ScanConvMode = ENABLE;
+    AdcHandle.Init.EOCSelection = ADC_EOC_SEQ_CONV;
+    AdcHandle.Init.LowPowerAutoWait = DISABLE;
+    AdcHandle.Init.ContinuousConvMode = ENABLE;
+    AdcHandle.Init.NbrOfConversion = numValues;
+    AdcHandle.Init.DiscontinuousConvMode = DISABLE;
+    AdcHandle.Init.NbrOfDiscConversion = numValues;
+    AdcHandle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    AdcHandle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    AdcHandle.Init.DMAContinuousRequests = ENABLE;
+    AdcHandle.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+    AdcHandle.Init.OversamplingMode = DISABLE;
 
-    for (i = 0; i < 12; i++) {
+    // Initialize ADC with the above configurations
+    if (HAL_ADC_Init(&AdcHandle) != HAL_OK) {
+        while (1);
+    }
+
+    // Start the ADC calibrartion
+    if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_SINGLE_ENDED) !=  HAL_OK) {
+        while (1);
+    }
+
+    // Configure individual ADC channels
+    sConfig.SamplingTime = ADC_SAMPLETIME_640CYCLES_5;
+    sConfig.SingleDiff = ADC_SINGLE_ENDED;
+    sConfig.OffsetNumber = ADC_OFFSET_NONE;
+    sConfig.Offset = 0;
+    for (i = 0, j = 0; i < 12; i++) {
         if (channels & (1 << i)) {
             sConfig.Channel = ADC_CHANNELS[i];
             sConfig.Rank = ADC_RANKS[j];
-            HAL_ADC_ConfigChannel(&hadc, &sConfig);
+            if (HAL_ADC_ConfigChannel(&AdcHandle, &sConfig) != HAL_OK) {
+                while (1);
+            }
             j++;
         }
         if (j == numValues) break;
     }
 
-    HAL_ADC_Start_DMA(&hadc, values, numValues);
+    // Start DMA for the ADC
+    if (HAL_ADC_Start_DMA(&AdcHandle, values, 3) != HAL_OK) {
+        while (1);
+    }
 }
