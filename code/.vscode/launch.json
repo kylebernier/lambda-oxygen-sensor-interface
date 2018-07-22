@@ -4,14 +4,15 @@
         {
             "preLaunchTask": "make",
             "cwd": "${workspaceRoot}",
-            "executable": "./bin/main.elf",
+            "executable": "./bin/main",
             "name": "Debug STM32L4",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",
             "configFiles": [
                 "openocd.cfg"
-            ]
+            ],
+            "svdFile": "${workspaceFolder}/STM32L4x6.svd"
         }
     ],
 }

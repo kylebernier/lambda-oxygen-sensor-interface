@@ -7,8 +7,5 @@
     "editor.wordWrap": "wordWrapColumn",
     "editor.wrappingIndent": "same",
     "editor.wordWrapColumn": 80,
-    "C_Cpp.errorSquiggles": "Disabled",
-    "files.associations": {
-        "semphr.h": "c"
-    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
