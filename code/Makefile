@@ -66,10 +66,10 @@ $(BIN_DIR)/%.o: %.s
 	$(MKDIR) -p $(dir $@) 2> /dev/null
 	$(CC) $(ASSEMBLER_FLAGS) $< -o $@
 
-# Remove all object files
+# Remove only src directory object files
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(wildcard $(BIN_DIR)/$(SRC_DIR)/*.o)
 
-# Remove object files and the target
+# Remove all object files and the target
 cleaner:
 	$(RM) $(OBJS) $(TARGET)
