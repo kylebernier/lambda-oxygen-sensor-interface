@@ -65,10 +65,13 @@ void Init_ADC(
 )
 {
     int i, j;
+    HAL_StatusTypeDef hal_ret;
 
     // Use ADC1
     AdcHandle.Instance = ADC1;
-    if (HAL_ADC_DeInit(&AdcHandle) != HAL_OK) {
+
+    hal_ret = HAL_ADC_DeInit(&AdcHandle);
+    if (hal_ret != HAL_OK) {
         while (1);
     }
 
@@ -90,12 +93,14 @@ void Init_ADC(
     AdcHandle.Init.OversamplingMode = DISABLE;
 
     // Initialize ADC with the above configurations
-    if (HAL_ADC_Init(&AdcHandle) != HAL_OK) {
+    hal_ret = HAL_ADC_Init(&AdcHandle);
+    if (hal_ret != HAL_OK) {
         while (1);
     }
 
     // Start the ADC calibrartion
-    if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_SINGLE_ENDED) !=  HAL_OK) {
+    hal_ret = HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_SINGLE_ENDED);
+    if (hal_ret !=  HAL_OK) {
         while (1);
     }
 
@@ -108,7 +113,8 @@ void Init_ADC(
         if (channels & (1 << i)) {
             sConfig.Channel = ADC_CHANNELS[i];
             sConfig.Rank = ADC_RANKS[j];
-            if (HAL_ADC_ConfigChannel(&AdcHandle, &sConfig) != HAL_OK) {
+            hal_ret = HAL_ADC_ConfigChannel(&AdcHandle, &sConfig);
+            if (hal_ret != HAL_OK) {
                 while (1);
             }
             j++;
@@ -117,7 +123,8 @@ void Init_ADC(
     }
 
     // Start DMA for the ADC
-    if (HAL_ADC_Start_DMA(&AdcHandle, values, 3) != HAL_OK) {
+    hal_ret = HAL_ADC_Start_DMA(&AdcHandle, values, 3);
+    if (hal_ret != HAL_OK) {
         while (1);
     }
 }
