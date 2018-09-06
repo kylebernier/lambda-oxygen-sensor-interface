@@ -77,48 +77,6 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc)
 }
 
 /**
- * @brief DAC MSP Initialization
- *        This function configures the hardware resources used in this example:
- *           - Peripheral's clock enable
- *           - Peripheral's GPIO Configuration
- * @param hdac: DAC handle pointer
- * @retval None
- */
-void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac)
-{
-    GPIO_InitTypeDef GPIO_InitStruct;
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_DAC1_CLK_ENABLE();
-
-    GPIO_InitStruct.Pin = DAC_LMD_GPIO_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(DAC_LMD_GPIO_PORT, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = DAC_FUN_GPIO_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(DAC_FUN_GPIO_PORT, &GPIO_InitStruct);
-}
-
-/**
- * @brief  DeInitializes the DAC MSP.
- * @param  hdac: pointer to a DAC_HandleTypeDef structure that contains
- *         the configuration information for the specified DAC.
- * @retval None
- */
-void HAL_DAC_MspDeInit(DAC_HandleTypeDef *hdac)
-{
-    __HAL_RCC_DAC1_FORCE_RESET();
-    __HAL_RCC_DAC1_RELEASE_RESET();
-    __HAL_RCC_DAC1_CLK_DISABLE();
-
-    HAL_GPIO_DeInit(DAC_LMD_GPIO_PORT, DAC_LMD_GPIO_PIN);
-    HAL_GPIO_DeInit(DAC_FUN_GPIO_PORT, DAC_FUN_GPIO_PIN);
-}
-
-/**
  * @brief  Initializes the Global MSP.
  * @param  None
  * @retval None

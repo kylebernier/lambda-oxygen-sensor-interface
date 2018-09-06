@@ -2,7 +2,7 @@
  * @file hw_map.h
  * @author Kyle Bernier and Daeghan Elkin
  * @date 2018 July 15
- * 
+ *
  * @brief Maps hardware peripherals to board specific features
  *
  */
@@ -40,7 +40,7 @@
 #define DAC_LMD_BASE DAC1
 #define DAC_LMD_GPIO_PIN GPIO_PIN_4
 #define DAC_LMD_GPIO_PORT GPIOA
-#define DAC_LMD_CHANNEL ADC_CHANNEL_1
+#define DAC_LMD_CHANNEL DAC_CHANNEL_1
 
 // DAC Fun
 #define DAC_FUN_BASE DAC1

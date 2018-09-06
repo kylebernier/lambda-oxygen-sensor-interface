@@ -2,7 +2,7 @@
  * @file dac.c
  * @author Kyle Bernier and Daeghan Elkin
  * @date 2018 July 29
- * 
+ *
  * @brief Provides basic DAC functionality
  *
  */
@@ -12,54 +12,38 @@
 #include "stm32l4xx_hal.h"
 
 
-DAC_HandleTypeDef DacHandle;
-static DAC_ChannelConfTypeDef sConfig;
-
-
-int dac_init(void)
+int Init_DAC(void)
 {
-    HAL_StatusTypeDef hal_ret;
+    volatile uint32_t i = 0;
 
-    hal_ret = HAL_DAC_DeInit(&DacHandle);
-    if (hal_ret != HAL_OK) {
-        while(1);
+    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
+
+    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_5, LL_GPIO_MODE_ANALOG);
+
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_DAC1);
+
+    LL_DAC_SetTriggerSource(DAC1, LL_DAC_CHANNEL_2, LL_DAC_TRIG_SOFTWARE);
+
+    LL_DAC_ConfigOutput(DAC1, LL_DAC_CHANNEL_2, LL_DAC_OUTPUT_MODE_NORMAL, LL_DAC_OUTPUT_BUFFER_ENABLE, LL_DAC_OUTPUT_CONNECT_GPIO);
+
+    LL_DAC_EnableIT_DMAUDR1(DAC1);
+
+    LL_DAC_Enable(DAC1, LL_DAC_CHANNEL_2);
+
+    i = ((LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * (SystemCoreClock / (100000 * 2))) / 10);
+    while(i != 0)
+    {
+        i--;
     }
 
-    hal_ret = HAL_DAC_Init(&DacHandle);
-    if (hal_ret != HAL_OK) {
-        while(1);
-    }
+    LL_DAC_EnableTrigger(DAC1, LL_DAC_CHANNEL_2);
 
-    sConfig.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_DISABLE;
-    sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
-    sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
-    sConfig.DAC_ConnectOnChipPeripheral = DAC_CHIPCONNECT_DISABLE;
-    sConfig.DAC_UserTrimming = DAC_TRIMMING_FACTORY;
+    return 0;
+}
 
-    hal_ret = HAL_DAC_ConfigChannel(&DacHandle, &sConfig, DAC_CHANNEL_1);
-    if (hal_ret != HAL_OK) {
-        while(1);
-    }
+void DAC_SetValue(uint32_t value)
+{
+    LL_DAC_ConvertData12RightAligned(DAC1, LL_DAC_CHANNEL_2, 0xFFF & value);
 
-    hal_ret = HAL_DAC_ConfigChannel(&DacHandle, &sConfig, DAC_CHANNEL_2);
-    if (hal_ret != HAL_OK) {
-        while(1);
-    }
-
-    hal_ret = HAL_DACEx_DualSetValue(&DacHandle, DAC_ALIGN_12B_R, 0xFF, 0xFF);
-    if (hal_ret != HAL_OK) {
-        while(1);
-    }
-
-    hal_ret = HAL_DAC_Start(&DacHandle, DAC_CHANNEL_1);
-    if (hal_ret != HAL_OK) {
-        while(1);
-    }
-
-    hal_ret = HAL_DAC_Start(&DacHandle, DAC_CHANNEL_2);
-    if (hal_ret != HAL_OK) {
-        while(1);
-    }
-
-    while (1);
+    LL_DAC_TrigSWConversion(DAC1, LL_DAC_CHANNEL_2);
 }

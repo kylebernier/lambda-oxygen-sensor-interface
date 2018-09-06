@@ -52,7 +52,7 @@
 #define HAL_CORTEX_MODULE_ENABLED
 #define HAL_CRC_MODULE_ENABLED
 /* #define HAL_CRYP_MODULE_ENABLED */
-// #define HAL_DAC_MODULE_ENABLED
+#define HAL_DAC_MODULE_ENABLED
 /* #define HAL_DFSDM_MODULE_ENABLED */
 #define HAL_DMA_MODULE_ENABLED
 #define HAL_FLASH_MODULE_ENABLED
@@ -84,6 +84,16 @@
 /* #define HAL_WWDG_MODULE_ENABLED */
 /* #define HAL_PCD_MODULE_ENABLED */
 /* #define HAL_HCD_MODULE_ENABLED */
+
+#include "stm32l4xx_ll_bus.h"
+#include "stm32l4xx_ll_rcc.h"
+#include "stm32l4xx_ll_system.h"
+#include "stm32l4xx_ll_utils.h"
+#include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_exti.h"
+#include "stm32l4xx_ll_dma.h"
+#include "stm32l4xx_ll_tim.h"
+#include "stm32l4xx_ll_dac.h"
 
 
 /* ########################## Oscillator Values adaptation ####################*/
@@ -120,7 +130,7 @@
 /**
   * @brief Internal Low Speed oscillator (LSI) value.
   */
-#if !defined  (LSI_VALUE) 
+#if !defined  (LSI_VALUE)
  #define LSI_VALUE  32000U                 /*!< LSI Typical Value in Hz*/
 #endif /* LSI_VALUE */                     /*!< Value of the Internal Low Speed oscillator in Hz
                                              The real value may vary depending on the variations
@@ -139,7 +149,7 @@
 
 /**
   * @brief External clock source for SAI1 peripheral
-  *        This value is used by the RCC HAL module to compute the SAI1 & SAI2 clock source 
+  *        This value is used by the RCC HAL module to compute the SAI1 & SAI2 clock source
   *        frequency.
   */
 #if !defined  (EXTERNAL_SAI1_CLOCK_VALUE)
@@ -148,7 +158,7 @@
 
 /**
   * @brief External clock source for SAI2 peripheral
-  *        This value is used by the RCC HAL module to compute the SAI1 & SAI2 clock source 
+  *        This value is used by the RCC HAL module to compute the SAI1 & SAI2 clock source
   *        frequency.
   */
 #if !defined  (EXTERNAL_SAI2_CLOCK_VALUE)
