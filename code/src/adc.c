@@ -2,122 +2,316 @@
  * @file adc.c
  * @author Kyle Bernier and Daeghan Elkin
  * @date 2018 July 15
- * 
+ *
  * @brief Provides basic ADC functionality
  *
  */
 
 
 #include "stm32l4xx.h"
-#include "stm32l4xx_hal.h"
 
+#include "adc.h"
+
+
+/* Delay between ADC end of calibration and ADC enable. */
+#define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
+
+
+static void ADC_Init_DMA(
+    uint16_t * values,
+    int numValues
+);
+
+#define ADC_NUM_CHANNELS 23
+
+#define ADC_SAMPLE_RATE LL_ADC_SAMPLINGTIME_640CYCLES_5
 
 /* Array of ADC channels */
-uint32_t ADC_CHANNELS[16] = {
-    ADC_CHANNEL_0,
-    ADC_CHANNEL_1,
-    ADC_CHANNEL_2,
-    ADC_CHANNEL_3,
-    ADC_CHANNEL_4,
-    ADC_CHANNEL_5,
-    ADC_CHANNEL_6,
-    ADC_CHANNEL_7,
-    ADC_CHANNEL_8,
-    ADC_CHANNEL_9,
-    ADC_CHANNEL_10,
-    ADC_CHANNEL_11,
-    ADC_CHANNEL_12,
-    ADC_CHANNEL_13,
-    ADC_CHANNEL_14,
-    ADC_CHANNEL_15
+uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
+    LL_ADC_CHANNEL_0,
+    LL_ADC_CHANNEL_1,
+    LL_ADC_CHANNEL_2,
+    LL_ADC_CHANNEL_3,
+    LL_ADC_CHANNEL_4,
+    LL_ADC_CHANNEL_5,
+    LL_ADC_CHANNEL_6,
+    LL_ADC_CHANNEL_7,
+    LL_ADC_CHANNEL_8,
+    LL_ADC_CHANNEL_9,
+    LL_ADC_CHANNEL_10,
+    LL_ADC_CHANNEL_11,
+    LL_ADC_CHANNEL_12,
+    LL_ADC_CHANNEL_13,
+    LL_ADC_CHANNEL_14,
+    LL_ADC_CHANNEL_15,
+    LL_ADC_CHANNEL_VREFINT, // ADC1 Only, Uses Channel 0
+    LL_ADC_CHANNEL_TEMPSENSOR, // ADC1 or ADC3
+    LL_ADC_CHANNEL_VBAT, // ADC1 or ADC3
+    LL_ADC_CHANNEL_DAC1CH1_ADC2, // ADC2 Only
+    LL_ADC_CHANNEL_DAC1CH2_ADC2, // ADC2 Only
+    LL_ADC_CHANNEL_DAC1CH1_ADC3, // ADC3 Only, Uses Channel 14
+    LL_ADC_CHANNEL_DAC1CH2_ADC3 // ADC3 Only, Uses Channel 15
 };
 
 /* Array of ADC channel ranks */
 uint32_t ADC_RANKS[16] = {
-    ADC_REGULAR_RANK_1,
-    ADC_REGULAR_RANK_2,
-    ADC_REGULAR_RANK_3,
-    ADC_REGULAR_RANK_4,
-    ADC_REGULAR_RANK_5,
-    ADC_REGULAR_RANK_6,
-    ADC_REGULAR_RANK_7,
-    ADC_REGULAR_RANK_8,
-    ADC_REGULAR_RANK_9,
-    ADC_REGULAR_RANK_10,
-    ADC_REGULAR_RANK_11,
-    ADC_REGULAR_RANK_12,
-    ADC_REGULAR_RANK_13,
-    ADC_REGULAR_RANK_14,
-    ADC_REGULAR_RANK_15,
-    ADC_REGULAR_RANK_16
+    LL_ADC_REG_RANK_1,
+    LL_ADC_REG_RANK_2,
+    LL_ADC_REG_RANK_3,
+    LL_ADC_REG_RANK_4,
+    LL_ADC_REG_RANK_5,
+    LL_ADC_REG_RANK_6,
+    LL_ADC_REG_RANK_7,
+    LL_ADC_REG_RANK_8,
+    LL_ADC_REG_RANK_9,
+    LL_ADC_REG_RANK_10,
+    LL_ADC_REG_RANK_11,
+    LL_ADC_REG_RANK_12,
+    LL_ADC_REG_RANK_13,
+    LL_ADC_REG_RANK_14,
+    LL_ADC_REG_RANK_15,
+    LL_ADC_REG_RANK_16
 };
 
-/* Global ADC configuration variables */
-ADC_HandleTypeDef AdcHandle;
-ADC_ChannelConfTypeDef sConfig;
+/* 0: DMA transfer is not completed */
+/* 1: DMA transfer is completed */
+/* 2: DMA transfer has not been started yet (initial state) */
+volatile uint8_t dmaTransferStatus = 2;
+
+/* 0: ADC group regular sequence conversions are not completed */
+/* 1: ADC group regular sequence conversions are completed */
+volatile uint8_t adcConversionStatus = 0;
 
 
 /* Initialize the ADC with DMA */
 void Init_ADC(
     uint32_t channels,
-    uint32_t * values,
+    uint16_t * values,
     int numValues
 )
 {
     int i, j;
 
-    // Use ADC1
-    AdcHandle.Instance = ADC1;
-    if (HAL_ADC_DeInit(&AdcHandle) != HAL_OK) {
-        while (1);
+    // Check if the ADC is already enabled
+    if (LL_ADC_IsEnabled(ADC1)) {
+        return;
     }
 
-    // Set the ADC configuration
-    AdcHandle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-    AdcHandle.Init.Resolution = ADC_RESOLUTION_12B;
-    AdcHandle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    AdcHandle.Init.ScanConvMode = ENABLE;
-    AdcHandle.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-    AdcHandle.Init.LowPowerAutoWait = DISABLE;
-    AdcHandle.Init.ContinuousConvMode = ENABLE;
-    AdcHandle.Init.NbrOfConversion = numValues;
-    AdcHandle.Init.DiscontinuousConvMode = DISABLE;
-    AdcHandle.Init.NbrOfDiscConversion = numValues;
-    AdcHandle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-    AdcHandle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-    AdcHandle.Init.DMAContinuousRequests = ENABLE;
-    AdcHandle.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
-    AdcHandle.Init.OversamplingMode = DISABLE;
+    // Initialize DMA for the ADC
+    ADC_Init_DMA(values, numValues);
 
-    // Initialize ADC with the above configurations
-    if (HAL_ADC_Init(&AdcHandle) != HAL_OK) {
-        while (1);
+
+    // Enable the clock for GPIO port A
+    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
+
+    // Configure the GPIO pin as ADC input
+    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_0, LL_GPIO_MODE_ANALOG);
+
+    // Map GPIO pin to the ADC
+    LL_GPIO_EnablePinAnalogControl(GPIOA, LL_GPIO_PIN_0);
+
+    // Configure the GPIO pin as ADC input
+    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_0, LL_GPIO_MODE_ANALOG);
+
+    // Map GPIO pin to the ADC
+    LL_GPIO_EnablePinAnalogControl(GPIOA, LL_GPIO_PIN_1);
+
+    // Configure the GPIO pin as ADC input
+    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_0, LL_GPIO_MODE_ANALOG);
+
+    // Map GPIO pin to the ADC
+    LL_GPIO_EnablePinAnalogControl(GPIOA, LL_GPIO_PIN_2);
+
+
+    // Enable ADC interrupts
+    // Set the ADC IRQ to a greater priority than the DMA IRQ
+    NVIC_SetPriority(ADC1_2_IRQn, 0);
+    NVIC_EnableIRQ(ADC1_2_IRQn);
+
+    // Enable the ADC clock
+    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_ADC);
+
+    // Set the ADC clock
+    LL_ADC_SetCommonClock(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_CLOCK_SYNC_PCLK_DIV2);
+
+    // Enable the internal ADC channels
+    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), (LL_ADC_PATH_INTERNAL_VREFINT | LL_ADC_PATH_INTERNAL_TEMPSENSOR | LL_ADC_PATH_INTERNAL_VBAT));
+
+    // Delay for the internal ADC channels to stablize
+    // The temperature sensor takes the longest time to stabalize
+    i = ((LL_ADC_DELAY_TEMPSENSOR_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
+    while(i != 0) {
+        i--;
     }
 
-    // Start the ADC calibrartion
-    if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_SINGLE_ENDED) !=  HAL_OK) {
-        while (1);
-    }
+    // Set the ADC to have a software trigger source
+    LL_ADC_REG_SetTriggerSource(ADC1, LL_ADC_REG_TRIG_SOFTWARE);
 
-    // Configure individual ADC channels
-    sConfig.SamplingTime = ADC_SAMPLETIME_640CYCLES_5;
-    sConfig.SingleDiff = ADC_SINGLE_ENDED;
-    sConfig.OffsetNumber = ADC_OFFSET_NONE;
-    sConfig.Offset = 0;
-    for (i = 0, j = 0; i < 12; i++) {
+    // Set the ADC to convert continuously
+    LL_ADC_REG_SetContinuousMode(ADC1, LL_ADC_REG_CONV_CONTINUOUS);
+
+    // Set the ADC conversion data transfer
+    LL_ADC_REG_SetDMATransfer(ADC1, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
+
+    // Set the ADC overrun behavior
+    LL_ADC_REG_SetOverrun(ADC1, LL_ADC_REG_OVR_DATA_OVERWRITTEN);
+
+    // Set the ADC sequencer length
+    LL_ADC_REG_SetSequencerLength(ADC1, numValues - 1);
+
+    // Enable specified ADC channels
+    for (i = 0, j = 0; i < ADC_NUM_CHANNELS; i++) {
         if (channels & (1 << i)) {
-            sConfig.Channel = ADC_CHANNELS[i];
-            sConfig.Rank = ADC_RANKS[j];
-            if (HAL_ADC_ConfigChannel(&AdcHandle, &sConfig) != HAL_OK) {
-                while (1);
-            }
+            LL_ADC_REG_SetSequencerRanks(ADC1, ADC_RANKS[j], ADC_CHANNELS[i]);
+            LL_ADC_SetChannelSamplingTime(ADC1, ADC_CHANNELS[i], ADC_SAMPLE_RATE);
             j++;
         }
-        if (j == numValues) break;
+        if (j >= numValues || j >= 16) break;
     }
 
-    // Start DMA for the ADC
-    if (HAL_ADC_Start_DMA(&AdcHandle, values, 3) != HAL_OK) {
-        while (1);
+    // Enable ADC interupts for conversion completion
+    LL_ADC_EnableIT_EOS(ADC1);
+
+    // Enable ADC interupts for overrun
+    LL_ADC_EnableIT_OVR(ADC1);
+
+    // Disable the ADC deep power down mode
+    LL_ADC_DisableDeepPowerDown(ADC1);
+
+    // Enable the ADC internal voltage regulator
+    LL_ADC_EnableInternalRegulator(ADC1);
+
+    // Delay for the ADC internal voltage regulator to stabilize
+    i = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
+    while(i != 0) {
+        i--;
     }
+
+    // Start the ADC calibration
+    LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
+
+    // Wait for the ADC calibration to finish
+    while (LL_ADC_IsCalibrationOnGoing(ADC1) != 0);
+
+    // Delay to allow ADC calibration to enable
+    i = (ADC_DELAY_CALIB_ENABLE_CPU_CYCLES >> 1);
+    while(i != 0) {
+        i--;
+    }
+
+    // Enable the ADC
+    LL_ADC_Enable(ADC1);
+
+    // Wait for the ADC to be ready
+    while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0);
+
+    // Start the continous ADC conversion
+    LL_ADC_REG_StartConversion(ADC1);
+}
+
+/**
+ * @brief  This function configures DMA for transfer of data from ADC
+ * @param  None
+ * @retval None
+ */
+static void ADC_Init_DMA(
+    uint16_t * values,
+    int numValues
+)
+{
+    // Enable DMA interrupts
+    // Set the DMA IRQ to a lower priority than the ADC IRQ
+    NVIC_SetPriority(DMA1_Channel1_IRQn, 1);
+    NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+    // Enable the DMA clock
+    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+
+    // Configure the DMA transfer
+    LL_DMA_ConfigTransfer(DMA1, LL_DMA_CHANNEL_1,
+        LL_DMA_DIRECTION_PERIPH_TO_MEMORY |
+        LL_DMA_MODE_CIRCULAR |
+        LL_DMA_PERIPH_NOINCREMENT |
+        LL_DMA_MEMORY_INCREMENT |
+        LL_DMA_PDATAALIGN_HALFWORD |
+        LL_DMA_MDATAALIGN_HALFWORD |
+        LL_DMA_PRIORITY_HIGH );
+
+    // Select ADC1 as the DMA transfer request
+    LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_1, LL_DMA_REQUEST_0);
+
+    // Set the DMA transfer address source and destination
+    LL_DMA_ConfigAddresses(DMA1, LL_DMA_CHANNEL_1,
+        LL_ADC_DMA_GetRegAddr(ADC1, LL_ADC_DMA_REG_REGULAR_DATA),
+        (uint32_t)values, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+
+    // Set the DMA transfer size
+    LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, numValues);
+
+    // Enable DMA transfer complete interrupts
+    LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_1);
+
+    // Enable DMA transfer error interrupts
+    LL_DMA_EnableIT_TE(DMA1, LL_DMA_CHANNEL_1);
+
+    // Enable the DMA channel
+    LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+}
+
+
+/**
+ * @brief  DMA transfer complete callback
+ * @note   This function is executed when the transfer complete interrupt
+ *         is generated
+ * @retval None
+ */
+void ADC_DMA_TransferComplete_Callback(void)
+{
+    // Update the DMA transfer status
+    dmaTransferStatus = 1;
+
+    // Verify the ADC conversion was completed
+    if (adcConversionStatus != 1)
+    {
+        ADC_DMA_TransferError_Callback();
+    }
+
+    // Reset the ADC conversion status
+    adcConversionStatus = 0;
+}
+
+/**
+  * @brief  DMA transfer error callback
+  * @note   This function is executed when the transfer error interrupt
+  *         is generated during DMA transfer
+  * @retval None
+  */
+void ADC_DMA_TransferError_Callback(void)
+{
+    // Handle the error
+    while(1);
+}
+
+/**
+ * @brief  ADC group regular end of sequence conversions interruption callback
+ * @note   This function is executed when the ADC group regular
+ *         sequencer has converted all ranks of the sequence.
+ * @retval None
+ */
+void ADC_ConvComplete_Callback(void)
+{
+    // Update the ADC conversion status
+    adcConversionStatus = 1;
+}
+
+/**
+  * @brief  ADC group regular overrun interruption callback
+  * @note   This function is executed when ADC group regular
+  *         overrun error occurs.
+  * @retval None
+  */
+void ADC_OverrunError_Callback(void)
+{
+    // Disable ADC overrun interrupts
+    LL_ADC_DisableIT_OVR(ADC1);
 }

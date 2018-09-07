@@ -2,7 +2,7 @@
  * @file hw_map.h
  * @author Kyle Bernier and Daeghan Elkin
  * @date 2018 July 15
- * 
+ *
  * @brief Maps hardware peripherals to board specific features
  *
  */

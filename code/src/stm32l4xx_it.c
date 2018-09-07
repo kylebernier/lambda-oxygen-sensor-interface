@@ -1,12 +1,8 @@
 #include "stm32l4xx.h"
-#include "stm32l4xx_hal.h"
 
 #include "stm32l4xx_it.h"
 
 #include "adc.h"
-
-
-extern ADC_HandleTypeDef AdcHandle;
 
 
 /**
@@ -103,15 +99,60 @@ void PendSV_Handler(void)
  */
 void SysTick_Handler(void)
 {
-    HAL_IncTick();
 }
 
 /**
-* @brief  This function handles DMA1_Channel1_IRQHandler interrupt request.
-* @param  None
-* @retval None
-*/
+  * @brief  This function handles ADC1 interrupt request.
+  * @param  None
+  * @retval None
+  */
+void ADC1_2_IRQHandler(void)
+{
+    // Check if the interupt is end of conversion
+    if(LL_ADC_IsActiveFlag_EOS(ADC1) != 0)
+    {
+        // Clear the end of conversion flag
+        LL_ADC_ClearFlag_EOS(ADC1);
+
+        // Call the ADC conversion complete callback
+        ADC_ConvComplete_Callback();
+    }
+
+    // Check if the interupt is overrun
+    if(LL_ADC_IsActiveFlag_OVR(ADC1) != 0)
+    {
+        // Clear the ADC overrun flag
+        LL_ADC_ClearFlag_OVR(ADC1);
+
+        // Call the ADC conversion complete callback
+        ADC_OverrunError_Callback();
+    }
+}
+
+/**
+  * @brief  This function handles DMA1 interrupt request.
+  * @param  None
+  * @retval None
+  */
 void DMA1_Channel1_IRQHandler(void)
 {
-    HAL_DMA_IRQHandler(AdcHandle.DMA_Handle);
+    // Check if the DMA transfer is complete
+    if(LL_DMA_IsActiveFlag_TC1(DMA1) == 1)
+    {
+        // Clear the DMA interupt flag
+        LL_DMA_ClearFlag_GI1(DMA1);
+
+        // Call the DMA transfer complete callback
+        ADC_DMA_TransferComplete_Callback();
+    }
+
+    // Check if the DMA transfer casused an error
+    if(LL_DMA_IsActiveFlag_TE1(DMA1) == 1)
+    {
+        // Clear the DMA error flag
+        LL_DMA_ClearFlag_TE1(DMA1);
+
+        // Call the DMA transfer error callback
+        ADC_DMA_TransferError_Callback();
+    }
 }
