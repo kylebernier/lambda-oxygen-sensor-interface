@@ -4,14 +4,17 @@
  * @date 2018 May 27
  *
  * @brief Blinks an led and updates variables with the ADC.
- *        Has basic functions to us FreeRTOS
  *
  */
 
 
 #include "stm32l4xx.h"
-#include "stm32l4xx_hal.h"
 
+#include "stm32l4xx_ll_rcc.h"
+#include "stm32l4xx_ll_system.h"
+#include "stm32l4xx_ll_utils.h"
+
+#include "hw_map.h"
 #include "adc.h"
 #include "dac.h"
 
@@ -19,7 +22,7 @@
 void SystemClock_Config(void);
 
 
-uint32_t aResultDMA[3];
+uint16_t aResultDMA[3];
 
 
 /* Simple delay, will use systick at some point */
@@ -30,11 +33,14 @@ void delay(volatile unsigned delay)
 
 int main(void)
 {
-    HAL_Init();
+    // Initialize the GPIO pins
+    HW_Init_GPIO();
 
+    // Config the system clock to 80MHz
     SystemClock_Config();
 
-    Init_ADC(0xE0, (uint32_t *)aResultDMA, 3);
+    // Initialize the ADC with channels 5, 6, and 7
+    Init_ADC(0xE0, (uint16_t *)aResultDMA, 3);
 
     Init_DAC();
 

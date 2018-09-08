@@ -1,3 +1,10 @@
+# @file Makefile
+# @author Kyle Bernier and Daeghan Elkin
+# @date 2018 May 27
+#
+# @brief Makefile to compile STM32L4 project with dependencies
+
+
 # System configuration
 CC = arm-none-eabi-gcc
 RM = rm -f
