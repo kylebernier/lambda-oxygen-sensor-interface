@@ -12,13 +12,6 @@
 #define __DAC_H
 
 
-#include "stm32l4xx.h"
-
-#include "stm32l4xx_ll_bus.h"
-#include "stm32l4xx_ll_gpio.h"
-#include "stm32l4xx_ll_dac.h"
-
-
 /* Initialize the DAC interface */
 int Init_DAC(void);
 /* Adjust the DAC output value */

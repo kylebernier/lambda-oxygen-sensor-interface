@@ -10,6 +10,10 @@
 
 #include "stm32l4xx.h"
 
+#include "stm32l4xx_ll_bus.h"
+#include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_dac.h"
+
 #include "dac.h"
 
 
@@ -17,12 +21,6 @@
 int Init_DAC(void)
 {
     volatile uint32_t i = 0;
-
-    // Enable the clock for GPIOA
-    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
-
-    // Set the mode for pin 5 for the DAC
-    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_5, LL_GPIO_MODE_ANALOG);
 
     // Enable the clock for the DAC
     LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_DAC1);
