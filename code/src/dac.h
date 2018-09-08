@@ -12,10 +12,17 @@
 #define __DAC_H
 
 
-/* Initialize the DAC */
-void Init_DAC(void);
-void DAC_SetValue(uint32_t value);
+#include "stm32l4xx.h"
 
+#include "stm32l4xx_ll_bus.h"
+#include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_dac.h"
+
+
+/* Initialize the DAC interface */
+int Init_DAC(void);
+/* Adjust the DAC output value */
+void DAC_SetValue(uint32_t value);
 
 
 #endif // __DAC_H
