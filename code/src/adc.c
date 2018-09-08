@@ -97,7 +97,6 @@ void Init_ADC(
 )
 {
     int i, j;
-    HAL_StatusTypeDef hal_ret;
 
     // Check if the ADC is already enabled
     if (LL_ADC_IsEnabled(ADC1)) {
