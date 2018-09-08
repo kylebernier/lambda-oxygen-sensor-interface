@@ -4,6 +4,7 @@
 #include "stm32l4xx_ll_dma.h"
 
 #include "adc.h"
+#include "spi.h"
 
 
 /**
@@ -22,10 +23,8 @@ void NMI_Handler(void)
  */
 void HardFault_Handler(void)
 {
-    /* Go to infinite loop when Hard Fault exception occurs */
-    while (1)
-    {
-    }
+    // Enter an infinite loop
+    while (1);
 }
 
 /**
@@ -35,10 +34,8 @@ void HardFault_Handler(void)
  */
 void MemManage_Handler(void)
 {
-    /* Go to infinite loop when Memory Manage exception occurs */
-    while (1)
-    {
-    }
+    // Enter an infinite loop
+    while (1);
 }
 
 /**
@@ -48,9 +45,8 @@ void MemManage_Handler(void)
  */
 void BusFault_Handler(void)
 {
-    /* Go to infinite loop when Bus Fault exception occurs */
-    while (1) {
-    }
+    // Enter an infinite loop
+    while (1);
 }
 
 /**
@@ -60,10 +56,8 @@ void BusFault_Handler(void)
  */
 void UsageFault_Handler(void)
 {
-    /* Go to infinite loop when Usage Fault exception occurs */
-    while (1)
-    {
-    }
+    // Enter an infinite loop
+    while (1);
 }
 
 /**
@@ -110,8 +104,7 @@ void SysTick_Handler(void)
 void ADC1_2_IRQHandler(void)
 {
     // Check if the interupt is end of conversion
-    if(LL_ADC_IsActiveFlag_EOS(ADC1) != 0)
-    {
+    if (LL_ADC_IsActiveFlag_EOS(ADC1) != 0) {
         // Clear the end of conversion flag
         LL_ADC_ClearFlag_EOS(ADC1);
 
@@ -120,8 +113,7 @@ void ADC1_2_IRQHandler(void)
     }
 
     // Check if the interupt is overrun
-    if(LL_ADC_IsActiveFlag_OVR(ADC1) != 0)
-    {
+    if (LL_ADC_IsActiveFlag_OVR(ADC1) != 0) {
         // Clear the ADC overrun flag
         LL_ADC_ClearFlag_OVR(ADC1);
 
@@ -138,8 +130,7 @@ void ADC1_2_IRQHandler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
     // Check if the DMA transfer is complete
-    if(LL_DMA_IsActiveFlag_TC1(DMA1) == 1)
-    {
+    if (LL_DMA_IsActiveFlag_TC1(DMA1) == 1) {
         // Clear the DMA interupt flag
         LL_DMA_ClearFlag_GI1(DMA1);
 
@@ -148,12 +139,45 @@ void DMA1_Channel1_IRQHandler(void)
     }
 
     // Check if the DMA transfer casused an error
-    if(LL_DMA_IsActiveFlag_TE1(DMA1) == 1)
-    {
+    if (LL_DMA_IsActiveFlag_TE1(DMA1) == 1) {
         // Clear the DMA error flag
         LL_DMA_ClearFlag_TE1(DMA1);
 
         // Call the DMA transfer error callback
         ADC_DMA_TransferError_Callback();
+    }
+}
+
+/**
+  * @brief  This function handles DMA1 interrupt request.
+  * @param  None
+  * @retval None
+  */
+void DMA1_Channel2_IRQHandler(void)
+{
+    if (LL_DMA_IsActiveFlag_TC2(DMA1)) {
+        LL_DMA_ClearFlag_GI2(DMA1);
+        // Call receive complete callback
+        SPI_DMA_ReceiveComplete_Callback();
+    } else if (LL_DMA_IsActiveFlag_TE2(DMA1)) {
+        // Call spi error callback
+        SPI_TransferError_Callback();
+    }
+}
+
+/**
+  * @brief  This function handles DMA1 interrupt request.
+  * @param  None
+  * @retval None
+  */
+void DMA1_Channel3_IRQHandler(void)
+{
+    if (LL_DMA_IsActiveFlag_TC3(DMA1)) {
+        LL_DMA_ClearFlag_GI3(DMA1);
+        // Call transmit complete callback
+        SPI_DMA_TransmitComplete_Callback();
+    } else if (LL_DMA_IsActiveFlag_TE3(DMA1)) {
+        // Call spi error callback
+        SPI_TransferError_Callback();
     }
 }

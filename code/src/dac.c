@@ -39,7 +39,7 @@ int Init_DAC(void)
 
     // Delay to allow the DAC voltage to settle
     i = ((LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * (SystemCoreClock / (100000 * 2))) / 10);
-    while(i != 0)
+    while (i != 0)
     {
         i--;
     }

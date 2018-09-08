@@ -123,7 +123,7 @@ void Init_ADC(
     // Delay for the internal ADC channels to stablize
     // The temperature sensor takes the longest time to stabalize
     i = ((LL_ADC_DELAY_TEMPSENSOR_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
-    while(i != 0) {
+    while (i != 0) {
         i--;
     }
 
@@ -166,7 +166,7 @@ void Init_ADC(
 
     // Delay for the ADC internal voltage regulator to stabilize
     i = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
-    while(i != 0) {
+    while (i != 0) {
         i--;
     }
 
@@ -178,7 +178,7 @@ void Init_ADC(
 
     // Delay to allow ADC calibration to enable
     i = (ADC_DELAY_CALIB_ENABLE_CPU_CYCLES >> 1);
-    while(i != 0) {
+    while (i != 0) {
         i--;
     }
 
@@ -254,8 +254,7 @@ void ADC_DMA_TransferComplete_Callback(void)
     dmaTransferStatus = 1;
 
     // Verify the ADC conversion was completed
-    if (adcConversionStatus != 1)
-    {
+    if (adcConversionStatus != 1) {
         ADC_DMA_TransferError_Callback();
     }
 
