@@ -54,7 +54,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_hal.h"
+// This driver appears to require the higher level drivers which were removed.
+// Commented out following include so code will compile -KPB
+//#include "stm32l4xx_hal.h"
 
 /** @addtogroup STM32L4xx_LL_USB_DRIVER
   * @{

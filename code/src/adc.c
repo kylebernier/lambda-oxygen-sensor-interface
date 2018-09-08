@@ -10,6 +10,11 @@
 
 #include "stm32l4xx.h"
 
+#include "stm32l4xx_ll_bus.h"
+#include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_adc.h"
+#include "stm32l4xx_ll_dma.h"
+
 #include "adc.h"
 
 
@@ -17,6 +22,7 @@
 #define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
 
 
+/* Initialize DMA for the ADC */
 static void ADC_Init_DMA(
     uint16_t * values,
     int numValues
@@ -99,29 +105,6 @@ void Init_ADC(
 
     // Initialize DMA for the ADC
     ADC_Init_DMA(values, numValues);
-
-
-    // Enable the clock for GPIO port A
-    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
-
-    // Configure the GPIO pin as ADC input
-    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_0, LL_GPIO_MODE_ANALOG);
-
-    // Map GPIO pin to the ADC
-    LL_GPIO_EnablePinAnalogControl(GPIOA, LL_GPIO_PIN_0);
-
-    // Configure the GPIO pin as ADC input
-    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_0, LL_GPIO_MODE_ANALOG);
-
-    // Map GPIO pin to the ADC
-    LL_GPIO_EnablePinAnalogControl(GPIOA, LL_GPIO_PIN_1);
-
-    // Configure the GPIO pin as ADC input
-    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_0, LL_GPIO_MODE_ANALOG);
-
-    // Map GPIO pin to the ADC
-    LL_GPIO_EnablePinAnalogControl(GPIOA, LL_GPIO_PIN_2);
-
 
     // Enable ADC interrupts
     // Set the ADC IRQ to a greater priority than the DMA IRQ
