@@ -18,7 +18,7 @@
 #include "adc.h"
 
 
-/* Delay between ADC end of calibration and ADC enable. */
+/* Delay between ADC end of calibration and ADC enable */
 #define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
 
 

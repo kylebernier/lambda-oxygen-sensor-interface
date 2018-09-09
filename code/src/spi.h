@@ -18,9 +18,10 @@
  *
  */
 
+#ifndef __SPI_H
+#define __SPI_H
 
 void Init_SPI(uint8_t * send_buf, uint8_t * recv_buf, int max_transfer_size);
-void SPI_Transfer(void);
-void SPI_DMA_ReceiveComplete_Callback(void);
-void SPI_DMA_TransmitComplete_Callback(void);
-void SPI_TransferError_Callback(void);
+void SPI_Transfer(uint8_t * send, uint8_t * recv, int send_size, int recv_size);
+
+#endif // __SPI_H

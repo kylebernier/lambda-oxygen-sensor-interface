@@ -2,6 +2,7 @@
 
 #include "stm32l4xx_ll_adc.h"
 #include "stm32l4xx_ll_dma.h"
+#include "stm32l4xx_ll_spi.h"
 
 #include "adc.h"
 #include "spi.h"
@@ -145,39 +146,5 @@ void DMA1_Channel1_IRQHandler(void)
 
         // Call the DMA transfer error callback
         ADC_DMA_TransferError_Callback();
-    }
-}
-
-/**
-  * @brief  This function handles DMA1 interrupt request.
-  * @param  None
-  * @retval None
-  */
-void DMA1_Channel2_IRQHandler(void)
-{
-    if (LL_DMA_IsActiveFlag_TC2(DMA1)) {
-        LL_DMA_ClearFlag_GI2(DMA1);
-        // Call receive complete callback
-        SPI_DMA_ReceiveComplete_Callback();
-    } else if (LL_DMA_IsActiveFlag_TE2(DMA1)) {
-        // Call spi error callback
-        SPI_TransferError_Callback();
-    }
-}
-
-/**
-  * @brief  This function handles DMA1 interrupt request.
-  * @param  None
-  * @retval None
-  */
-void DMA1_Channel3_IRQHandler(void)
-{
-    if (LL_DMA_IsActiveFlag_TC3(DMA1)) {
-        LL_DMA_ClearFlag_GI3(DMA1);
-        // Call transmit complete callback
-        SPI_DMA_TransmitComplete_Callback();
-    } else if (LL_DMA_IsActiveFlag_TE3(DMA1)) {
-        // Call spi error callback
-        SPI_TransferError_Callback();
     }
 }
