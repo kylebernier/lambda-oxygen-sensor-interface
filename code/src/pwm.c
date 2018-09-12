@@ -2,17 +2,6 @@
 
 void Init_PWM(void)
 {
-  uint32_t P;    /* Pulse duration */
-  uint32_t T;    /* PWM signal period */
-  
-  /* PWM signal period is determined by the value of the auto-reload register */
-  T = LL_TIM_GetAutoReload(TIM1);
-  
-  /* Pulse duration is determined by the value of the compare register.       */
-  /* Its value is calculated in order to match the requested duty cycle.      */
-  P = (50*T)/100;
-  LL_TIM_OC_SetCompareCH1(TIM1, P);
-  
   /***********************************************/
   /* Configure the NVIC to handle TIM1 interrupt */
   /***********************************************/
@@ -43,19 +32,19 @@ void Init_PWM(void)
   /*********************************/
   /* Set output mode */
   /* Reset value is LL_TIM_OCMODE_FROZEN */
-  LL_TIM_OC_SetMode(TIM1, LL_TIM_CHANNEL_CH1, LL_TIM_OCMODE_PWM1);
+  LL_TIM_OC_SetMode(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_OCMODE_PWM1);
   
   /* Set output channel polarity */
   /* Reset value is LL_TIM_OCPOLARITY_HIGH */
-  //LL_TIM_OC_SetPolarity(TIM1, LL_TIM_CHANNEL_CH1, LL_TIM_OCPOLARITY_HIGH);
+  //LL_TIM_OC_SetPolarity(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_OCPOLARITY_HIGH);
   
   /* Set compare value to half of the counter period (50% duty cycle ) */
-  LL_TIM_OC_SetCompareCH1(TIM1, (LL_TIM_GetAutoReload(TIM1) / 2));
+  LL_TIM_OC_SetCompareCH2(TIM1, (LL_TIM_GetAutoReload(TIM1) / 2));
   
   /* Enable TIM1_CCR1 register preload. Read/Write operations access the      */
   /* preload register. TIM1_CCR1 preload value is loaded in the active        */
   /* at each update event.                                                    */
-  LL_TIM_OC_EnablePreload(TIM1, LL_TIM_CHANNEL_CH1);
+  LL_TIM_OC_EnablePreload(TIM1, LL_TIM_CHANNEL_CH2);
   
   /**************************/
   /* TIM1 interrupts set-up */
@@ -67,7 +56,7 @@ void Init_PWM(void)
   /* Start output signal generation */
   /**********************************/
   /* Enable output channel 1 */
-  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH2);
   
   /* Enable counter */
   LL_TIM_EnableCounter(TIM1);
