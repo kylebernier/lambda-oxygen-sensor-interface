@@ -18,6 +18,7 @@
 #include "adc.h"
 #include "dac.h"
 #include "pwm.h"
+#include "usart.h"
 
 void SystemClock_Config(void);
 
@@ -45,6 +46,8 @@ int main(void)
     Init_DAC();
 
     Init_PWM();
+    
+    Init_USART();
 
     // Enable GPIOB
     SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_GPIOBEN);
@@ -63,7 +66,7 @@ int main(void)
         CLEAR_BIT(GPIOE->ODR, GPIO_ODR_OD8);
 
         // Delay a bit
-        delay(20000000);
+        delay(2000000);
 
         // Turn off red led
         CLEAR_BIT(GPIOB->ODR, GPIO_ODR_OD2);
@@ -71,9 +74,12 @@ int main(void)
         SET_BIT(GPIOE->ODR, GPIO_ODR_OD8);
 
         // Delay a bit
-        delay(20000000);
+        delay(2000000);
 
         DAC_SetValue(0x600);
+
+        /* Transmit message over USART */
+        USART_Transfer();
     }
 }
 

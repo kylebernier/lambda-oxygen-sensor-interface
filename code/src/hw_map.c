@@ -62,4 +62,30 @@ void HW_Init_GPIO(void)
 
     /* Enable the timer peripheral clock */
     PWMx_CLK_ENABLE();
+
+    /*************************/
+    /* USART Setup */
+    /*************************/
+    /* Enable the peripheral clock of GPIO Port */
+    USARTx_GPIO_CLK_ENABLE();
+
+    /* Configure Tx Pin */
+    LL_GPIO_SetPinMode(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_MODE_ALTERNATE);
+    USARTx_SET_TX_GPIO_AF();
+    LL_GPIO_SetPinSpeed(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_SPEED_FREQ_HIGH);
+    LL_GPIO_SetPinOutputType(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_OUTPUT_PUSHPULL);
+    LL_GPIO_SetPinPull(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_PULL_UP);
+
+    /* Configure Rx Pin */
+    LL_GPIO_SetPinMode(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_MODE_ALTERNATE);
+    USARTx_SET_RX_GPIO_AF();
+    LL_GPIO_SetPinSpeed(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_SPEED_FREQ_HIGH);
+    LL_GPIO_SetPinOutputType(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_OUTPUT_PUSHPULL);
+    LL_GPIO_SetPinPull(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_PULL_UP);
+
+    /* Enable USART peripheral clock and clock source */
+    USARTx_CLK_ENABLE();
+
+    /* Set clock source */
+    USARTx_CLK_SOURCE();
 }

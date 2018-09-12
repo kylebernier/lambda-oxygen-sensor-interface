@@ -14,6 +14,8 @@
 
 #include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_adc.h"
+#include "stm32l4xx_ll_usart.h"
+#include "stm32l4xx_ll_rcc.h"
 
 /*****************************/
 /* ADC Definitions */
@@ -64,6 +66,21 @@
 #define PWMx_GPIO_PIN LL_GPIO_PIN_11
 #define PWMx_GPIO_PORT GPIOE
 #define PWMx_SET_GPIO_AF() LL_GPIO_SetAFPin_8_15(GPIOE, LL_GPIO_PIN_11, LL_GPIO_AF_1)
+
+/*****************************/
+/* USART Definitions */
+/*****************************/
+#define USARTx_CLK_ENABLE() LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_USART1)
+#define USARTx_CLK_SOURCE() LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK2)
+
+#define USARTx_GPIO_CLK_ENABLE() LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB)   
+#define USARTx_TX_PIN LL_GPIO_PIN_6
+#define USARTx_TX_GPIO_PORT GPIOB
+#define USARTx_SET_TX_GPIO_AF() LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_6, LL_GPIO_AF_7)
+#define USARTx_RX_PIN LL_GPIO_PIN_7
+#define USARTx_RX_GPIO_PORT GPIOB
+#define USARTx_SET_RX_GPIO_AF() LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_7, LL_GPIO_AF_7)
+
 
 /* Initialize GPIO pins */
 void HW_Init_GPIO(void);
