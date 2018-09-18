@@ -1,0 +1,5 @@
+Record=TopLevelDocument|FileName=cjb.SchDoc
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_breakout|SchDesignator=U_breakout|FileName=breakout.SchDoc|SymbolType=Normal|RawFileName=breakout.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_cj125|SchDesignator=U_cj125|FileName=cj125.schDoc|SymbolType=Normal|RawFileName=cj125.schDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_microcontroller|SchDesignator=U_microcontroller|FileName=microcontroller.SchDoc|SymbolType=Normal|RawFileName=microcontroller.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_power|SchDesignator=U_power|FileName=power.SchDoc|SymbolType=Normal|RawFileName=power.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 

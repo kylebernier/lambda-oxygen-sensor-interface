@@ -1,9 +1,6 @@
 *.bin
 *.o
-pcb/debug.log
-pcb/CJB/History
-pcb/CJB/__Previews
-pcb/CJB/Project Logs for CJB
-pcb/INT/History
-pcb/INT/__Previews
-pcb/INT/Project Logs for INT
+debug.log
+History/
+__Previews/
+Project_Logs/
