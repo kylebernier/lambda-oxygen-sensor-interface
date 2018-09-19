@@ -14,6 +14,7 @@
 
 #include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_adc.h"
+#include "stm32l4xx_ll_tim.h"
 
 /*****************************/
 /* ADC Definitions */
@@ -58,6 +59,7 @@
 /* PWM Definitions */
 /*****************************/
 #define PWMx_BASE TIM1
+#define PWMx_CHANNEL LL_TIM_CHANNEL_CH2
 #define PWMx_CLK_ENABLE() LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1)
 
 #define PWMx_GPIO_CLK_ENABLE() LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOE)
