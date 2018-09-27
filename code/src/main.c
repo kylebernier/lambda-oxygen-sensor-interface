@@ -19,11 +19,16 @@
 #include "dac.h"
 #include "pwm.h"
 #include "usart.h"
+#include "spi.h"
+
 
 void SystemClock_Config(void);
 
 
 uint16_t aResultDMA[3];
+
+uint8_t tx[5] = "Hello";
+uint8_t rx[5];
 
 
 /* Simple delay, will use systick at some point */
@@ -34,6 +39,8 @@ void delay(volatile unsigned delay)
 
 int main(void)
 {
+    uint16_t i = 0;
+
     // Initialize the GPIO pins
     HW_Init_GPIO();
 
@@ -48,6 +55,7 @@ int main(void)
     Init_PWM();
     
     Init_USART();
+    Init_SPI((uint8_t *)tx, (uint8_t *)rx, 5);
 
     // Enable GPIOB
     SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_GPIOBEN);
@@ -76,10 +84,15 @@ int main(void)
         // Delay a bit
         delay(2000000);
 
-        DAC_SetValue(0x600);
-
         /* Transmit message over USART */
         USART_Transfer();
+        DAC_SetValue(i);
+
+        i+=1;
+
+        if (i > 0xFFF) i = 0;
+
+        SPI_Transfer(tx, rx, 5, 0);
     }
 }
 

@@ -83,6 +83,17 @@
 #define USARTx_RX_GPIO_PORT GPIOB
 #define USARTx_SET_RX_GPIO_AF() LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_7, LL_GPIO_AF_7)
 
+/*****************************/
+/* SPI CJ125 */
+/*****************************/
+#define SPI_CJ125_BASE SPI1
+#define SPI_CJ125_SCK_PIN LL_GPIO_PIN_13
+#define SPI_CJ125_SCK_PORT GPIOE
+#define SPI_CJ125_MISO_PIN LL_GPIO_PIN_14
+#define SPI_CJ125_MISO_PORT GPIOE
+#define SPI_CJ125_MOSI_PIN LL_GPIO_PIN_15
+#define SPI_CJ125_MOSI_PORT GPIOE
+
 
 /* Initialize GPIO pins */
 void HW_Init_GPIO(void);

@@ -4,6 +4,13 @@
 
 The code controls a STM32L4 microcontroller on a Lambda Oxygen Sensor Interface board.
 
+### Modules Being Used
+* ADC1 CH 5 6 7
+* DMA1 CH 1
+* SPI1
+* DAC1 CH 2
+* GPIO A0 A1 A2
+
 ## Build Instructions
 
 ### Required Packages
