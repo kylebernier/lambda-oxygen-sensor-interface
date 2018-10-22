@@ -10,9 +10,6 @@
 
 #include "hw_map.h"
 
-#include "stm32l4xx_ll_bus.h"
-
-
 /* Initialize GPIO pins */
 void HW_Init_GPIO(void)
 {
@@ -99,6 +96,9 @@ void HW_Init_GPIO(void)
     /*************************/
     /* SPI Setup */
     /*************************/
+    /* Enable the peripheral clock of GPIO Port */
+    SPIx_GPIO_CLK_ENABLE();
+
     // Configure the SPI SCK pin
     LL_GPIO_SetPinMode(SPI_CJ125_SCK_PORT, SPI_CJ125_SCK_PIN,
         LL_GPIO_MODE_ALTERNATE);

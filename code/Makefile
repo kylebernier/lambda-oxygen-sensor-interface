@@ -11,8 +11,8 @@ RM = rm -f
 MKDIR = mkdir -p
 
 # Hardware architecture
-ARCH = STM32L476xx
-ARCH_LOW = stm32l476xx
+ARCH = STM32L475xx
+ARCH_LOW = stm32l475xx
 
 # Assembler, Compiler and Linker flags and linker script settings
 LINKER_FLAGS = -lm -mthumb -mhard-float -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -Wl,--gc-sections -T$(LINK_SCRIPT) -static -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs -specs=nosys.specs

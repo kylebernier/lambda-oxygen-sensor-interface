@@ -9,7 +9,6 @@
 #ifndef __PWM_H
 #define __PWM_H
 
-#include "stm32l4xx_ll_tim.h"
 #include "hw_map.h"
 
 /* Initialize PWM */

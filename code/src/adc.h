@@ -11,6 +11,7 @@
 #ifndef __ADC_H
 #define __ADC_H
 
+#include "hw_map.h"
 
 /* Initialize the ADC with DMA */
 void Init_ADC(

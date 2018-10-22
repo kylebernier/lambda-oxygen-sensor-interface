@@ -11,6 +11,7 @@
 #ifndef __DAC_H
 #define __DAC_H
 
+#include "hw_map.h"
 
 /* Initialize the DAC interface */
 int Init_DAC(void);

@@ -12,7 +12,7 @@
             "configFiles": [
                 "openocd.cfg"
             ],
-            "svdFile": "${workspaceFolder}/STM32L4x6.svd"
+            "svdFile": "${workspaceFolder}/STM32L4x5.svd"
         }
     ],
 }

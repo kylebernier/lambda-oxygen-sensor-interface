@@ -21,6 +21,8 @@
 #ifndef __SPI_H
 #define __SPI_H
 
+#include "hw_map.h"
+
 void Init_SPI(uint8_t * send_buf, uint8_t * recv_buf, int max_transfer_size);
 void SPI_Transfer(uint8_t * send, uint8_t * recv, int send_size, int recv_size);
 

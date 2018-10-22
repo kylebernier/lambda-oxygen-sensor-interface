@@ -68,27 +68,11 @@ int main(void)
 
     // Alternate blinking of two leds
     while (1) {
-        // Turn on read led
-        SET_BIT(GPIOB->ODR, GPIO_ODR_OD2);
-        // Turn off green led
-        //CLEAR_BIT(GPIOE->ODR, GPIO_ODR_OD8);
-
-        // Delay a bit
-        delay(2000000);
-
-        // Turn off red led
-        CLEAR_BIT(GPIOB->ODR, GPIO_ODR_OD2);
-        // Turn on green led
-        //SET_BIT(GPIOE->ODR, GPIO_ODR_OD8);
-
-        // Delay a bit
-        delay(2000000);
-
         /* Transmit message over USART */
         USART_Transfer();
         DAC_SetValue(i);
 
-        i+=1;
+        i+=100;
 
         if (i > 0xFFF) i = 0;
 

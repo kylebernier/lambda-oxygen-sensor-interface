@@ -7,15 +7,7 @@
  *
  */
 
-
-#include "stm32l4xx.h"
-
-#include "stm32l4xx_ll_bus.h"
-#include "stm32l4xx_ll_gpio.h"
-#include "stm32l4xx_ll_dac.h"
-
 #include "dac.h"
-
 
 /* Initialize the DAC interface */
 int Init_DAC(void)
@@ -23,19 +15,19 @@ int Init_DAC(void)
     volatile uint32_t i = 0;
 
     // Enable the clock for the DAC
-    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_DAC1);
+    DACx_CLK_ENABLE();
 
     // Set the DAC trigger source to software
-    LL_DAC_SetTriggerSource(DAC1, LL_DAC_CHANNEL_2, LL_DAC_TRIG_SOFTWARE);
+    LL_DAC_SetTriggerSource(DAC_FUN_BASE, DAC_FUN_CHANNEL, LL_DAC_TRIG_SOFTWARE);
 
     // Configure the DAC output for channel 2
-    LL_DAC_ConfigOutput(DAC1, LL_DAC_CHANNEL_2, LL_DAC_OUTPUT_MODE_NORMAL, LL_DAC_OUTPUT_BUFFER_ENABLE, LL_DAC_OUTPUT_CONNECT_GPIO);
+    LL_DAC_ConfigOutput(DAC_FUN_BASE, DAC_FUN_CHANNEL, LL_DAC_OUTPUT_MODE_NORMAL, LL_DAC_OUTPUT_BUFFER_ENABLE, LL_DAC_OUTPUT_CONNECT_GPIO);
 
     // Enable the DMA underrun interrupt for channel 2
-    LL_DAC_EnableIT_DMAUDR2(DAC1);
+    LL_DAC_EnableIT_DMAUDR2(DAC_FUN_BASE);
 
     // Enable the DAC for channel 2
-    LL_DAC_Enable(DAC1, LL_DAC_CHANNEL_2);
+    LL_DAC_Enable(DAC_FUN_BASE, DAC_FUN_CHANNEL);
 
     // Delay to allow the DAC voltage to settle
     i = ((LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * (SystemCoreClock / (100000 * 2))) / 10);
@@ -45,7 +37,7 @@ int Init_DAC(void)
     }
 
     // Enable the DAC
-    LL_DAC_EnableTrigger(DAC1, LL_DAC_CHANNEL_2);
+    LL_DAC_EnableTrigger(DAC_FUN_BASE, DAC_FUN_CHANNEL);
 
     return 0;
 }
@@ -54,7 +46,7 @@ int Init_DAC(void)
 void DAC_SetValue(uint32_t value)
 {
     // Set the DAC value
-    LL_DAC_ConvertData12RightAligned(DAC1, LL_DAC_CHANNEL_2, 0xFFF & value);
+    LL_DAC_ConvertData12RightAligned(DAC_FUN_BASE, DAC_FUN_CHANNEL, 0xFFF & value);
     // Tigger a DAC conversion
-    LL_DAC_TrigSWConversion(DAC1, LL_DAC_CHANNEL_2);
+    LL_DAC_TrigSWConversion(DAC_FUN_BASE, DAC_FUN_CHANNEL);
 }
