@@ -22,7 +22,8 @@ void Init_PWM(void)
   
     /* Set compare value to half of the counter period (50% duty cycle ) */
     /* If the Timer channel is changed, change this to match */
-    LL_TIM_OC_SetCompareCH1(PWMx_BASE, (LL_TIM_GetAutoReload(PWMx_BASE) / 2));
+    //LL_TIM_OC_SetCompareCH1(PWMx_BASE, (LL_TIM_GetAutoReload(PWMx_BASE) / 2));
+    LL_TIM_OC_SetCompareCH1(PWMx_BASE, 0);
   
     /* Enable PWMx_BASE_CCR1 register preload. */
     LL_TIM_OC_EnablePreload(PWMx_BASE, PWMx_CHANNEL);

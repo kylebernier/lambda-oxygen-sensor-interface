@@ -117,7 +117,8 @@
 #define SPI_CJ125_MISO_PORT GPIOB
 #define SPI_CJ125_MOSI_PIN LL_GPIO_PIN_15
 #define SPI_CJ125_MOSI_PORT GPIOB
-
+#define SPI_CJ125_SEL_PIN LL_GPIO_PIN_12
+#define SPI_CJ125_SEL_PORT GPIOB
 
 /* Initialize GPIO pins */
 void HW_Init_GPIO(void);

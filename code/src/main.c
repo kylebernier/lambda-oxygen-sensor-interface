@@ -22,14 +22,17 @@
 #include "spi.h"
 
 
+#define CJ125_IDENT_REG         0x4800 // Identify request
+#define CJ125_DIAG_REG          0x7800 // Diagnostic request
+#define CJ125_DIAG_REG_OK       0x28ff // Diagnostic response CJ125 ready
+#define CJ125_DIAG_REG_NOPWR    0x2855 // Diagnostic response no/low power
+#define CJ125_DIAG_REG_NOSNSR   0x287F // Diagnostic response no sensor
+
+
 void SystemClock_Config(void);
 
 
 uint16_t aResultDMA[3];
-
-uint8_t tx[5] = "Hello";
-uint8_t rx[5];
-
 
 /* Simple delay, will use systick at some point */
 void delay(volatile unsigned delay)
@@ -39,45 +42,29 @@ void delay(volatile unsigned delay)
 
 int main(void)
 {
-    uint16_t i = 0;
+    uint16_t response;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
 
-    // Config the system clock to 80MHz
+    // Config the system clock to 8MHz
     SystemClock_Config();
 
-    // Initialize the ADC with channels 5, 6, and 7
+    // Initialize peripherals
     Init_ADC(0xE0, (uint16_t *)aResultDMA, 3);
-
     Init_DAC();
-
     Init_PWM();
-    
     Init_USART();
-    Init_SPI((uint8_t *)tx, (uint8_t *)rx, 5);
+    Init_SPI();
 
-    // Enable GPIOB
-    SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_GPIOBEN);
-    // Enable GPIOE
-    //SET_BIT(RCC->AHB2ENR, RCC_AHB2ENR_GPIOEEN);
+    // Loop until CJ125 is ready. When CJ125 responds OK move on.
+    do {
+        response = SPI_Transfer(CJ125_DIAG_REG);
+        delay(100);
+    } while (response != CJ125_DIAG_REG_OK);
 
-    // Set GPIOB_2 and GPIOE_8 as outputs
-    MODIFY_REG(GPIOB->MODER, GPIO_MODER_MODE2, GPIO_MODER_MODE2_0);
-    //MODIFY_REG(GPIOE->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
-
-    // Alternate blinking of two leds
-    while (1) {
-        /* Transmit message over USART */
-        USART_Transfer();
-        DAC_SetValue(i);
-
-        i+=100;
-
-        if (i > 0xFFF) i = 0;
-
-        SPI_Transfer(tx, rx, 5, 0);
-    }
+    // Enter CJ125 calibration mode
+    //SPI_Transfer(CJ125_DIAG_REG);
 }
 
 /**
@@ -85,7 +72,7 @@ int main(void)
  *         The system Clock is configured as follows :
  *            System Clock source            = PLL (MSI)
  *            SYSCLK(Hz)                     = 80000000
- *            HCLK(Hz)                       = 80000000
+ *            HCLK(Hz)                       = 8000000
  *            AHB Prescaler                  = 1
  *            APB1 Prescaler                 = 1
  *            APB2 Prescaler                 = 1
@@ -105,7 +92,7 @@ void SystemClock_Config(void)
     while(LL_RCC_MSI_IsReady() != 1);
 
     // Main PLL configuration and activation
-    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_MSI, LL_RCC_PLLM_DIV_1, 40, LL_RCC_PLLR_DIV_2);
+    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_MSI, LL_RCC_PLLM_DIV_1, 4, LL_RCC_PLLR_DIV_2);
     LL_RCC_PLL_Enable();
     LL_RCC_PLL_EnableDomain_SYS();
     while(LL_RCC_PLL_IsReady() != 1);
@@ -119,9 +106,9 @@ void SystemClock_Config(void)
     LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
     LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
 
-    // Set systick to 1ms in using frequency set to 80MHz
-    LL_Init1msTick(80000000);
+    // Set systick to 1ms in using frequency set to 8MHz
+    LL_Init1msTick(8000000);
 
     // Update CMSIS variable
-    LL_SetSystemCoreClock(80000000);
+    LL_SetSystemCoreClock(8000000);
 }

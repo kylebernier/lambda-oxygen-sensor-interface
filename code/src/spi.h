@@ -1,15 +1,4 @@
 /**
- * @file spi.h
- * @author Kyle Bernier and Daeghan Elkin
- * @date 2018 September 8
- *
- * @brief Provides basic SPI functionality
- *
- */
-
-
-
-/**
  * @file spi.c
  * @author Kyle Bernier and Daeghan Elkin
  * @date 2018 July 15
@@ -23,7 +12,7 @@
 
 #include "hw_map.h"
 
-void Init_SPI(uint8_t * send_buf, uint8_t * recv_buf, int max_transfer_size);
-void SPI_Transfer(uint8_t * send, uint8_t * recv, int send_size, int recv_size);
+void Init_SPI(void);
+uint16_t SPI_Transfer(uint16_t send);
 
 #endif // __SPI_H
