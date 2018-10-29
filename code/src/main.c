@@ -42,7 +42,8 @@ void delay(volatile unsigned delay)
 
 int main(void)
 {
-    uint16_t response;
+    uint8_t i;
+    uint16_t response = 0;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -58,13 +59,20 @@ int main(void)
     Init_SPI();
 
     // Loop until CJ125 is ready. When CJ125 responds OK move on.
-    do {
+    while (response != CJ125_DIAG_REG_OK) {
         response = SPI_Transfer(CJ125_DIAG_REG);
-        delay(100);
-    } while (response != CJ125_DIAG_REG_OK);
+        delay(2000);
+    } 
 
     // Enter CJ125 calibration mode
     //SPI_Transfer(CJ125_DIAG_REG);
+
+    while(1) {
+        DAC_SetValue(i);
+        if (i > 2000000) i = 0; 
+
+        i += 1000;
+    }
 }
 
 /**

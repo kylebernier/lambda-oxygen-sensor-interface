@@ -41,6 +41,8 @@ uint16_t SPI_Transfer(uint16_t send)
 
     // Wait for TX buffer to be empty
     while(!LL_SPI_IsActiveFlag_TXE(SPI_CJ125_BASE));
+    // Reverse byte order
+    send = ((send << 8) & 0xff00) | ((send >> 8) & 0x00ff);
     // Transmit a byte
     LL_SPI_TransmitData16(SPI_CJ125_BASE, send);
     // Wait for transmit to finish
@@ -50,6 +52,8 @@ uint16_t SPI_Transfer(uint16_t send)
     while(!LL_SPI_IsActiveFlag_TXE(SPI_CJ125_BASE));
     // Receive a byte
     recv = LL_SPI_ReceiveData16(SPI_CJ125_BASE);
+    // Reverse byte order
+    recv = ((recv << 8) & 0xff00) | ((recv >> 8) & 0x00ff);
     // Wait for transmit to finish
     while (SPI_CJ125_BASE->SR & SPI_SR_BSY);
     
