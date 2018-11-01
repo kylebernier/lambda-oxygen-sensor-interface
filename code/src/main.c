@@ -62,14 +62,14 @@ int main(void)
     while (response != CJ125_DIAG_REG_OK) {
         response = SPI_Transfer(CJ125_DIAG_REG);
         delay(2000);
-    } 
+    }
 
     // Enter CJ125 calibration mode
     //SPI_Transfer(CJ125_DIAG_REG);
 
     while(1) {
         DAC_SetValue(i);
-        if (i > 2000000) i = 0; 
+        if (i > 2000000) i = 0;
 
         i += 1000;
     }

@@ -17,8 +17,8 @@ ARCH_LOW = stm32l475xx
 # Assembler, Compiler and Linker flags and linker script settings
 LINKER_FLAGS = -lm -mthumb -mhard-float -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -Wl,--gc-sections -T$(LINK_SCRIPT) -static -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs -specs=nosys.specs
 LINK_SCRIPT = linker_script.ld
-ASSEMBLER_FLAGS = -c -g -O0 -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mthumb -mhard-float -specs=nano.specs -D"$(ARCH)" -x assembler-with-cpp $(INCLUDE_FLAGS)
-COMPILER_FLAGS = -c -g -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -O0 -Wall -ffunction-sections -fdata-sections -mthumb -mhard-float -specs=nano.specs -D"$(ARCH)" $(INCLUDE_FLAGS)
+ASSEMBLER_FLAGS = -c -g -O0 -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mthumb -mhard-float -specs=nano.specs -D"$(ARCH)" -D"ARM_MATH_CM4" -D"__FPU_PRESENT" -x assembler-with-cpp $(INCLUDE_FLAGS)
+COMPILER_FLAGS = -c -g -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -O0 -Wall -ffunction-sections -fdata-sections -mthumb -mhard-float -specs=nano.specs -D"$(ARCH)" -D"ARM_MATH_CM4" -D"__FPU_PRESENT" $(INCLUDE_FLAGS)
 
 # Define directories
 BIN_DIR = bin
@@ -43,12 +43,13 @@ HAL_SRC_DIR = $(HAL_DIR)/src
 HAL_SRC_LEG_DIR = $(HAL_SRC_DIR)/Legacy
 
 # Define include flags
-INCLUDE_FLAGS = -I$(SRC_DIR) -I$(CMSIS_DEV_DIR) -I$(CMSIS_INC_DIR) -I$(CMSIS_SRC_DIR) -I$(FREERTOS_DIR) -I$(FREERTOS_INC_DIR) -I$(FREERTOS_PRT_DIR) -I$(HAL_DIR) -I$(HAL_INC_DIR) -I$(HAL_SRC_DIR)
+INCLUDE_FLAGS = -I$(SRC_DIR) -I$(CMSIS_DEV_DIR) -I$(CMSIS_INC_DIR) -I$(CMSIS_SRC_DIR) -I$(HAL_DIR) -I$(HAL_INC_DIR) -I$(HAL_SRC_DIR)
 
 # Define sources
 SRCS := $(wildcard $(HAL_SRC_DIR)/*.c) \
 	$(wildcard $(HAL_SRC_LEG_DIR)/*.c) \
-	$(wildcard $(SRC_DIR)/*.c)
+	$(wildcard $(SRC_DIR)/*.c) \
+	$(wildcard $(CMSIS_SRC_DIR)/*.c)
 SRCSASM := $(CMSIS_SRC_DIR)/startup_$(ARCH_LOW).s
 
 # Define objects

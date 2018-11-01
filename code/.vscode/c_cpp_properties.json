@@ -14,7 +14,9 @@
                 "${workspaceFolder}/lib/freertos/portable"
             ],
             "defines": [
-                "STM32L476xx"
+                "STM32L476xx",
+                "ARM_MATH_CM4",
+                "__FPU_PRESENT"
             ],
             "intelliSenseMode": "clang-x64",
             "browse": {
