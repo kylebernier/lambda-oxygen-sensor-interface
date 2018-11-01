@@ -63,6 +63,4 @@ void SPI_Transfer(uint16_t send, uint16_t recv, int send_size, int recv_size)
     
     // Set SPI select line high
     SET_BIT(GPIOB->ODR, GPIO_ODR_OD12_Msk);
-
-    return recv;
 }
