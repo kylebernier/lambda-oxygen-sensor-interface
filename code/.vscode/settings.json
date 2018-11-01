@@ -3,9 +3,9 @@
     "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "editor.renderWhitespace": "all",
-    "editor.rulers": [80],
+    "editor.rulers": [120],
     "editor.wordWrap": "wordWrapColumn",
     "editor.wrappingIndent": "same",
-    "editor.wordWrapColumn": 80,
+    "editor.wordWrapColumn": 120,
     "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -24,7 +24,7 @@
 /*****************************/
 /* ADC Definitions */
 /*****************************/
-/* ADC Battery Monitor */
+/* ADC Battery Voltage Monitor */
 #define ADC_BAT_BASE ADC1
 #define ADC_BAT_GPIO_PIN LL_GPIO_PIN_3
 #define ADC_BAT_GPIO_PORT GPIOA
@@ -32,14 +32,14 @@
 #define ADC_BAT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 #define ADC_BAT_IRQ ADC1_2_IRQn
 
-/* ADC Current Monitor */
+/* ADC Lambda Value Monitor */
 #define ADC_CRT_BASE ADC1
 #define ADC_CRT_GPIO_PIN LL_GPIO_PIN_6
 #define ADC_CRT_GPIO_PORT GPIOA
 #define ADC_CRT_CHANNEL LL_ADC_CHANNEL_11
 #define ADC_CRT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 
-/* ADC Voltage Monitor */
+/* ADC Resistance Monitor */
 #define ADC_VTG_BASE ADC1
 #define ADC_VTG_GPIO_PIN LL_GPIO_PIN_7
 #define ADC_VTG_GPIO_PORT GPIOA
