@@ -94,6 +94,7 @@
 /*****************************/
 /* USART Definitions */
 /*****************************/
+#define USARTx_BASE USART1
 #define USARTx_CLK_ENABLE() LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_USART1)
 #define USARTx_CLK_SOURCE() LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK2)
 

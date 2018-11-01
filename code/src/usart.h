@@ -10,14 +10,12 @@
 #ifndef __USART_H
 #define __USART_H
 
-#include "stm32l4xx_ll_usart.h"
-
-#define USARTx_INSTANCE USART1
+#include "hw_map.h"
 
 /* Initializes the USART */
 void Init_USART();
 
 /* Transfers data */
-void USART_Transfer();
+void USART_Transmit(uint8_t *send, uint8_t size);
 
 #endif /* __USART_H */
