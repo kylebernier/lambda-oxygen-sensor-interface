@@ -21,6 +21,9 @@
 #include "pwm.h"
 #include "usart.h"
 #include "spi.h"
+#include "temp.h"
+#include "v8Lambda.h"
+#include "v17Lambda.h"
 
 
 #define CJ125_IDENT_REG         0x4800  // Identify request
@@ -45,8 +48,7 @@ int main(void)
     uint16_t response = 0;
     int i = 0;
     uint8_t *data_out;
-    uint16_t lambda, temp;
-    //uint16_t optimal_lambda, optimal_resistance, lambda, resistance;
+    uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -91,9 +93,12 @@ int main(void)
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
         // Read in battery voltage, lambda voltage and restance values from CJ125
+        UA = adc_vals[1];
+        UR = adc_vals[2];
 
         // Calculate lambda value and heater temperature
-        lambda = 10159;
+        //v8Lambda = 10159;
+        //v17Lambda = 10159;
         temp = 780;
 
         // Output lambda value via DAC
