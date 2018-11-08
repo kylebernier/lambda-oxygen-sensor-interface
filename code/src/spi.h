@@ -13,6 +13,6 @@
 #include "hw_map.h"
 
 void Init_SPI(void);
-void SPI_Transfer(uint16_t send, uint16_t recv, int send_size, int recv_size);
+uint16_t SPI_Transfer(uint16_t send);
 
 #endif // __SPI_H

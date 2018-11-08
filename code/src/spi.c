@@ -32,14 +32,15 @@ void Init_SPI(void)
 }
 
 /* Complete an SPI transfer */
-void SPI_Transfer(uint16_t send, uint16_t recv, int send_size, int recv_size)
+uint16_t SPI_Transfer(uint16_t send)
 {
-    int i;
+    uint16_t recv;
+    //int i;
 
     // Set SPI select line low
     CLEAR_BIT(GPIOB->ODR, GPIO_ODR_OD12_Msk);
 
-    for (i = 0; i < send_size; i++) {
+    //for (i = 0; i < send_size; i++) {
         // Wait for TX buffer to be empty
         while(!LL_SPI_IsActiveFlag_TXE(SPI_CJ125_BASE));
         // Reverse byte order
@@ -48,9 +49,9 @@ void SPI_Transfer(uint16_t send, uint16_t recv, int send_size, int recv_size)
         LL_SPI_TransmitData16(SPI_CJ125_BASE, send);
         // Wait for transmit to finish
         while (SPI_CJ125_BASE->SR & SPI_SR_BSY);
-    }
+    //}
 
-    for (i = 0; i < recv_size; i++) {
+    //for (i = 0; i < recv_size; i++) {
         // Wait for TX buffer to be empty
         while(!LL_SPI_IsActiveFlag_TXE(SPI_CJ125_BASE));
         // Receive a byte
@@ -59,8 +60,10 @@ void SPI_Transfer(uint16_t send, uint16_t recv, int send_size, int recv_size)
         recv = ((recv << 8) & 0xff00) | ((recv >> 8) & 0x00ff);
         // Wait for transmit to finish
         while (SPI_CJ125_BASE->SR & SPI_SR_BSY);
-    }
+    //}
     
     // Set SPI select line high
     SET_BIT(GPIOB->ODR, GPIO_ODR_OD12_Msk);
+
+    return recv;
 }

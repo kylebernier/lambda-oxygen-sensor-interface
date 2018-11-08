@@ -46,9 +46,11 @@ uint16_t adc_vals[3] = {0, 0, 0};
 int main(void)
 {
     uint16_t response = 0;
-    int i = 0;
+    float f = 0.0;
     uint8_t *data_out;
     uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
+    float pwm_duty_cycle;
+    uint32_t Vbat;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -67,51 +69,82 @@ int main(void)
     // Initialize SPI connection to CJ125
     Init_SPI();
 
-    /*
+    
     // Loop until CJ125 is ready. When CJ125 responds OK move on.
-    while (response != CJ125_DIAG_REG_OK || adc_vals[0] < BAT_MIN) {
-        SPI_Transfer(CJ125_DIAG_REG, response, 1, 1);
+    while (response != CJ125_DIAG_REG_OK) {
+        response = SPI_Transfer(CJ125_DIAG_REG);
         LL_mDelay(200);
     } 
 
     // Enter CJ125 calibration mode
-    SPI_Transfer(CJ125_CALIBRATE_MODE, response, 1, 0);
-    delay(2000);
+    response = SPI_Transfer(CJ125_CALIBRATE_MODE);
+    LL_mDelay(2000);
 
     // Store optimal values from CJ125
     optimal_lambda = adc_vals[1];
     optimal_resistance = adc_vals[2];
 
     // Set CJ125 into normal operation mode with an amplification of 8
-    SPI_Transfer(CJ125_V8_MODE, response, 1, 0);
-    SPI_Transfer(CJ125_V17_MODE, response, 1, 0);
-    */
+    response = SPI_Transfer(CJ125_V8_MODE);
+    //response = SPI_Transfer(CJ125_V17_MODE);
+    
 
     // Initialize heater before using it
     //Initialize_Heater();
 
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
+        
         // Read in battery voltage, lambda voltage and restance values from CJ125
-        UA = adc_vals[1];
-        UR = adc_vals[2];
+        //UA = adc_vals[1];
+        //UR = adc_vals[2];
+        UA = optimal_lambda;
+        UR = optimal_resistance;
 
         // Calculate lambda value and heater temperature
-        //v8Lambda = 10159;
-        //v17Lambda = 10159;
-        temp = 780;
+        if (UA >= 2142) {
+            lambda = 10159;
+        } else {
+            lambda = v8Lambda_Lookup[UA];
+        }
+        /* 
+        if (UA >= 3170) {
+            lambda = 10147;
+        } else {
+            lambda = v17Lambda_Lookup[UA];
+        } 
+        */
+
+        if (UR <= 315) {
+            temp = 1816;
+        } else {
+            temp = temp_Lookup[UR];
+        }
 
         // Output lambda value via DAC
-        DAC_SetValue((lambda-650)*4096/710);
+        if (lambda >= 650 && lambda <= 10159) {
+            DAC_SetValue((lambda-650)*4096/710);
+        }
 
         // Output lambda and temperature via UART
         data_out = (uint8_t *)(&lambda);
         USART_Transmit(data_out, 2);
         data_out = (uint8_t *)(&temp);
         USART_Transmit(data_out, 2);
+        
 
         // Adjust PWM signal for heater so it stays at 780C
-        LL_mDelay(500);
+        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        pwm_duty_cycle = pow(f / Vbat, 2);
+        LL_TIM_OC_SetCompareCH1(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+
+        // Ramp up voltage by 400mV/s
+        if (f < 13000) {
+            f += 100.0;
+        } else {
+            f = 0.0;
+        }
+        LL_mDelay(200);
     }
 }
 
