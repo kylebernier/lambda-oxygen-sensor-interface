@@ -1,0 +1,6 @@
+Record=TopLevelDocument|FileName=cjb.SchDoc
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_breakout|SchDesignator=U_breakout|FileName=breakout.SchDoc|SymbolType=Normal|RawFileName=breakout.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_cj125|SchDesignator=U_cj125|FileName=sensor.schDoc|SymbolType=Normal|RawFileName=sensor.schDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_heater|SchDesignator=U_heater|FileName=heater.SchDoc|SymbolType=Normal|RawFileName=heater.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_microcontroller|SchDesignator=U_microcontroller|FileName=microcontroller.SchDoc|SymbolType=Normal|RawFileName=microcontroller.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=cjb.SchDoc|Designator=U_power|SchDesignator=U_power|FileName=power.SchDoc|SymbolType=Normal|RawFileName=power.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 

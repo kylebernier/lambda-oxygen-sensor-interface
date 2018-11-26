@@ -190,7 +190,122 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GELCBLUO
 
+[Document10]
+DocumentPath=thermocouple.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=6
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=FJAGLTHY
+
+[Document11]
+DocumentPath=CAMtastic1.Cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document12]
+DocumentPath=CAMtastic2.Cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [GeneratedDocument1]
+DocumentPath=Project_Outputs\cjb-RoundHoles.TXT
+DItemRevisionGUID=
+
+[GeneratedDocument2]
+DocumentPath=Project_Outputs\cjb-SlotHoles.TXT
+DItemRevisionGUID=
+
+[GeneratedDocument3]
+DocumentPath=Project_Outputs\cjb.DRR
+DItemRevisionGUID=
+
+[GeneratedDocument4]
+DocumentPath=Project_Outputs\cjb.EXTREP
+DItemRevisionGUID=
+
+[GeneratedDocument5]
+DocumentPath=Project_Outputs\cjb.GBL
+DItemRevisionGUID=
+
+[GeneratedDocument6]
+DocumentPath=Project_Outputs\cjb.GBO
+DItemRevisionGUID=
+
+[GeneratedDocument7]
+DocumentPath=Project_Outputs\cjb.GBS
+DItemRevisionGUID=
+
+[GeneratedDocument8]
+DocumentPath=Project_Outputs\cjb.GKO
+DItemRevisionGUID=
+
+[GeneratedDocument9]
+DocumentPath=Project_Outputs\cjb.GM1
+DItemRevisionGUID=
+
+[GeneratedDocument10]
+DocumentPath=Project_Outputs\cjb.GM15
+DItemRevisionGUID=
+
+[GeneratedDocument11]
+DocumentPath=Project_Outputs\cjb.GTL
+DItemRevisionGUID=
+
+[GeneratedDocument12]
+DocumentPath=Project_Outputs\cjb.GTO
+DItemRevisionGUID=
+
+[GeneratedDocument13]
+DocumentPath=Project_Outputs\cjb.GTS
+DItemRevisionGUID=
+
+[GeneratedDocument14]
+DocumentPath=Project_Outputs\cjb.LDP
+DItemRevisionGUID=
+
+[GeneratedDocument15]
+DocumentPath=Project_Outputs\cjb.REP
+DItemRevisionGUID=
+
+[GeneratedDocument16]
+DocumentPath=Project_Outputs\cjb.RUL
+DItemRevisionGUID=
+
+[GeneratedDocument17]
 DocumentPath=Project_Outputs\Design Rule Check - cjb.html
 DItemRevisionGUID=
 
@@ -247,9 +362,6 @@ SCH_ExpandSheetNumber=0
 SCH_ExpandDocumentNumber=0
 SCH_HasExpandLogicalToPhysicalSheets=-1
 SaveSettingsToOutJob=0
-
-[Generic_EDE]
-OutputDir=Project_Outputs
 
 [Generic_SignalIntegritySimulation]
 SignalIntegrityInitialised=-1
@@ -370,6 +482,9 @@ TerminationMinC7=0
 TerminationMaxC7=0
 TerminationPrefC7=0
 TerminationVCC7=5
+
+[Generic_EDE]
+OutputDir=Project_Outputs
 
 [OutputGroup1]
 Name=Netlist Outputs
@@ -503,13 +618,37 @@ OutputName1=Composite Drawing
 OutputDocumentPath1=
 OutputVariantName1=
 OutputDefault1=0
-PageOptions1=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
+PageOptions1=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=2.56|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
+Configuration1_Name1=OutputConfigurationParameter1
+Configuration1_Item1=DesignatorDisplayMode=Physical|PrintArea=DesignExtent|PrintAreaLowerLeftCornerX=0|PrintAreaLowerLeftCornerY=0|PrintAreaUpperRightCornerX=0|PrintAreaUpperRightCornerY=0|Record=PcbPrintView
+Configuration1_Name2=OutputConfigurationParameter2
+Configuration1_Item2=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=0|Mirror=False|Name=Multilayer Composite Print|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
+Configuration1_Name3=OutputConfigurationParameter3
+Configuration1_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name4=OutputConfigurationParameter4
+Configuration1_Item4=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name5=OutputConfigurationParameter5
+Configuration1_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name6=OutputConfigurationParameter6
+Configuration1_Item6=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MultiLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name7=OutputConfigurationParameter7
+Configuration1_Item7=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name8=OutputConfigurationParameter8
+Configuration1_Item8=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical1|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name9=OutputConfigurationParameter9
+Configuration1_Item9=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical13|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name10=OutputConfigurationParameter10
+Configuration1_Item10=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical15|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration1_Name11=OutputConfigurationParameter11
+Configuration1_Item11=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical16|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
 OutputType2=PCB 3D Print
 OutputName2=PCB 3D Print
 OutputDocumentPath2=
 OutputVariantName2=[No Variations]
-OutputDefault2=0
-PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
+OutputDefault2=1
+PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=2.15|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
+Configuration2_Name1=OutputConfigurationParameter1
+Configuration2_Item1=Record=Pcb3DPrintView|ResX=300|ResY=300|ViewX=51083844|ViewY=36059184|LookAtX=24583698|LookAtY=33490550|LookAtZ=-52000|UpX=3.32018024185032E-10|UpY=0.45291069149971|UpZ=-0.89155638217926|FOV=45|QuatX=-0.523016631603241|QuatY=-8.68254218522324E-11|QuatZ=-1.41493136651683E-10|QuatW=0.852322459220886|Zoom=2.56245400319929E-5|UnitsPercent=True|UnitsDPI=True|LockResAspect=True|ViewConfigType=.config_3d|CustomCamera=True|ViewFromTop=True|ViewConfig= 
 OutputType3=PCB 3D Video
 OutputName3=PCB 3D Video
 OutputDocumentPath3=
@@ -1334,130 +1473,166 @@ UpdateVariants=1
 PartTypes=0
 ComponentLibIdentifierKind0=Library Name And Type
 ComponentLibraryIdentifier0=Miscellaneous Connectors.IntLib
-ComponentDesignItemID0=Header 11
-ComponentSymbolReference0=Header 11
-ComponentUpdate0=1
+ComponentDesignItemID0=Header 2
+ComponentSymbolReference0=Header 2
+ComponentUpdate0=0
 ComponentIsDeviceSheet0=0
 ComponentLibIdentifierKind1=Library Name And Type
 ComponentLibraryIdentifier1=Miscellaneous Connectors.IntLib
-ComponentDesignItemID1=Header 12
-ComponentSymbolReference1=Header 12
-ComponentUpdate1=1
+ComponentDesignItemID1=Header 3
+ComponentSymbolReference1=Header 3
+ComponentUpdate1=0
 ComponentIsDeviceSheet1=0
 ComponentLibIdentifierKind2=Library Name And Type
 ComponentLibraryIdentifier2=Miscellaneous Connectors.IntLib
-ComponentDesignItemID2=Header 2
-ComponentSymbolReference2=Header 2
-ComponentUpdate2=1
+ComponentDesignItemID2=Header 4
+ComponentSymbolReference2=Header 4
+ComponentUpdate2=0
 ComponentIsDeviceSheet2=0
 ComponentLibIdentifierKind3=Library Name And Type
 ComponentLibraryIdentifier3=Miscellaneous Connectors.IntLib
-ComponentDesignItemID3=Header 3
-ComponentSymbolReference3=Header 3
-ComponentUpdate3=1
+ComponentDesignItemID3=Header 6
+ComponentSymbolReference3=Header 6
+ComponentUpdate3=0
 ComponentIsDeviceSheet3=0
 ComponentLibIdentifierKind4=Library Name And Type
-ComponentLibraryIdentifier4=Miscellaneous Connectors.IntLib
-ComponentDesignItemID4=Header 6
-ComponentSymbolReference4=Header 6
-ComponentUpdate4=1
+ComponentLibraryIdentifier4=symbol_library.SchLib
+ComponentDesignItemID4=BZT52C15T
+ComponentSymbolReference4=BZT52C15T
+ComponentUpdate4=0
 ComponentIsDeviceSheet4=0
 ComponentLibIdentifierKind5=Library Name And Type
-ComponentLibraryIdentifier5=Miscellaneous Connectors.IntLib
-ComponentDesignItemID5=Header 9
-ComponentSymbolReference5=Header 9
-ComponentUpdate5=1
+ComponentLibraryIdentifier5=symbol_library.SchLib
+ComponentDesignItemID5=C_0805
+ComponentSymbolReference5=C_0805
+ComponentUpdate5=0
 ComponentIsDeviceSheet5=0
 ComponentLibIdentifierKind6=Library Name And Type
 ComponentLibraryIdentifier6=symbol_library.SchLib
-ComponentDesignItemID6=BZT52C15T
-ComponentSymbolReference6=BZT52C15T
+ComponentDesignItemID6=C_1206
+ComponentSymbolReference6=C_1206
 ComponentUpdate6=1
 ComponentIsDeviceSheet6=0
 ComponentLibIdentifierKind7=Library Name And Type
 ComponentLibraryIdentifier7=symbol_library.SchLib
-ComponentDesignItemID7=C_0805
-ComponentSymbolReference7=C_0805
-ComponentUpdate7=1
+ComponentDesignItemID7=C_can
+ComponentSymbolReference7=C_can
+ComponentUpdate7=0
 ComponentIsDeviceSheet7=0
 ComponentLibIdentifierKind8=Library Name And Type
 ComponentLibraryIdentifier8=symbol_library.SchLib
-ComponentDesignItemID8=C_can
-ComponentSymbolReference8=C_can
-ComponentUpdate8=1
+ComponentDesignItemID8=CJ125
+ComponentSymbolReference8=CJ125
+ComponentUpdate8=0
 ComponentIsDeviceSheet8=0
 ComponentLibIdentifierKind9=Library Name And Type
 ComponentLibraryIdentifier9=symbol_library.SchLib
-ComponentDesignItemID9=CJ125
-ComponentSymbolReference9=CJ125
-ComponentUpdate9=1
+ComponentDesignItemID9=IPBT-103-H1-XX-D-RA
+ComponentSymbolReference9=IPBT-103-H1-XX-D-RA
+ComponentUpdate9=0
 ComponentIsDeviceSheet9=0
 ComponentLibIdentifierKind10=Library Name And Type
 ComponentLibraryIdentifier10=symbol_library.SchLib
-ComponentDesignItemID10=LT4367
-ComponentSymbolReference10=LT4367
-ComponentUpdate10=1
+ComponentDesignItemID10=LED_0805
+ComponentSymbolReference10=LED_0805
+ComponentUpdate10=0
 ComponentIsDeviceSheet10=0
 ComponentLibIdentifierKind11=Library Name And Type
 ComponentLibraryIdentifier11=symbol_library.SchLib
-ComponentDesignItemID11=MCP6L02
-ComponentSymbolReference11=MCP6L02
-ComponentUpdate11=1
+ComponentDesignItemID11=LTC4367
+ComponentSymbolReference11=LTC4367
+ComponentUpdate11=0
 ComponentIsDeviceSheet11=0
 ComponentLibIdentifierKind12=Library Name And Type
 ComponentLibraryIdentifier12=symbol_library.SchLib
-ComponentDesignItemID12=R_0603
-ComponentSymbolReference12=R_0603
-ComponentUpdate12=1
+ComponentDesignItemID12=MAX31855
+ComponentSymbolReference12=MAX31855
+ComponentUpdate12=0
 ComponentIsDeviceSheet12=0
 ComponentLibIdentifierKind13=Library Name And Type
 ComponentLibraryIdentifier13=symbol_library.SchLib
-ComponentDesignItemID13=SI7288DP
-ComponentSymbolReference13=SI7288DP
-ComponentUpdate13=1
+ComponentDesignItemID13=MCP6L01
+ComponentSymbolReference13=MCP6L01
+ComponentUpdate13=0
 ComponentIsDeviceSheet13=0
 ComponentLibIdentifierKind14=Library Name And Type
 ComponentLibraryIdentifier14=symbol_library.SchLib
-ComponentDesignItemID14=SMAJ58CA
-ComponentSymbolReference14=SMAJ58CA
-ComponentUpdate14=1
+ComponentDesignItemID14=MCP6L02
+ComponentSymbolReference14=MCP6L02
+ComponentUpdate14=0
 ComponentIsDeviceSheet14=0
 ComponentLibIdentifierKind15=Library Name And Type
 ComponentLibraryIdentifier15=symbol_library.SchLib
-ComponentDesignItemID15=SQD50N10
-ComponentSymbolReference15=SQD50N10
-ComponentUpdate15=1
+ComponentDesignItemID15=MI0805K
+ComponentSymbolReference15=MI0805K
+ComponentUpdate15=0
 ComponentIsDeviceSheet15=0
 ComponentLibIdentifierKind16=Library Name And Type
 ComponentLibraryIdentifier16=symbol_library.SchLib
-ComponentDesignItemID16=STM32L475RCT3
-ComponentSymbolReference16=STM32L475RCT3
-ComponentUpdate16=1
+ComponentDesignItemID16=Micro_USB
+ComponentSymbolReference16=Micro_USB
+ComponentUpdate16=0
 ComponentIsDeviceSheet16=0
 ComponentLibIdentifierKind17=Library Name And Type
 ComponentLibraryIdentifier17=symbol_library.SchLib
-ComponentDesignItemID17=TLV71333PDBVR
-ComponentSymbolReference17=TLV71333PDBVR
-ComponentUpdate17=1
+ComponentDesignItemID17=MPT-02-01-XX-X-RA-SD
+ComponentSymbolReference17=MPT-02-01-XX-X-RA-SD
+ComponentUpdate17=0
 ComponentIsDeviceSheet17=0
 ComponentLibIdentifierKind18=Library Name And Type
 ComponentLibraryIdentifier18=symbol_library.SchLib
-ComponentDesignItemID18=TP5001
-ComponentSymbolReference18=TP5001
-ComponentUpdate18=1
+ComponentDesignItemID18=NTD5865NL
+ComponentSymbolReference18=NTD5865NL
+ComponentUpdate18=0
 ComponentIsDeviceSheet18=0
 ComponentLibIdentifierKind19=Library Name And Type
 ComponentLibraryIdentifier19=symbol_library.SchLib
-ComponentDesignItemID19=TPS7A6150-Q1
-ComponentSymbolReference19=TPS7A6150-Q1
-ComponentUpdate19=1
+ComponentDesignItemID19=R_0603
+ComponentSymbolReference19=R_0603
+ComponentUpdate19=0
 ComponentIsDeviceSheet19=0
 ComponentLibIdentifierKind20=Library Name And Type
 ComponentLibraryIdentifier20=symbol_library.SchLib
-ComponentDesignItemID20=TXB0104
-ComponentSymbolReference20=TXB0104
-ComponentUpdate20=1
+ComponentDesignItemID20=SMAJ58CA
+ComponentSymbolReference20=SMAJ58CA
+ComponentUpdate20=0
 ComponentIsDeviceSheet20=0
+ComponentLibIdentifierKind21=Library Name And Type
+ComponentLibraryIdentifier21=symbol_library.SchLib
+ComponentDesignItemID21=SQJ974EP
+ComponentSymbolReference21=SQJ974EP
+ComponentUpdate21=0
+ComponentIsDeviceSheet21=0
+ComponentLibIdentifierKind22=Library Name And Type
+ComponentLibraryIdentifier22=symbol_library.SchLib
+ComponentDesignItemID22=STM32L475RCT3
+ComponentSymbolReference22=STM32L475RCT3
+ComponentUpdate22=0
+ComponentIsDeviceSheet22=0
+ComponentLibIdentifierKind23=Library Name And Type
+ComponentLibraryIdentifier23=symbol_library.SchLib
+ComponentDesignItemID23=TLS850D0TE
+ComponentSymbolReference23=TLS850D0TE
+ComponentUpdate23=0
+ComponentIsDeviceSheet23=0
+ComponentLibIdentifierKind24=Library Name And Type
+ComponentLibraryIdentifier24=symbol_library.SchLib
+ComponentDesignItemID24=TP5001
+ComponentSymbolReference24=TP5001
+ComponentUpdate24=0
+ComponentIsDeviceSheet24=0
+ComponentLibIdentifierKind25=Library Name And Type
+ComponentLibraryIdentifier25=symbol_library.SchLib
+ComponentDesignItemID25=TPS79933
+ComponentSymbolReference25=TPS79933
+ComponentUpdate25=0
+ComponentIsDeviceSheet25=0
+ComponentLibIdentifierKind26=Library Name And Type
+ComponentLibraryIdentifier26=symbol_library.SchLib
+ComponentDesignItemID26=UCC27519
+ComponentSymbolReference26=UCC27519
+ComponentUpdate26=0
+ComponentIsDeviceSheet26=0
 FullReplace=1
 UpdateDesignatorLock=1
 UpdatePartIDLock=1
@@ -1475,216 +1650,246 @@ ParameterName0=Accuracy(%)
 ParameterUpdate0=1
 ParameterName1=Alternate Color
 ParameterUpdate1=1
-ParameterName2=Catalog Drawings
+ParameterName2=Brand
 ParameterUpdate2=1
-ParameterName3=Category
+ParameterName3=Catalog Drawings
 ParameterUpdate3=1
-ParameterName4=Code_JEDEC
+ParameterName4=Category
 ParameterUpdate4=1
-ParameterName5=Color
+ParameterName5=Code_IPC
 ParameterUpdate5=1
-ParameterName6=Comment
+ParameterName6=Code_JEDEC
 ParameterUpdate6=1
-ParameterName7=Component Kind
+ParameterName7=Color
 ParameterUpdate7=1
-ParameterName8=ComponentLink1Description
+ParameterName8=Comment
 ParameterUpdate8=1
-ParameterName9=ComponentLink1URL
+ParameterName9=Component Kind
 ParameterUpdate9=1
-ParameterName10=ComponentLink2Description
+ParameterName10=ComponentLink1Description
 ParameterUpdate10=1
-ParameterName11=ComponentLink2URL
+ParameterName11=ComponentLink1URL
 ParameterUpdate11=1
-ParameterName12=ComponentLink3Description
+ParameterName12=ComponentLink2Description
 ParameterUpdate12=1
-ParameterName13=ComponentLink3URL
+ParameterName13=ComponentLink2URL
 ParameterUpdate13=1
-ParameterName14=Core
+ParameterName14=ComponentLink3Description
 ParameterUpdate14=1
-ParameterName15=Current - Continuous Drain (Id) @ 25°C
+ParameterName15=ComponentLink3URL
 ParameterUpdate15=1
-ParameterName16=D/A Converter
+ParameterName16=ComponentLink4Description
 ParameterUpdate16=1
-ParameterName17=Data Rate
+ParameterName17=ComponentLink4URL
 ParameterUpdate17=1
-ParameterName18=Datasheet URL
+ParameterName18=Connector Type
 ParameterUpdate18=1
-ParameterName19=Datasheet Version
+ParameterName19=Contact Material
 ParameterUpdate19=1
-ParameterName20=DatasheetVersion
+ParameterName20=Contact Plating
 ParameterUpdate20=1
-ParameterName21=Description
+ParameterName21=Core
 ParameterUpdate21=1
-ParameterName22=Differential - Input
+ParameterName22=Current - Continuous Drain (Id) @ 25°C
 ParameterUpdate22=1
-ParameterName23=Drain to Source Voltage (Vdss)
+ParameterName23=Current Rating
 ParameterUpdate23=1
-ParameterName24=Dynamic Catalog
+ParameterName24=Current Rating (Max)
 ParameterUpdate24=1
-ParameterName25=Eco-Plan
+ParameterName25=D/A Converter
 ParameterUpdate25=1
-ParameterName26=Family
+ParameterName26=Datasheet URL
 ParameterUpdate26=1
-ParameterName27=FET Feature
+ParameterName27=Datasheet Version
 ParameterUpdate27=1
-ParameterName28=FET Type
+ParameterName28=DatasheetVersion
 ParameterUpdate28=1
-ParameterName29=Fixed Output Options(V)
+ParameterName29=DC Resistance (DCR) (Max)
 ParameterUpdate29=1
-ParameterName30=FLASH Size (Prog) (kB)
+ParameterName30=Description
 ParameterUpdate30=1
-ParameterName31=Gate Charge (Qg) @ Vgs
+ParameterName31=Drain to Source Voltage (Vdss)
 ParameterUpdate31=1
-ParameterName32=I/Os (High Current)
+ParameterName32=Eco-Plan
 ParameterUpdate32=1
-ParameterName33=ID (uA)
+ParameterName33=Factory Pack Quantity
 ParameterUpdate33=1
-ParameterName34=IFSM
+ParameterName34=Family
 ParameterUpdate34=1
-ParameterName35=Input Capacitance (Ciss) @ Vds
+ParameterName35=FET Feature
 ParameterUpdate35=1
-ParameterName36=Input Type
+ParameterName36=FET Type
 ParameterUpdate36=1
-ParameterName37=Internal RAM Size (kB)
+ParameterName37=Filter Type
 ParameterUpdate37=1
-ParameterName38=Iout(Max)(A)
+ParameterName38=Fixed Output Options(V)
 ParameterUpdate38=1
-ParameterName39=Iq(Typ)(mA)
+ParameterName39=FLASH Size (Prog) (kB)
 ParameterUpdate39=1
-ParameterName40=Kits
+ParameterName40=Gate Charge (Qg) @ Vgs
 ParameterUpdate40=1
-ParameterName41=LatestRevisionDate
+ParameterName41=Gender
 ParameterUpdate41=1
-ParameterName42=LatestRevisionNote
+ParameterName42=Height (Max)
 ParameterUpdate42=1
-ParameterName43=Library Reference
+ParameterName43=I/Os (High Current)
 ParameterUpdate43=1
-ParameterName44=Logic Function
+ParameterName44=ID (uA)
 ParameterUpdate44=1
-ParameterName45=Manufacturer
+ParameterName45=IFSM
 ParameterUpdate45=1
-ParameterName46=Manufacturer URL
+ParameterName46=Impedance @ Frequency
 ParameterUpdate46=1
-ParameterName47=Manufacturer_Part_Number
+ParameterName47=Input Capacitance (Ciss) @ Vds
 ParameterUpdate47=1
-ParameterName48=Material
+ParameterName48=Internal RAM Size (kB)
 ParameterUpdate48=1
-ParameterName49=Maximum Reverse Current
+ParameterName49=Iout(Max)(A)
 ParameterUpdate49=1
-ParameterName50=Maximum Zener Impedance f
+ParameterName50=Iq(Typ)(mA)
 ParameterUpdate50=1
-ParameterName51=Mounting Technology
+ParameterName51=Kits
 ParameterUpdate51=1
-ParameterName52=Mounting Type
+ParameterName52=LatestRevisionDate
 ParameterUpdate52=1
-ParameterName53=Number of Bits
+ParameterName53=LatestRevisionNote
 ParameterUpdate53=1
-ParameterName54=Number of Channels
+ParameterName54=Library Reference
 ParameterUpdate54=1
-ParameterName55=Number of Outputs/Channel
+ParameterName55=Manufacturer
 ParameterUpdate55=1
-ParameterName56=Online Catalog
+ParameterName56=Manufacturer URL
 ParameterUpdate56=1
-ParameterName57=Operating Frequency(F) (Processor speed) (MHz)
+ParameterName57=Material
 ParameterUpdate57=1
-ParameterName58=Operating Junction and Storage Temperature Range
+ParameterName58=Maximum Reverse Current
 ParameterUpdate58=1
-ParameterName59=Operating Temperature
+ParameterName59=Maximum Zener Impedance f
 ParameterUpdate59=1
-ParameterName60=Other Names
+ParameterName60=Mounting Angle
 ParameterUpdate60=1
-ParameterName61=Output Type
+ParameterName61=Mounting Technology
 ParameterUpdate61=1
-ParameterName62=Package
+ParameterName62=Mounting Type
 ParameterUpdate62=1
-ParameterName63=Package / Case
+ParameterName63=Number of Contacts
 ParameterUpdate63=1
-ParameterName64=Package Description
+ParameterName64=Number of Lines
 ParameterUpdate64=1
-ParameterName65=Package Reference
+ParameterName65=Number of Ports
 ParameterUpdate65=1
-ParameterName66=PackageDescription
+ParameterName66=Online Catalog
 ParameterUpdate66=1
-ParameterName67=PackageReference
+ParameterName67=Operating Frequency(F) (Processor speed) (MHz)
 ParameterUpdate67=1
-ParameterName68=PackageVersion
+ParameterName68=Operating Junction and Storage Temperature Range
 ParameterUpdate68=1
-ParameterName69=Packaging
+ParameterName69=Operating Temperature
 ParameterUpdate69=1
-ParameterName70=Packing
+ParameterName70=Operating Temperature Range
 ParameterUpdate70=1
-ParameterName71=PartNumber
+ParameterName71=Other Names
 ParameterUpdate71=1
-ParameterName72=PCN Assembly/Origin
+ParameterName72=Package
 ParameterUpdate72=1
-ParameterName73=Power - Max
+ParameterName73=Package / Case
 ParameterUpdate73=1
-ParameterName74=Power Max
+ParameterName74=Package Description
 ParameterUpdate74=1
-ParameterName75=PPPM (W)
+ParameterName75=Package Reference
 ParameterUpdate75=1
-ParameterName76=Product Category
+ParameterName76=PackageDescription
 ParameterUpdate76=1
-ParameterName77=Product Training Modules
+ParameterName77=PackageReference
 ParameterUpdate77=1
-ParameterName78=Propagation Delay (Max)
+ParameterName78=PackageVersion
 ParameterUpdate78=1
-ParameterName79=Publisher
+ParameterName79=Packaging
 ParameterUpdate79=1
-ParameterName80=Rds On (Max) @ Id, Vgs
+ParameterName80=Packing
 ParameterUpdate80=1
-ParameterName81=RevisionNote
+ParameterName81=PartNumber
 ParameterUpdate81=1
-ParameterName82=RoHS
+ParameterName82=PCN Assembly/Origin
 ParameterUpdate82=1
-ParameterName83=RoHS Information
+ParameterName83=Power - Max
 ParameterUpdate83=1
-ParameterName84=Series
+ParameterName84=Power Max
 ParameterUpdate84=1
-ParameterName85=Specifications
+ParameterName85=PPPM (W)
 ParameterUpdate85=1
-ParameterName86=Standard Package
+ParameterName86=Product
 ParameterUpdate86=1
-ParameterName87=SubFamily
+ParameterName87=Product Category
 ParameterUpdate87=1
-ParameterName88=Supplier 1
+ParameterName88=Publisher
 ParameterUpdate88=1
-ParameterName89=Supplier Device Package
+ParameterName89=Rating
 ParameterUpdate89=1
-ParameterName90=Supplier Part Number 1
+ParameterName90=Ratings
 ParameterUpdate90=1
-ParameterName91=Supply Voltage(Vcc) min (V)
+ParameterName91=Rds On (Max) @ Id, Vgs
 ParameterUpdate91=1
-ParameterName92=Terminal
+ParameterName92=RevisionNote
 ParameterUpdate92=1
-ParameterName93=Tol V
+ParameterName93=RoHS
 ParameterUpdate93=1
-ParameterName94=Transistor Polarity
+ParameterName94=RoHS Information
 ParameterUpdate94=1
-ParameterName95=Type
+ParameterName95=Series
 ParameterUpdate95=1
-ParameterName96=Value
+ParameterName96=Shell Plating
 ParameterUpdate96=1
-ParameterName97=VBR Bi-Directional (V)
+ParameterName97=Size / Dimension
 ParameterUpdate97=1
-ParameterName98=Vdo(Typ)(mV)
+ParameterName98=Specifications
 ParameterUpdate98=1
-ParameterName99=Vgs(th) (Max) @ Id
+ParameterName99=Standard
 ParameterUpdate99=1
-ParameterName100=Vin(Max)(V)
+ParameterName100=Standard Package
 ParameterUpdate100=1
-ParameterName101=Vin(Min)(V)
+ParameterName101=SubFamily
 ParameterUpdate101=1
-ParameterName102=Voltage - Supply
+ParameterName102=Supplier 1
 ParameterUpdate102=1
-ParameterName103=Voltage Zener
+ParameterName103=Supplier Device Package
 ParameterUpdate103=1
-ParameterName104=Vout Adj(Max)(V)
+ParameterName104=Supplier Part Number 1
 ParameterUpdate104=1
-ParameterName105=Vout Adj(Min)(V)
+ParameterName105=Supply Voltage(Vcc) min (V)
 ParameterUpdate105=1
-ParameterName106=VWM (V)
+ParameterName106=Terminal
 ParameterUpdate106=1
+ParameterName107=Termination Style
+ParameterUpdate107=1
+ParameterName108=Tol V
+ParameterUpdate108=1
+ParameterName109=Type
+ParameterUpdate109=1
+ParameterName110=Value
+ParameterUpdate110=1
+ParameterName111=VBR Bi-Directional (V)
+ParameterUpdate111=1
+ParameterName112=Vdo(Typ)(mV)
+ParameterUpdate112=1
+ParameterName113=Vgs(th) (Max) @ Id
+ParameterUpdate113=1
+ParameterName114=Vin(Max)(V)
+ParameterUpdate114=1
+ParameterName115=Vin(Min)(V)
+ParameterUpdate115=1
+ParameterName116=Voltage
+ParameterUpdate116=1
+ParameterName117=Voltage Rating
+ParameterUpdate117=1
+ParameterName118=Voltage Zener
+ParameterUpdate118=1
+ParameterName119=Vout Adj(Max)(V)
+ParameterUpdate119=1
+ParameterName120=Vout Adj(Min)(V)
+ParameterUpdate120=1
+ParameterName121=VWM (V)
+ParameterUpdate121=1
 ModelTypeGroup0=PCBLIB
 ModelTypeUpdate0=1
 ModelType0=PCBLIB
@@ -1694,40 +1899,40 @@ ModelType1=PCBLIB
 ModelName1=0805
 ModelUpdate1=1
 ModelType2=PCBLIB
-ModelName2=DBV5-M
+ModelName2=0805_A
 ModelUpdate2=1
 ModelType3=PCBLIB
-ModelName3=DIOD-SOD123-2_V
+ModelName3=DDC0005A_M
 ModelUpdate3=1
 ModelType4=PCBLIB
-ModelName4=HDR1X11
+ModelName4=DIOD-SOD123-2_V
 ModelUpdate4=1
 ModelType5=PCBLIB
-ModelName5=HDR1X12
+ModelName5=HDR1X2
 ModelUpdate5=1
 ModelType6=PCBLIB
-ModelName6=HDR1X2
+ModelName6=HDR1X3
 ModelUpdate6=1
 ModelType7=PCBLIB
-ModelName7=HDR1X3
+ModelName7=HDR1X4
 ModelUpdate7=1
 ModelType8=PCBLIB
 ModelName8=HDR1X6
 ModelUpdate8=1
 ModelType9=PCBLIB
-ModelName9=HDR1X9
+ModelName9=HIRO-ZX62D-B-5PA8_V
 ModelUpdate9=1
 ModelType10=PCBLIB
-ModelName10=KSTN-5001
+ModelName10=IPBT-103-H1-XX-D-RA
 ModelUpdate10=1
 ModelType11=PCBLIB
-ModelName11=KVU0005A_L
+ModelName11=KSTN-5001
 ModelUpdate11=1
 ModelType12=PCBLIB
 ModelName12=KVU0005A_M
 ModelUpdate12=1
 ModelType13=PCBLIB
-ModelName13=KVU0005A_N
+ModelName13=MPT-02-01-XX-X-RA-SD
 ModelUpdate13=1
 ModelType14=PCBLIB
 ModelName14=MSOP8_M
@@ -1736,10 +1941,10 @@ ModelType15=PCBLIB
 ModelName15=NIC-UUX2A470MNL1GS_M
 ModelUpdate15=1
 ModelType16=PCBLIB
-ModelName16=PW0014A_M
+ModelName16=SOIC-24
 ModelUpdate16=1
 ModelType17=PCBLIB
-ModelName17=SOIC-24
+ModelName17=SOIC8
 ModelUpdate17=1
 ModelType18=PCBLIB
 ModelName18=STM-LQFP64_L
@@ -1783,19 +1988,27 @@ PageOptions=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintSc
 Configuration_Name1=OutputConfigurationParameter1
 Configuration_Item1=DesignatorDisplayMode=Physical|PrintArea=DesignExtent|PrintAreaLowerLeftCornerX=0|PrintAreaLowerLeftCornerY=0|PrintAreaUpperRightCornerX=0|PrintAreaUpperRightCornerY=0|Record=PcbPrintView
 Configuration_Name2=OutputConfigurationParameter2
-Configuration_Item2=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=0|Mirror=False|Name=Multilayer Composite Print|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
+Configuration_Item2=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=0|Mirror=False|Name=Top Layer|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
 Configuration_Name3=OutputConfigurationParameter3
-Configuration_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
 Configuration_Name4=OutputConfigurationParameter4
-Configuration_Item4=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item4=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=1|Mirror=False|Name=Bottom Layer|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
 Configuration_Name5=OutputConfigurationParameter5
-Configuration_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomLayer|Polygon=Full|PrintOutIndex=1|Record=PcbPrintLayer
 Configuration_Name6=OutputConfigurationParameter6
-Configuration_Item6=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MultiLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item6=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=2|Mirror=False|Name=Top Silkscreen Overlay|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
 Configuration_Name7=OutputConfigurationParameter7
-Configuration_Item7=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical1|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item7=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopSolder|Polygon=Full|PrintOutIndex=2|Record=PcbPrintLayer
 Configuration_Name8=OutputConfigurationParameter8
-Configuration_Item8=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical13|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item8=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=2|Record=PcbPrintLayer
 Configuration_Name9=OutputConfigurationParameter9
-Configuration_Item9=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical15|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer
+Configuration_Item9=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=3|Mirror=False|Name=Bottom Silkscreen Overlay|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
+Configuration_Name10=OutputConfigurationParameter10
+Configuration_Item10=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomSolder|Polygon=Full|PrintOutIndex=3|Record=PcbPrintLayer
+Configuration_Name11=OutputConfigurationParameter11
+Configuration_Item11=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=BottomOverlay|Polygon=Full|PrintOutIndex=3|Record=PcbPrintLayer
+Configuration_Name12=OutputConfigurationParameter12
+Configuration_Item12=IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=True|Index=4|Mirror=False|Name=Drill Drawing For (Bottom Layer,Top Layer)|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False
+Configuration_Name13=OutputConfigurationParameter13
+Configuration_Item13=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=BottomLayer|DLayer2=TopLayer|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=DrillDrawing|Polygon=Full|PrintOutIndex=4|Record=PcbPrintLayer
 

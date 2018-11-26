@@ -1,0 +1,38 @@
+********************************
+* Copyright:                   *
+* Vishay Intertechnology, Inc. *
+********************************
+*Mar 21, 2016
+*ECN S16-0471, Rev. A
+*File Name: SQJ974EP_PS.txt and SQJ974EP_PS.lib
+*This document is intended as a SPICE modeling guideline and does not
+*constitute a commercial product datasheet. Designers should refer to the
+*appropriate datasheet of the same number for guaranteed specification
+*limits.
+.SUBCKT SQJ974EP D G S 
+M1 3 GX S S NMOS W= 1479563u L= 0.30u 
+M2 S GX S D PMOS W= 1479563u L= 0.33u 
+R1 D 3 1.888e-02 TC=5.596e-03,1.442e-05
+CGS GX S 4.993e-10 
+CGD GX D 1.000e-13 
+RG G GY 1m 
+RTCV 100 S 1e6 TC=7.205e-04,-5.537e-06
+ETCV GX GY 100 200 1 
+ITCV S 100 1u 
+VTCV 200 S 1 
+DBD S D DBD 1479563u 
+****************************************************** 
+.MODEL NMOS NMOS ( LEVEL = 3 TOX = 5e-8 
++ RS = 0 KP = 9.666e-06 NSUB = 1.36e+17 
++ KAPPA = 2.260e-02 NFS = 9.973e+11 
++ LD = 0 IS = 0 TPG = 1    )
+******************************************************
+.MODEL PMOS PMOS ( LEVEL = 3 TOX = 5e-8 
++NSUB = 7.116e+15 IS = 0 TPG = -1    )
+******************************************************
+.MODEL DBD D ( 
++FC = 0.1 TT = 6.967e-08 T_measured = 25 BV = 101
++RS = 7.326e-03 N = 1.142e+00 IS = 7.242e-12 
++EG = 1.235e+00 XTI = -4.636e-02 TRS1 = 2.467e-03
++CJO = 5.114e-10 VJ = 2.000e+01 M = 8.404e-01 ) 
+.ENDS 
