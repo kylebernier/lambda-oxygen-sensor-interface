@@ -1,6 +1,7 @@
 /**
  * @file dac.h
- * @author Kyle Bernier and Daeghan Elkin
+ * @author Kyle Bernier
+ * @author Daeghan Elkin
  * @date 2018 July 29
  *
  * @brief Provides basic DAC functionality
@@ -13,10 +14,19 @@
 
 #include "hw_map.h"
 
-/* Initialize the DAC interface */
+/**
+ * @brief Initialize the DAC interface 
+ * @retval None
+ * @details
+ */
 int Init_DAC(void);
-/* Adjust the DAC output value */
-void DAC_SetValue(uint32_t value);
 
+/** 
+ * @brief Adjust the DAC output value 
+ * @param value Value to set the DAC output to
+ * @retval None
+ * @details
+ */
+void DAC_SetValue(uint32_t value);
 
 #endif // __DAC_H

@@ -1,6 +1,7 @@
 /**
  * @file dac.c
- * @author Kyle Bernier and Daeghan Elkin
+ * @author Kyle Bernier
+ * @author Daeghan Elkin
  * @date 2018 July 29
  *
  * @brief Provides basic DAC functionality

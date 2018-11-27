@@ -1,6 +1,7 @@
 /**
  * @file usart.c
- * @author Kyle Bernier and Daeghan Elkin
+ * @author Kyle Bernier
+ * @author Daeghan Elkin
  * @date 2018 September 12
  *
  * @brief Provides basic USART functionality.
@@ -8,6 +9,7 @@
  */
 #include "usart.h"
 
+/** @brief Send counter */
 uint8_t ubSend = 0;
 
 /* Initialize the USART */

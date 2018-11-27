@@ -1,6 +1,7 @@
 /**
  * @file pwm.c
- * @author Kyle Bernier and Daeghan Elkin
+ * @author Kyle Bernier 
+ * @author Daeghan Elkin
  * @date 2018 September 9
  *
  * @brief Provides basic PWM functionality

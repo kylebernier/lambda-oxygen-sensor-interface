@@ -1,9 +1,10 @@
 /**
  * @file main.c
- * @author Kyle Bernier and Daeghan Elkin
+ * @author Kyle Bernier
+ * @author Daeghan Elkin
  * @date 2018 May 27
  *
- * @brief Blinks an led and updates variables with the ADC.
+ * @brief Runs overall control for the CJ125 and LSU4.9 sensor
  *
  */
 
@@ -24,25 +25,18 @@
 #include "temp.h"
 #include "v8Lambda.h"
 #include "v17Lambda.h"
+#include "cj125.h"
 
-
-#define CJ125_IDENT_REG         0x4800  // Identify request
-#define CJ125_DIAG_REG          0x7800  // Diagnostic request
-#define CJ125_DIAG_REG_OK       0x28ff  // Diagnostic response CJ125 ready
-#define CJ125_DIAG_REG_NOPWR    0x2855  // Diagnostic response no/low power
-#define CJ125_DIAG_REG_NOSNSR   0x287f  // Diagnostic response no sensor
-#define CJ125_CALIBRATE_MODE    0x569d  // Calibration mode for CJ125
-#define CJ125_V8_MODE           0x5688  // Set CJ125 into V=8 mode
-#define CJ125_V17_MODE          0x5689  // Set CJ125 into V=17 mode
-
-void SystemClock_Config(void);
 void Initialize_Heater(void);
 
-
-uint16_t aResultDMA[3];
-// ADC values: Battery voltage, lambda value, sensor resistance
+/** @brief ADC values array: Battery voltage, lambda value, sensor resistance */
 uint16_t adc_vals[3] = {0, 0, 0};
 
+/**
+ * @brief Main program entrypoint
+ * 
+ * @return Should not return 
+ */
 int main(void)
 {
     uint16_t response = 0;
@@ -150,19 +144,19 @@ int main(void)
 
 /**
  * @brief  System Clock Configuration
- *         The system Clock is configured as follows :
- *            System Clock source            = PLL (MSI)
- *            SYSCLK(Hz)                     = 8000000
- *            HCLK(Hz)                       = 8000000
- *            AHB Prescaler                  = 1
- *            APB1 Prescaler                 = 1
- *            APB2 Prescaler                 = 1
- *            MSI Frequency(Hz)              = 4000000
- *            PLL_M                          = 1
- *            PLL_N                          = 40
- *            PLL_R                          = 2
- *            Flash Latency(WS)              = 4
- * @param  None
+ * 
+ * The system Clock is configured as follows :
+ *    System Clock source            = PLL (MSI)
+ *    SYSCLK(Hz)                     = 8000000
+ *    HCLK(Hz)                       = 8000000
+ *    AHB Prescaler                  = 1
+ *    APB1 Prescaler                 = 1
+ *    APB2 Prescaler                 = 1
+ *    MSI Frequency(Hz)              = 4000000
+ *    PLL_M                          = 1
+ *    PLL_N                          = 40
+ *    PLL_R                          = 2
+ *    Flash Latency(WS)              = 4
  * @retval None
  */
 void SystemClock_Config(void)
@@ -194,7 +188,15 @@ void SystemClock_Config(void)
     LL_SetSystemCoreClock(8000000);
 }
 
-/* Initializes heater to start at a low voltage and then ramp up to operating range. */
+/**
+ * @brief Heater initialization routine
+ * 
+ * Initializes heater to a starting voltage of less than 2V during the condensation phase.
+ * Once past condensation phase heater voltage is ramped up at a rate of 0.4V/s until
+ * reaching a maximum of 13V. This is highlighted in the LSU 4.9 manual.
+ * 
+ * @retval None
+ */
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;

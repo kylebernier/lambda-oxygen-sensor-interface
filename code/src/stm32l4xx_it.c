@@ -1,3 +1,10 @@
+/**
+ * @file stm32l4xx_it.c
+ * @author Kyle Bernier
+ * @author Daeghan Elkin
+ * @brief Interrupt setup for STM32L4xx
+ * @date 2018-11-27
+ */
 #include "stm32l4xx.h"
 
 #include "stm32l4xx_ll_adc.h"
@@ -7,101 +14,60 @@
 #include "adc.h"
 #include "spi.h"
 
-
-/**
- * @brief   This function handles NMI exception.
- * @param  None
- * @retval None
- */
+/* This function handles NMI exceptions */
 void NMI_Handler(void)
 {
 }
 
-/**
- * @brief  This function handles Hard Fault exception.
- * @param  None
- * @retval None
- */
+/* THis function handles Hard Fault exceptions */
 void HardFault_Handler(void)
 {
     // Enter an infinite loop
     while (1);
 }
 
-/**
- * @brief  This function handles Memory Manage exception.
- * @param  None
- * @retval None
- */
+/* This function handles Memory Manage exceptions */
 void MemManage_Handler(void)
 {
     // Enter an infinite loop
     while (1);
 }
 
-/**
- * @brief  This function handles Bus Fault exception.
- * @param  None
- * @retval None
- */
+/* This function handles Bus Fault exceptions */
 void BusFault_Handler(void)
 {
     // Enter an infinite loop
     while (1);
 }
 
-/**
- * @brief  This function handles Usage Fault exception.
- * @param  None
- * @retval None
- */
+/* This function handles Fault exceptions */
 void UsageFault_Handler(void)
 {
     // Enter an infinite loop
     while (1);
 }
 
-/**
- * @brief  This function handles SVCall exception.
- * @param  None
- * @retval None
- */
+/* This function handles SVCall exceptions */
 void SVC_Handler(void)
 {
 }
 
-/**
- * @brief  This function handles Debug Monitor exception.
- * @param  None
- * @retval None
- */
+/* This function handles Debug Monitor exceptions */
 void DebugMon_Handler(void)
 {
 }
 
-/**
- * @brief  This function handles PendSVC exception.
- * @param  None
- * @retval None
- */
+/* This function handles PendSVC exceptions */
 void PendSV_Handler(void)
 {
 }
 
-/**
- * @brief  This function handles SysTick Handler.
- * @param  None
- * @retval None
- */
+/* This function handles SysTick Handlers */
 void SysTick_Handler(void)
 {
 }
 
-/**
-  * @brief  This function handles ADC1 interrupt request.
-  * @param  None
-  * @retval None
-  */
+/* This function handles ADC1 interrupt requests */
 void ADC1_2_IRQHandler(void)
 {
     // Check if the interupt is end of conversion
@@ -123,11 +89,7 @@ void ADC1_2_IRQHandler(void)
     }
 }
 
-/**
-  * @brief  This function handles DMA1 interrupt request.
-  * @param  None
-  * @retval None
-  */
+/* This function handles DMA1 interrupts requests */
 void DMA1_Channel1_IRQHandler(void)
 {
     // Check if the DMA transfer is complete

@@ -1,10 +1,10 @@
 /**
  * @file adc.c
- * @author Kyle Bernier and Daeghan Elkin
+ * @author Kyle Bernier
+ * @author Daeghan Elkin
  * @date 2018 July 15
- *
+ * 
  * @brief Provides basic ADC functionality
- *
  */
 
 #include "stm32l4xx_ll_dma.h"
@@ -12,21 +12,13 @@
 #include "adc.h"
 
 
-/* Delay between ADC end of calibration and ADC enable */
+/** @brief Delay between ADC end of calibration and ADC enable */
 #define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
 
-
-/* Initialize DMA for the ADC */
-static void ADC_Init_DMA(
-    uint16_t * values,
-    int numValues
-);
-
+/** @brief Number of possible ADC channels */
 #define ADC_NUM_CHANNELS 23
 
-#define ADC_SAMPLE_RATE LL_ADC_SAMPLINGTIME_640CYCLES_5
-
-/* Array of ADC channels */
+/** @brief Array of ADC channels */
 uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
     LL_ADC_CHANNEL_0,
     LL_ADC_CHANNEL_1,
@@ -53,7 +45,7 @@ uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
     LL_ADC_CHANNEL_DAC1CH2_ADC3 // ADC3 Only, Uses Channel 15
 };
 
-/* Array of ADC channel ranks */
+/** @brief Array of ADC channel ranks */
 uint32_t ADC_RANKS[16] = {
     LL_ADC_REG_RANK_1,
     LL_ADC_REG_RANK_2,
@@ -73,17 +65,22 @@ uint32_t ADC_RANKS[16] = {
     LL_ADC_REG_RANK_16
 };
 
-/* 0: DMA transfer is not completed */
-/* 1: DMA transfer is completed */
-/* 2: DMA transfer has not been started yet (initial state) */
+/**
+ * @brief DMA transfer value
+ * 0: DMA transfer is not completed
+ * 1: DMA transfer is completed
+ * 2: DMA transfer has not been started yet (initial state) 
+ */
 volatile uint8_t dmaTransferStatus = 2;
 
-/* 0: ADC group regular sequence conversions are not completed */
-/* 1: ADC group regular sequence conversions are completed */
+/**
+ * @brief ADC group sequence conversion value
+ * 0: ADC group regular sequence conversions are not completed
+ * 1: ADC group regular sequence conversions are completed 
+ */
 volatile uint8_t adcConversionStatus = 0;
 
-
-/* Initialize the ADC with DMA */
+/* Initialize ADC with DMA*/
 void Init_ADC(
     uint32_t channels,
     uint16_t * values,
@@ -140,7 +137,7 @@ void Init_ADC(
     for (i = 0, j = 0; i < ADC_NUM_CHANNELS; i++) {
         if (channels & (1 << i)) {
             LL_ADC_REG_SetSequencerRanks(ADC_BAT_BASE, ADC_RANKS[j], ADC_CHANNELS[i]);
-            LL_ADC_SetChannelSamplingTime(ADC_BAT_BASE, ADC_CHANNELS[i], ADC_SAMPLE_RATE);
+            LL_ADC_SetChannelSamplingTime(ADC_BAT_BASE, ADC_CHANNELS[i], ADC_BAT_SAMPLETIME);
             j++;
         }
         if (j >= numValues || j >= 16) break;
@@ -186,11 +183,6 @@ void Init_ADC(
     LL_ADC_REG_StartConversion(ADC_BAT_BASE);
 }
 
-/**
- * @brief  This function configures DMA for transfer of data from ADC
- * @param  None
- * @retval None
- */
 static void ADC_Init_DMA(
     uint16_t * values,
     int numValues
@@ -236,12 +228,6 @@ static void ADC_Init_DMA(
 }
 
 
-/**
- * @brief  DMA transfer complete callback
- * @note   This function is executed when the transfer complete interrupt
- *         is generated
- * @retval None
- */
 void ADC_DMA_TransferComplete_Callback(void)
 {
     // Update the DMA transfer status
@@ -256,36 +242,18 @@ void ADC_DMA_TransferComplete_Callback(void)
     adcConversionStatus = 0;
 }
 
-/**
-  * @brief  DMA transfer error callback
-  * @note   This function is executed when the transfer error interrupt
-  *         is generated during DMA transfer
-  * @retval None
-  */
 void ADC_DMA_TransferError_Callback(void)
 {
     // Handle the error
     while(1);
 }
 
-/**
- * @brief  ADC group regular end of sequence conversions interruption callback
- * @note   This function is executed when the ADC group regular
- *         sequencer has converted all ranks of the sequence.
- * @retval None
- */
 void ADC_ConvComplete_Callback(void)
 {
     // Update the ADC conversion status
     adcConversionStatus = 1;
 }
 
-/**
-  * @brief  ADC group regular overrun interruption callback
-  * @note   This function is executed when ADC group regular
-  *         overrun error occurs.
-  * @retval None
-  */
 void ADC_OverrunError_Callback(void)
 {
     // Disable ADC overrun interrupts
