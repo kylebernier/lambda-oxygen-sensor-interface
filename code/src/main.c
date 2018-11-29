@@ -28,6 +28,7 @@
 #include "cj125.h"
 
 void Initialize_Heater(void);
+void SystemClock_Config(void);
 
 /** @brief ADC values array: Battery voltage, lambda value, sensor resistance */
 uint16_t adc_vals[3] = {0, 0, 0};

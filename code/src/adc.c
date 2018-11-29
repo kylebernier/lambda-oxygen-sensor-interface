@@ -12,6 +12,19 @@
 #include "adc.h"
 
 
+/**
+ * @brief Initialize DMA for the ADC 
+ * 
+ * @param values Array to store ADC values
+ * @param numValues Number of values in values array
+ * 
+ * @retval None
+ */
+static void ADC_Init_DMA(
+    uint16_t * values,
+    int numValues
+);
+
 /** @brief Delay between ADC end of calibration and ADC enable */
 #define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
 

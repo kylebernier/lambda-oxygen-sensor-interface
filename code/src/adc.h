@@ -28,19 +28,6 @@ void Init_ADC(
 );
 
 /**
- * @brief Initialize DMA for the ADC 
- * 
- * @param values Array to store ADC values
- * @param numValues Number of values in values array
- * 
- * @retval None
- */
-static void ADC_Init_DMA(
-    uint16_t * values,
-    int numValues
-);
-
-/**
  * @brief DMA transfer complete callback
  * 
  * @note This function is executed when the transfer complete interrupt
