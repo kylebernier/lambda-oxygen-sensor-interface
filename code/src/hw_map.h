@@ -178,18 +178,18 @@
 /** @brief STM PWM timer */
 #define PWMx_BASE TIM8
 /** @brief STM PWM Timer channel */
-#define PWMx_CHANNEL LL_TIM_CHANNEL_CH1
+#define PWMx_CHANNEL LL_TIM_CHANNEL_CH2
 /** @brief Enable PWM peripheral clock */
 #define PWMx_CLK_ENABLE() LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM8)
 
 /** @brief Enable GPIO clock */
 #define PWMx_GPIO_CLK_ENABLE() LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOC)
 /** @brief STM PWM GPIO Pin */
-#define PWMx_GPIO_PIN LL_GPIO_PIN_6
+#define PWMx_GPIO_PIN LL_GPIO_PIN_7
 /** @brief STM PWM GPIO Port */
 #define PWMx_GPIO_PORT GPIOC
 /** @brief Set PWM alternative function */
-#define PWMx_SET_GPIO_AF() LL_GPIO_SetAFPin_0_7(GPIOC, LL_GPIO_PIN_6, LL_GPIO_AF_3)
+#define PWMx_SET_GPIO_AF() LL_GPIO_SetAFPin_0_7(GPIOC, LL_GPIO_PIN_7, LL_GPIO_AF_3)
 /** @} */
 
 /**
@@ -245,6 +245,10 @@
 #define SPI_CJ125_SEL_PIN LL_GPIO_PIN_12
 /** @brief STM SPI Select GPIO Port */
 #define SPI_CJ125_SEL_PORT GPIOB
+/** @brief STM SPI Reset GPIO Pin */
+#define SPI_CJ125_RST_PIN LL_GPIO_PIN_6
+/** @brief STM SPI Reset GPIO Port */
+#define SPI_CJ125_RST_PORT GPIOC
 /** @} */
 
 /**
