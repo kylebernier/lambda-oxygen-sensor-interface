@@ -6,10 +6,9 @@
  *
  * @brief Maps hardware peripherals to board specific features
  * 
- * Sets up all of the includes and definitions required for hardware 
- * peripherals. 
+ * Sets up definitions required for hardware peripherals. 
  * 
- * Includes: ADC, DAC, PWM, UART, SPI
+ * Includes: ADC, DAC, DMA, PWM, UART, SPI
  */
 
 #ifndef __HW_MAP_H
@@ -53,7 +52,7 @@
 /** @} */
 
 /**
- * @defgroup ADC_CRT ADC Lambda Value Monitor
+ * @defgroup ADC_LMD ADC Lambda Value Monitor
  * @ingroup ADC
  * @brief ADC channel used to read lambda value
  * 
@@ -62,19 +61,19 @@
  * @{
  */ 
 /** @brief STM ADC*/
-#define ADC_CRT_BASE ADC1
+#define ADC_LMD_BASE ADC1
 /** @brief STM ADC GPIO Pin*/
-#define ADC_CRT_GPIO_PIN LL_GPIO_PIN_6
+#define ADC_LMD_GPIO_PIN LL_GPIO_PIN_6
 /** @brief STM ADC GPIO Port*/
-#define ADC_CRT_GPIO_PORT GPIOA
+#define ADC_LMD_GPIO_PORT GPIOA
 /** @brief STM ADC Channel*/
-#define ADC_CRT_CHANNEL LL_ADC_CHANNEL_11
+#define ADC_LMD_CHANNEL LL_ADC_CHANNEL_11
 /** @brief STM ADC sample rate*/
-#define ADC_CRT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
+#define ADC_LMD_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
- * @defgroup ADC_VTG ADC Resistance Monitor
+ * @defgroup ADC_RES ADC Resistance Monitor
  * @ingroup ADC
  * @brief ADC channel used to read sensor resitance
  * 
@@ -84,15 +83,15 @@
  * @{
  */
 /** @brief STM ADC */
-#define ADC_VTG_BASE ADC1
+#define ADC_RES_BASE ADC1
 /** @brief STM ADC GPIO Pin */
-#define ADC_VTG_GPIO_PIN LL_GPIO_PIN_7
+#define ADC_RES_GPIO_PIN LL_GPIO_PIN_7
 /** @brief STM ADC GPIO Port */
-#define ADC_VTG_GPIO_PORT GPIOA
+#define ADC_RES_GPIO_PORT GPIOA
 /** @brief STM ADC Channel */
-#define ADC_VTG_CHANNEL LL_ADC_CHANNEL_12
+#define ADC_RES_CHANNEL LL_ADC_CHANNEL_12
 /** @brief STM ADC sample rate */
-#define ADC_VTG_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
+#define ADC_RES_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
@@ -139,26 +138,11 @@
 /** @brief STM DAC */
 #define DAC_LMD_BASE DAC1
 /** @brief STM DAC GPIO Pin */
-#define DAC_LMD_GPIO_PIN LL_GPIO_PIN_4
+#define DAC_LMD_GPIO_PIN LL_GPIO_PIN_5
 /** @brief STM DAC GPIO Port */
 #define DAC_LMD_GPIO_PORT GPIOA
 /** @brief STM DAC Channel */
 #define DAC_LMD_CHANNEL LL_DAC_CHANNEL_1
-/** @} */
-
-/**
- * @defgroup DAC_FUN DAC Function Output 
- * @ingroup DAC
- * @{
- */
-/** @brief STM DAC */
-#define DAC_FUN_BASE DAC1
-/** @brief STM DAC GPIO Pin */
-#define DAC_FUN_GPIO_PIN LL_GPIO_PIN_5
-/** @brief STM DAC GPIO Port */
-#define DAC_FUN_GPIO_PORT GPIOA
-/** @brief STM DAC Channel */
-#define DAC_FUN_CHANNEL LL_DAC_CHANNEL_2
 /** @} */
 
 /**

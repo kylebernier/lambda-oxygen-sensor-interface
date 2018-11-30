@@ -4,7 +4,7 @@
  * @author Daeghan Elkin
  * @date 2018 July 15
  *
- * @brief Provides basic ADC functionality
+ * @brief Provides ADC functionality
  */
 
 #ifndef __ADC_H
@@ -21,11 +21,7 @@
  * 
  * @retval None
  */
-void Init_ADC(
-    uint32_t channels,
-    uint16_t * values,
-    int numValues
-);
+void Init_ADC(uint32_t channels, uint16_t * values, int numValues);
 
 /**
  * @brief DMA transfer complete callback

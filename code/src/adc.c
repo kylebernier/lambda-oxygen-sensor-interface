@@ -20,10 +20,7 @@
  * 
  * @retval None
  */
-static void ADC_Init_DMA(
-    uint16_t * values,
-    int numValues
-);
+static void ADC_Init_DMA(uint16_t * values, int numValues);
 
 /** @brief Delay between ADC end of calibration and ADC enable */
 #define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
@@ -49,13 +46,13 @@ uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
     LL_ADC_CHANNEL_13,
     LL_ADC_CHANNEL_14,
     LL_ADC_CHANNEL_15,
-    LL_ADC_CHANNEL_VREFINT, // ADC_BAT_BASE Only, Uses Channel 0
-    LL_ADC_CHANNEL_TEMPSENSOR, // ADC_BAT_BASE or ADC3
-    LL_ADC_CHANNEL_VBAT, // ADC_BAT_BASE or ADC3
-    LL_ADC_CHANNEL_DAC1CH1_ADC2, // ADC2 Only
-    LL_ADC_CHANNEL_DAC1CH2_ADC2, // ADC2 Only
-    LL_ADC_CHANNEL_DAC1CH1_ADC3, // ADC3 Only, Uses Channel 14
-    LL_ADC_CHANNEL_DAC1CH2_ADC3 // ADC3 Only, Uses Channel 15
+    LL_ADC_CHANNEL_VREFINT,         // ADC_BAT_BASE Only, Uses Channel 0
+    LL_ADC_CHANNEL_TEMPSENSOR,      // ADC_BAT_BASE or ADC3
+    LL_ADC_CHANNEL_VBAT,            // ADC_BAT_BASE or ADC3
+    LL_ADC_CHANNEL_DAC1CH1_ADC2,    // ADC2 Only
+    LL_ADC_CHANNEL_DAC1CH2_ADC2,    // ADC2 Only
+    LL_ADC_CHANNEL_DAC1CH1_ADC3,    // ADC3 Only, Uses Channel 14
+    LL_ADC_CHANNEL_DAC1CH2_ADC3     // ADC3 Only, Uses Channel 15
 };
 
 /** @brief Array of ADC channel ranks */
@@ -94,11 +91,7 @@ volatile uint8_t dmaTransferStatus = 2;
 volatile uint8_t adcConversionStatus = 0;
 
 /* Initialize ADC with DMA*/
-void Init_ADC(
-    uint32_t channels,
-    uint16_t * values,
-    int numValues
-)
+void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
 {
     int i, j;
 
@@ -196,10 +189,7 @@ void Init_ADC(
     LL_ADC_REG_StartConversion(ADC_BAT_BASE);
 }
 
-static void ADC_Init_DMA(
-    uint16_t * values,
-    int numValues
-)
+static void ADC_Init_DMA(uint16_t *values, int numValues)
 {
     // Enable DMA interrupts
     // Set the DMA IRQ to a lower priority than the ADC IRQ
@@ -240,7 +230,7 @@ static void ADC_Init_DMA(
     LL_DMA_EnableChannel(DMA_BASE, DMA_CHANNEL);
 }
 
-
+/* DMA transfer complete callback */
 void ADC_DMA_TransferComplete_Callback(void)
 {
     // Update the DMA transfer status
@@ -255,18 +245,21 @@ void ADC_DMA_TransferComplete_Callback(void)
     adcConversionStatus = 0;
 }
 
+/* DMA transfer error callback */
 void ADC_DMA_TransferError_Callback(void)
 {
     // Handle the error
     while(1);
 }
 
+/* ADC group regular end of sequence conversions interruption callback */
 void ADC_ConvComplete_Callback(void)
 {
     // Update the ADC conversion status
     adcConversionStatus = 1;
 }
 
+/* ADC group regular overrun interruption callback */
 void ADC_OverrunError_Callback(void)
 {
     // Disable ADC overrun interrupts
