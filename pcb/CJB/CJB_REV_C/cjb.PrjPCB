@@ -207,6 +207,10 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FJAGLTHY
 
+[GeneratedDocument1]
+DocumentPath=Project_Outputs\Design Rule Check - cjb.html
+DItemRevisionGUID=
+
 [SearchPath1]
 Path=..\..\Library\*.*
 IncludeSubFolders=1
