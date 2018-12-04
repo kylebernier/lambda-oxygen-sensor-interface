@@ -95,6 +95,25 @@
 /** @} */
 
 /**
+ * @defgroup ADC_CRNT ADC PWM Current Sense
+ * @ingroup ADC
+ * @brief ADC channel used to sense current
+ * 
+ * @{
+ */
+/** @brief STM ADC */
+#define ADC_CRNT_BASE ADC1
+/** @brief STM ADC GPIO Pin */
+#define ADC_CRNT_GPIO_PIN LL_GPIO_PIN_1
+/** @brief STM ADC GPIO Port */
+#define ADC_CRNT_GPIO_PORT GPIOB
+/** @brief STM ADC Channel */
+#define ADC_CRNT_CHANNEL LL_ADC_CHANNEL_16
+/** @brief STM ADC sample rate */
+#define ADC_CRNT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
+/** @} */
+
+/**
  * @def ADCx_CLK_ENABLE()
  * @ingroup ADC
  * @brief ADC definition for enabling peripheral clock.
@@ -229,10 +248,6 @@
 #define SPI_CJ125_SEL_PIN LL_GPIO_PIN_12
 /** @brief STM SPI Select GPIO Port */
 #define SPI_CJ125_SEL_PORT GPIOB
-/** @brief STM SPI Reset GPIO Pin */
-#define SPI_CJ125_RST_PIN LL_GPIO_PIN_6
-/** @brief STM SPI Reset GPIO Port */
-#define SPI_CJ125_RST_PORT GPIOC
 /** @} */
 
 /**

@@ -15,6 +15,14 @@
 /**
  * @brief Initialize the ADC with DMA 
  * 
+ * Initialization of the desired channels is done by taking the reverse of
+ * the binary expansion of the channels.
+ * ie. For enabling channels 3, 8, 11, & 12 the representation would be:
+ * - - - 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+ * 0 0 0  0| 0  0  0  1| 1  0 0 1|0 0 0 0|1 0 0 0
+ * 
+ * Which results in a hexidecimal number of 0x01908
+ * 
  * @param channels ADC channels to read from
  * @param values Array to store ADC values
  * @param numValues Number of values in values array

@@ -42,6 +42,11 @@ void HW_Init_GPIO(void)
     // Map GPIO pin to the ADC
     LL_GPIO_EnablePinAnalogControl(ADC_RES_GPIO_PORT, ADC_RES_GPIO_PIN);
 
+    // Configure the GPIO pin as a ADC input
+    LL_GPIO_SetPinMode(ADC_CRNT_GPIO_PORT, ADC_CRNT_GPIO_PIN, LL_GPIO_MODE_ANALOG);
+    // Map GPIO pin to the ADC
+    LL_GPIO_EnablePinAnalogControl(ADC_CRNT_GPIO_PORT, ADC_CRNT_GPIO_PIN);
+
     //------------------------
     // DAC Setup 
     //------------------------

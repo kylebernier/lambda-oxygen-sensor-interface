@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('adc_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Provides basic ADC functionality.  
+<p>Provides ADC functionality.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="hw__map_8h_source.html">hw_map.h</a>&quot;</code><br />
 </div>
@@ -117,7 +117,7 @@ Functions</h2></td></tr>
 <tr class="separator:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Provides basic ADC functionality. </p>
+<div class="textblock"><p>Provides ADC functionality. </p>
 <dl class="section author"><dt>Author</dt><dd>Kyle Bernier </dd>
 <dd>
 Daeghan Elkin </dd></dl>
@@ -150,7 +150,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00251">251</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00257">257</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -179,7 +179,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00231">231</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00235">235</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -208,7 +208,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00245">245</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00250">250</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -237,7 +237,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00257">257</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00264">264</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -274,6 +274,10 @@ Daeghan Elkin </dd></dl>
 </div><div class="memdoc">
 
 <p>Initialize the ADC with DMA. </p>
+<p>Initialization of the desired channels is done by taking the reverse of the binary expansion of the channels. ie. For enabling channels 3, 8, 11, &amp; 12 the representation would be:</p><ul>
+<li>- - 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 0 0 0 0| 0 0 0 1| 1 0 0 1|0 0 0 0|1 0 0 0</li>
+</ul>
+<p>Which results in a hexidecimal number of 0x01908</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">channels</td><td>ADC channels to read from </td></tr>
@@ -289,7 +293,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00084">84</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00095">95</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>

@@ -26,7 +26,7 @@ static void ADC_Init_DMA(uint16_t * values, int numValues);
 #define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES (LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32)
 
 /** @brief Number of possible ADC channels */
-#define ADC_NUM_CHANNELS 23
+#define ADC_NUM_CHANNELS 24
 
 /** @brief Array of ADC channels */
 uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
@@ -46,6 +46,7 @@ uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
     LL_ADC_CHANNEL_13,
     LL_ADC_CHANNEL_14,
     LL_ADC_CHANNEL_15,
+    LL_ADC_CHANNEL_16,
     LL_ADC_CHANNEL_VREFINT,         // ADC_BAT_BASE Only, Uses Channel 0
     LL_ADC_CHANNEL_TEMPSENSOR,      // ADC_BAT_BASE or ADC3
     LL_ADC_CHANNEL_VBAT,            // ADC_BAT_BASE or ADC3

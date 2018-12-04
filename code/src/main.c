@@ -30,8 +30,10 @@
 void Initialize_Heater(void);
 void SystemClock_Config(void);
 
-/** @brief ADC values array: Battery voltage, lambda value, sensor resistance */
-uint16_t adc_vals[3] = {0, 0, 0};
+/** @brief ADC values array 
+ * Battery voltage, lambda value, sensor resistance, current sense 
+ */
+uint16_t adc_vals[4] = {0, 0, 0, 0};
 
 /**
  * @brief Main program entrypoint
@@ -44,6 +46,7 @@ int main(void)
     float f = 0.0;
     uint8_t *data_out;
     uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
+    uint16_t crnt_sense;
     float pwm_duty_cycle;
     uint32_t Vbat;
 
@@ -53,8 +56,8 @@ int main(void)
     // Config the system clock to 8MHz
     SystemClock_Config();
 
-    // Initialize ADC on channels 8, 10, and 11
-    Init_ADC(0x1900, (uint16_t *)adc_vals, 3);
+    // Initialize ADC on channels 8, 11, 12, and 16
+    Init_ADC(0x11900, (uint16_t *)adc_vals, 4);
     // Initialize DAC
     Init_DAC();
     // Initialize PWM with duty cycle of 0%

@@ -29,7 +29,13 @@ void Init_SPI(void)
     // Enable the SPI interface
     LL_SPI_Enable(SPI_CJ125_BASE);
 
+    // Enable select line
     MODIFY_REG(GPIOB->MODER, GPIO_MODER_MODE12, GPIO_MODER_MODE12_0);
+
+    // Enable reset line
+    MODIFY_REG(GPIOC->MODER, GPIO_MODER_MODE6, GPIO_MODER_MODE6_0);
+    // Set SPI reset line high
+    SET_BIT(GPIOC->ODR, GPIO_ODR_OD6_Msk);
 }
 
 /* Complete an SPI transfer */
