@@ -48,7 +48,7 @@ int main(void)
     uint8_t *data_out;
     uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
     float pwm_duty_cycle;
-    uint32_t Vbat, desiredV;
+    uint32_t Vbat, desiredV = 0;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -199,7 +199,7 @@ void SystemClock_Config(void)
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;
-    uint32_t Vbat, maxCur;
+    uint32_t Vbat, maxCur, res;
     uint16_t maxCurADC = 0;
     uint16_t VbatADC;
     uint16_t cur;
@@ -207,7 +207,7 @@ void Initialize_Heater(void) {
     // Sample current sense ADC to determine the maximum value
     for (i= 0; i < 50; i++) {
         cur = adc_vals[3];
-        if (cur > maxCur) {
+        if (cur > maxCurADC) {
             maxCurADC = cur;
             VbatADC = adc_vals[0];
         }
@@ -231,7 +231,7 @@ void Initialize_Heater(void) {
 
         // Delay for 500ms
         LL_mDelay(500);
-    } while (res < CONDENSATION)
+    } while (res < CONDENSATION);
 
     i = 0;
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
