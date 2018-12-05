@@ -35,6 +35,8 @@ void SystemClock_Config(void);
  */
 uint16_t adc_vals[4] = {0, 0, 0, 0};
 
+#define CONDENSATION 4000
+
 /**
  * @brief Main program entrypoint
  * 
@@ -43,12 +45,10 @@ uint16_t adc_vals[4] = {0, 0, 0, 0};
 int main(void)
 {
     uint16_t response = 0;
-    float f = 0.0;
     uint8_t *data_out;
     uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
-    uint16_t crnt_sense;
     float pwm_duty_cycle;
-    uint32_t Vbat;
+    uint32_t Vbat, desiredV;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -88,31 +88,34 @@ int main(void)
     
 
     // Initialize heater before using it
-    //Initialize_Heater();
+    Initialize_Heater();
 
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
         
         // Read in battery voltage, lambda voltage and restance values from CJ125
-        //UA = adc_vals[1];
-        //UR = adc_vals[2];
-        UA = optimal_lambda;
-        UR = optimal_resistance;
+        UA = adc_vals[1];
+        UR = adc_vals[2];
+        //UA = optimal_lambda;
+        //UR = optimal_resistance;
 
-        // Calculate lambda value and heater temperature
+        // Calculate lambda value
+        // If using the V=8 on the CJ125 comment out V17 section and uncomment this section
         if (UA >= 2142) {
             lambda = 10159;
         } else {
             lambda = v8Lambda_Lookup[UA];
         }
-        /* 
-        if (UA >= 3170) {
-            lambda = 10147;
-        } else {
-            lambda = v17Lambda_Lookup[UA];
-        } 
-        */
+         
+        // If using the V=17 on the CJ125 comment out V8 section and uncomment this section
+        //if (UA >= 3170) {
+        //    lambda = 10147;
+        //} else {
+        //    lambda = v17Lambda_Lookup[UA];
+        //} 
+        
 
+        // Calculate heater temperature
         if (UR <= 315) {
             temp = 1816;
         } else {
@@ -133,16 +136,8 @@ int main(void)
 
         // Adjust PWM signal for heater so it stays at 780C
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
-        pwm_duty_cycle = pow(f / Vbat, 2);
-        LL_TIM_OC_SetCompareCH1(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
-
-        // Ramp up voltage by 400mV/s
-        if (f < 13000) {
-            f += 100.0;
-        } else {
-            f = 0.0;
-        }
-        LL_mDelay(200);
+        pwm_duty_cycle = pow(desiredV / Vbat, 2);
+        LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
     }
 }
 
@@ -151,8 +146,8 @@ int main(void)
  * 
  * The system Clock is configured as follows :
  *    System Clock source            = PLL (MSI)
- *    SYSCLK(Hz)                     = 8000000
- *    HCLK(Hz)                       = 8000000
+ *    SYSCLK(Hz)                     = 80000000
+ *    HCLK(Hz)                       = 80000000
  *    AHB Prescaler                  = 1
  *    APB1 Prescaler                 = 1
  *    APB2 Prescaler                 = 1
@@ -185,11 +180,11 @@ void SystemClock_Config(void)
     LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
     LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
 
-    // Set systick to 1ms in using frequency set to 8MHz
-    LL_Init1msTick(8000000);
+    // Set systick to 1ms in using frequency set to 80MHz
+    LL_Init1msTick(80000000);
 
     // Update CMSIS variable
-    LL_SetSystemCoreClock(8000000);
+    LL_SetSystemCoreClock(80000000);
 }
 
 /**
@@ -197,35 +192,59 @@ void SystemClock_Config(void)
  * 
  * Initializes heater to a starting voltage of less than 2V during the condensation phase.
  * Once past condensation phase heater voltage is ramped up at a rate of 0.4V/s until
- * reaching a maximum of 13V. This is highlighted in the LSU 4.9 manual.
+ * reaching a maximum of 13V. This is highlighted in section 1.6 of the LSU 4.9 manual.
  * 
  * @retval None
  */
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;
-    uint32_t Vbat;
+    uint32_t Vbat, maxCur;
+    uint16_t maxCurADC = 0;
+    uint16_t VbatADC;
+    uint16_t cur;
 
-    // Warm up heater, supply <= 2V to heater for 5 seconds to heat it during condensation phase.
-    while (i < 20) {
-        // Set PWM signal to equivalent of 2Vrms
-        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
-        pwm_duty_cycle = pow(2000.0 / Vbat, 2);
-        LL_TIM_OC_SetCompareCH1(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
-
-        LL_mDelay(500);
-        i++;
+    // Sample current sense ADC to determine the maximum value
+    for (i= 0; i < 50; i++) {
+        cur = adc_vals[3];
+        if (cur > maxCur) {
+            maxCurADC = cur;
+            VbatADC = adc_vals[0];
+        }
     }
 
-    // Set initial ramp up voltage to 8.5Vrms
-    i = 0;
-    while (8500 + i < 11000) {
-        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
-        pwm_duty_cycle = pow((8500.0 + i) / Vbat, 2);
-        LL_TIM_OC_SetCompareCH1(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+    // Determine the actual current based on ADC values
+    maxCur = (maxCurADC * 3300 / 4096);
 
-        // Ramp up voltage by 400mV/s
-        i += 10;
+    // Warm up heater, supply <= 2V to heater until out of condensation phase
+    // Uses the current sense value to determine when condensation phase is over
+    do {
+        // Get the current battery voltage
+        Vbat = (VbatADC * 3300 / 4096) * 973 / 187;
+
+        // Determine sensor resisitance
+        res = Vbat * 7 * 50 / maxCur - 23;
+
+        // Set PWM signal to equivalent of 2Vrms
+        pwm_duty_cycle = pow(2000.0 / Vbat, 2);
+        LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+
+        // Delay for 500ms
+        LL_mDelay(500);
+    } while (res < CONDENSATION)
+
+    i = 0;
+    // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
+    while (8500 + i < 11000) {
+        // Get the current battery voltage
+        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        // Set PWM signal to equivalent of ramp up voltage RMS
+        pwm_duty_cycle = pow((8500.0 + i) / Vbat, 2);
+        LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+
+        // Ramp up voltage by 200mV/s
+        i += 5;
+        // Delay 25ms
         LL_mDelay(25);
     }
 }
