@@ -35,7 +35,7 @@ void SystemClock_Config(void);
  */
 uint16_t adc_vals[4] = {0, 0, 0, 0};
 
-#define CONDENSATION 4000
+#define CONDENSATION 3900
 
 /**
  * @brief Main program entrypoint
@@ -49,6 +49,7 @@ int main(void)
     uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
     float pwm_duty_cycle;
     uint32_t Vbat, desiredV = 0;
+    unsigned long t1, t2, diff;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -66,6 +67,11 @@ int main(void)
     Init_USART();
     // Initialize SPI connection to CJ125
     Init_SPI();
+
+    // Enable cycle counter
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    DWT->CYCCNT = 0;
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 
     
     // Loop until CJ125 is ready. When CJ125 responds OK move on.
@@ -87,8 +93,14 @@ int main(void)
     //response = SPI_Transfer(CJ125_V17_MODE);
     
 
+    // Set t1 to how many clock cycles have gone by
+    t1 = DWT->CYCCNT;
     // Initialize heater before using it
     Initialize_Heater();
+    // Set t2 to how many clock cycles have gone by
+    t2 = DWT->CYCCNT;
+    // Determine the amount of time passed since start
+    diff = t2-t1;
 
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
@@ -181,10 +193,10 @@ void SystemClock_Config(void)
     LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
 
     // Set systick to 1ms in using frequency set to 80MHz
-    LL_Init1msTick(80000000);
+    LL_Init1msTick(8000000);
 
     // Update CMSIS variable
-    LL_SetSystemCoreClock(80000000);
+    LL_SetSystemCoreClock(8000000);
 }
 
 /**
@@ -204,30 +216,40 @@ void Initialize_Heater(void) {
     uint16_t VbatADC;
     uint16_t cur;
 
-    // Sample current sense ADC to determine the maximum value
-    for (i= 0; i < 50; i++) {
-        cur = adc_vals[3];
-        if (cur > maxCurADC) {
-            maxCurADC = cur;
-            VbatADC = adc_vals[0];
-        }
-    }
-
-    // Determine the actual current based on ADC values
-    maxCur = (maxCurADC * 3300 / 4096);
-
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
     do {
-        // Get the current battery voltage
+        // Read the battery voltage ADC value
+        VbatADC = adc_vals[0];
+        // Calculate the actual battery voltage
         Vbat = (VbatADC * 3300 / 4096) * 973 / 187;
-
-        // Determine sensor resisitance
-        res = Vbat * 7 * 50 / maxCur - 23;
 
         // Set PWM signal to equivalent of 2Vrms
         pwm_duty_cycle = pow(2000.0 / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+
+        // Sample current sense ADC to determine the maximum value
+        for (i= 0; i < 50; i++) {
+            cur = adc_vals[3];
+            if (cur > maxCurADC) {
+                maxCurADC = cur;
+                VbatADC = adc_vals[0];
+            }
+            // Delay 10ms
+            LL_mDelay(10);
+        }
+
+        // Calculate the battery voltage at the time of max current
+        Vbat = (VbatADC * 3300 / 4096) * 973 / 187;
+
+        // Determine the actual current based on ADC values
+        maxCur = (maxCurADC * 3300 / 4096);
+
+        // Determine sensor resisitance
+        res = Vbat * 7 * 50 / maxCur - 23;
+
+        // Reset max current value for next loop through
+        maxCurADC = 0;
 
         // Delay for 500ms
         LL_mDelay(500);
