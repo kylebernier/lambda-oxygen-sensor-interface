@@ -161,7 +161,7 @@
 /** @brief STM DAC GPIO Port */
 #define DAC_LMD_GPIO_PORT GPIOA
 /** @brief STM DAC Channel */
-#define DAC_LMD_CHANNEL LL_DAC_CHANNEL_1
+#define DAC_LMD_CHANNEL LL_DAC_CHANNEL_2
 /** @} */
 
 /**

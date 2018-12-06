@@ -150,8 +150,12 @@ int main(void)
         }
 
         // Output lambda value via DAC
-        if (lambda >= 650 && lambda <= 10159) {
+        if (lambda >= 650 && lambda < 1360) {
             DAC_SetValue((lambda-650)*4096/710);
+        } else if (lambda >= 1360) {
+            DAC_SetValue(4095);
+        } else if (lambda < 650) {
+            DAC_SetValue(0);
         }
 
         // Enable LED on PA8
