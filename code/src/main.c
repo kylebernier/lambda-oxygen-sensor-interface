@@ -14,6 +14,7 @@
 #include "stm32l4xx_ll_rcc.h"
 #include "stm32l4xx_ll_system.h"
 #include "stm32l4xx_ll_utils.h"
+#include "arm_math.h"
 #include <math.h>
 
 #include "hw_map.h"
@@ -34,6 +35,10 @@ void SystemClock_Config(void);
  * Battery voltage, lambda value, sensor resistance, current sense 
  */
 uint16_t adc_vals[4] = {0, 0, 0, 0};
+uint16_t optimal_lambda, optimal_resistance;
+
+uint32_t currentV;
+
 
 #define CONDENSATION 3900
 
@@ -46,10 +51,15 @@ int main(void)
 {
     uint16_t response = 0;
     uint8_t *data_out;
-    uint16_t optimal_lambda, optimal_resistance, lambda, temp, UA, UR;
+    uint16_t lambda, temp, UA, UR;
     float pwm_duty_cycle;
-    uint32_t Vbat, desiredV = 0;
-    unsigned long t1, t2, diff;
+    uint32_t Vbat, desiredV;
+    //unsigned long t1, t2, diff;
+    q15_t test;
+
+    // PID values for Q15 data type; See CMSIS documentation for use
+    // Struct layout; A0, A1, state[3], Kp, Ki, Kd
+    arm_pid_instance_q15 S = {0, 0, {0, 0, 0}, 1200, 1200, 1200};
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -67,6 +77,9 @@ int main(void)
     Init_USART();
     // Initialize SPI connection to CJ125
     Init_SPI();
+
+    // Initialize PID 
+    arm_pid_init_q15(&S, 1);
 
     // Enable cycle counter
     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
@@ -94,13 +107,15 @@ int main(void)
     
 
     // Set t1 to how many clock cycles have gone by
-    t1 = DWT->CYCCNT;
+    //t1 = DWT->CYCCNT;
+    
     // Initialize heater before using it
     Initialize_Heater();
+    
     // Set t2 to how many clock cycles have gone by
-    t2 = DWT->CYCCNT;
+    //t2 = DWT->CYCCNT;
     // Determine the amount of time passed since start
-    diff = t2-t1;
+    //diff = t2-t1;
 
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
@@ -139,17 +154,30 @@ int main(void)
             DAC_SetValue((lambda-650)*4096/710);
         }
 
+        // Enable LED on PA8
+        MODIFY_REG(GPIOA->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
+        // Turn on LED before UART Transmit
+        SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
+
         // Output lambda and temperature via UART
         data_out = (uint8_t *)(&lambda);
         USART_Transmit(data_out, 2);
         data_out = (uint8_t *)(&temp);
         USART_Transmit(data_out, 2);
-        
+
+        // Turn off LED after UART transmission
+        CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
         // Adjust PWM signal for heater so it stays at 780C
+        test = arm_pid_q15(&S, optimal_resistance-UR);
+
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
-        pwm_duty_cycle = pow(desiredV / Vbat, 2);
-        LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+        //test = (test * 3300 / 4096) * 973 / 187;
+        desiredV = currentV-test;
+        pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
+        //LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+        LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
+        LL_mDelay(50);
     }
 }
 
@@ -215,6 +243,7 @@ void Initialize_Heater(void) {
     uint16_t maxCurADC = 0;
     uint16_t VbatADC;
     uint16_t cur;
+    uint16_t UR;
 
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
@@ -225,7 +254,8 @@ void Initialize_Heater(void) {
         Vbat = (VbatADC * 3300 / 4096) * 973 / 187;
 
         // Set PWM signal to equivalent of 2Vrms
-        pwm_duty_cycle = pow(2000.0 / Vbat, 2);
+        currentV = 2000;
+        pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
         // Sample current sense ADC to determine the maximum value
@@ -255,17 +285,19 @@ void Initialize_Heater(void) {
         LL_mDelay(500);
     } while (res < CONDENSATION);
 
-    i = 0;
+    //currentV = 8500;
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
-    while (8500 + i < 11000) {
+    while (currentV < 11000 || UR > optimal_resistance) {
         // Get the current battery voltage
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
         // Set PWM signal to equivalent of ramp up voltage RMS
-        pwm_duty_cycle = pow((8500.0 + i) / Vbat, 2);
+        pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
+        UR = adc_vals[2];
+
         // Ramp up voltage by 200mV/s
-        i += 5;
+        currentV += 5;
         // Delay 25ms
         LL_mDelay(25);
     }

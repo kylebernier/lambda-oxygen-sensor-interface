@@ -4,7 +4,11 @@
  * @author Daeghan Elkin
  * @date 2018 November 07
  *
- * @brief Provides lookup table for temperature values
+ * @brief Provides lookup table for temperature values in Celcius
+ * 
+ * Table was generated based on the resistance to temperature equations in CJ125 manual.
+ * The temperatures are index to directly correlate to the resistance that is read from 
+ * the CJ125.
  *
  */
 
