@@ -175,8 +175,8 @@ int main(void)
         //test = (test * 3300 / 4096) * 973 / 187;
         desiredV = currentV-test;
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
-        //LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
-        LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
+        LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
+        //LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
         LL_mDelay(50);
     }
 }
