@@ -59,7 +59,7 @@ int main(void)
 
     // PID values for Q15 data type; See CMSIS documentation for use
     // Struct layout; A0, A1, state[3], Kp, Ki, Kd
-    arm_pid_instance_q15 S = {0, 0, {0, 0, 0}, 1200, 1200, 1200};
+    arm_pid_instance_q15 S = {0, 0, {0, 0, 0}, 1600, 1200, 800};
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -159,9 +159,9 @@ int main(void)
         }
 
         // Enable LED on PA8
-        MODIFY_REG(GPIOA->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
+        //MODIFY_REG(GPIOA->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
         // Turn on LED before UART Transmit
-        SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
+        //SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
         // Output lambda and temperature via UART
         data_out = (uint8_t *)(&lambda);
@@ -170,7 +170,7 @@ int main(void)
         USART_Transmit(data_out, 2);
 
         // Turn off LED after UART transmission
-        CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
+        //CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
         // Adjust PWM signal for heater so it stays at 780C
         test = arm_pid_q15(&S, optimal_resistance-UR);
@@ -181,7 +181,7 @@ int main(void)
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
         //LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
-        LL_mDelay(50);
+        LL_mDelay(25);
     }
 }
 
@@ -289,7 +289,7 @@ void Initialize_Heater(void) {
         LL_mDelay(500);
     } while (res < CONDENSATION);
 
-    //currentV = 8500;
+    currentV = 8500;
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
     while (currentV < 11000 || UR > optimal_resistance) {
         // Get the current battery voltage
