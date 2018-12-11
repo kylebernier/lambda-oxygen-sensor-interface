@@ -53,14 +53,10 @@ int main(void)
     uint16_t response = 0;
     uint16_t lambda, temp, UA, UR;
     uint16_t optimal_lambda;
+    int16_t error, change, integral = 0;
     uint32_t Vbat, desiredV;
     //uint64_t t1, t2, diff; // Only used for timing
     float pwm_duty_cycle;
-    q15_t test;
-
-    // PID values for Q15 data type; See CMSIS documentation for use
-    // Struct layout; A0, A1, state[3], Kp, Ki, Kd
-    arm_pid_instance_q15 S = {0, 0, {0, 0, 0}, 18000, 1800, 1000};
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -78,9 +74,6 @@ int main(void)
     Init_USART();
     // Initialize SPI connection to CJ125
     Init_SPI();
-
-    // Initialize PID 
-    arm_pid_init_q15(&S, 1);
 
     // Enable cycle counter
     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
@@ -172,16 +165,22 @@ int main(void)
         //CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
         // Adjust PWM signal for heater so it stays at 780C
-        test = arm_pid_q15(&S, optimal_resistance-UR);
 
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
 
-        desiredV = currentV - test;
+        error = optimal_resistance - UR;
+        
+        integral = integral + error;
+        
+        change = (20 * error) + (0.8 * integral);
+
+        desiredV = currentV - change;
 
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
         //LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
-        LL_mDelay(5);
+
+        LL_mDelay(15);
     }
 }
 
@@ -296,11 +295,19 @@ void Initialize_Heater(void) {
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
-        //UR = adc_vals[2];
+        UR = adc_vals[2];
 
         // Ramp up voltage by 200mV/s
         currentV += 5;
         // Delay 25ms
         LL_mDelay(25);
-    } while (currentV < 11000);// && UR > optimal_resistance);
+    } while (currentV < 11000 && UR > optimal_resistance);
 }
+
+/*
+int PID_Routine(int UR) {
+    int error = optimal_resistance - UR;
+    int change = kp * error;
+    return change;
+}
+*/
