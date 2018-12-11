@@ -30,15 +30,15 @@
 
 void Initialize_Heater(void);
 void SystemClock_Config(void);
+int Heater_PID_Control(int input);
 
 /** @brief ADC values array 
  * Battery voltage, lambda value, sensor resistance, current sense 
  */
 uint16_t adc_vals[4] = {0, 0, 0, 0};
-uint16_t optimal_lambda, optimal_resistance;
 
+uint16_t optimal_resistance;
 uint32_t currentV;
-
 
 #define CONDENSATION 3900
 
@@ -49,17 +49,18 @@ uint32_t currentV;
  */
 int main(void)
 {
-    uint16_t response = 0;
     uint8_t *data_out;
+    uint16_t response = 0;
     uint16_t lambda, temp, UA, UR;
-    float pwm_duty_cycle;
+    uint16_t optimal_lambda;
     uint32_t Vbat, desiredV;
-    //unsigned long t1, t2, diff;
+    //uint64_t t1, t2, diff; // Only used for timing
+    float pwm_duty_cycle;
     q15_t test;
 
     // PID values for Q15 data type; See CMSIS documentation for use
     // Struct layout; A0, A1, state[3], Kp, Ki, Kd
-    arm_pid_instance_q15 S = {0, 0, {0, 0, 0}, 1600, 1200, 800};
+    arm_pid_instance_q15 S = {0, 0, {0, 0, 0}, 18000, 1800, 1000};
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -123,8 +124,6 @@ int main(void)
         // Read in battery voltage, lambda voltage and restance values from CJ125
         UA = adc_vals[1];
         UR = adc_vals[2];
-        //UA = optimal_lambda;
-        //UR = optimal_resistance;
 
         // Calculate lambda value
         // If using the V=8 on the CJ125 comment out V17 section and uncomment this section
@@ -176,12 +175,13 @@ int main(void)
         test = arm_pid_q15(&S, optimal_resistance-UR);
 
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
-        //test = (test * 3300 / 4096) * 973 / 187;
-        desiredV = currentV-test;
+
+        desiredV = currentV - test;
+
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
         //LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
-        LL_mDelay(25);
+        LL_mDelay(5);
     }
 }
 
@@ -245,9 +245,7 @@ void Initialize_Heater(void) {
     float pwm_duty_cycle;
     uint32_t Vbat, maxCur, res;
     uint16_t maxCurADC = 0;
-    uint16_t VbatADC;
-    uint16_t cur;
-    uint16_t UR;
+    uint16_t VbatADC, cur, UR;
 
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
@@ -289,20 +287,20 @@ void Initialize_Heater(void) {
         LL_mDelay(500);
     } while (res < CONDENSATION);
 
-    currentV = 8500;
+    //currentV = 8500;
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
-    while (currentV < 11000 || UR > optimal_resistance) {
+    do {
         // Get the current battery voltage
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
         // Set PWM signal to equivalent of ramp up voltage RMS
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
-        UR = adc_vals[2];
+        //UR = adc_vals[2];
 
         // Ramp up voltage by 200mV/s
         currentV += 5;
         // Delay 25ms
         LL_mDelay(25);
-    }
+    } while (currentV < 11000);// && UR > optimal_resistance);
 }
