@@ -40,9 +40,9 @@ uint16_t optimal_resistance;
 uint32_t currentV;
 
 #define CONDENSATION 3900
-#define Kp 60
-#define Ki 0.8
-#define Kd 0
+#define Kp 60   // Proportional Coefficient
+#define Ki 0.8  // Integral Coefficient
+#define Kd 0    // Derivative Coefficient 
 
 /**
  * @brief Main program entrypoint
@@ -55,7 +55,7 @@ int main(void)
     uint16_t response = 0;
     uint16_t lambda, temp, UA, UR;
     uint16_t optimal_lambda;
-    uint32_t Vbat, desiredV;
+    uint32_t Vbat, minVbat, desiredV;
     int16_t error;
     static int16_t last_error = 0;
     int16_t integral = 0;
@@ -63,6 +63,7 @@ int main(void)
     //uint64_t t1, t2, diff; // Only used for timing
     float pwm_duty_cycle;
     int16_t change; 
+    int i = 0;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -81,7 +82,7 @@ int main(void)
     // Initialize SPI connection to CJ125
     Init_SPI();
 
-    // Enable cycle counter
+    // Enable cycle counter; Use for timing
     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
     DWT->CYCCNT = 0;
     DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
@@ -170,8 +171,7 @@ int main(void)
         // Turn off LED after UART transmission
         //CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
-        // Adjust PWM signal for heater so it stays at 780C
-
+        // Determine battery voltage
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
 
         // Determine error between desired value and current value
@@ -181,18 +181,20 @@ int main(void)
         integral = integral + error;
 
         // Set derivative term
-        derivative = error - last_error;
+        //derivative = error - last_error;
         
         // Calculate desired change to result in 0 error
         change = (Kp * error) + (Ki * integral);// + (Kd * derivative);
 
         // Set current error to last error for next loop through
-        last_error = error;
+        //last_error = error;
 
         // Set voltage based on desired change
         desiredV = currentV - change;
 
+        // Adjust PWM signal for heater so it stays at 780C
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
+
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
         //LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
 
@@ -258,48 +260,46 @@ void SystemClock_Config(void)
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;
-    uint32_t Vbat, maxCur, res;
-    uint16_t maxCurADC = 0;
-    uint16_t VbatADC, cur, UR;
+    uint32_t Vbat, avgCur, res;
+    uint16_t CurADC, avgCurADC = 0;
+    uint16_t UR;
 
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
     do {
-        // Read the battery voltage ADC value
-        VbatADC = adc_vals[0];
-        // Calculate the actual battery voltage
-        Vbat = (VbatADC * 3300 / 4096) * 973 / 187;
+        // Calculate the battery voltage from the ADC
+        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
 
         // Set PWM signal to equivalent of 2Vrms
         currentV = 2000;
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
-        // Sample current sense ADC to determine the maximum value
-        for (i= 0; i < 50; i++) {
-            cur = adc_vals[3];
-            if (cur > maxCurADC) {
-                maxCurADC = cur;
-                VbatADC = adc_vals[0];
+        // Sample current sense ADC to determine the average value
+        while(i < 50) {
+            CurADC = adc_vals[3];
+            if (CurADC > 450) {
+                avgCurADC += CurADC;
+                i++;
             }
-            // Delay 10ms
-            LL_mDelay(10);
         }
 
-        // Calculate the battery voltage at the time of max current
-        Vbat = (VbatADC * 3300 / 4096) * 973 / 187;
+        avgCurADC /= i;
+
+        // Calculate the most recent battery voltage
+        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
 
         // Determine the actual current based on ADC values
-        maxCur = (maxCurADC * 3300 / 4096);
+        avgCur = (avgCurADC * 3300 / 4096);
 
         // Determine sensor resisitance
-        res = Vbat * 7 * 50 / maxCur - 23;
+        res = Vbat * 7 * 50 / avgCur - 23;
 
         // Reset max current value for next loop through
-        maxCurADC = 0;
+        avgCurADC = 0;
 
         // Delay for 500ms
-        LL_mDelay(500);
+        LL_mDelay(50);
     } while (res < CONDENSATION);
 
     //currentV = 8500;
