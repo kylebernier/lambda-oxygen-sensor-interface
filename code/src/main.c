@@ -30,7 +30,7 @@
 
 void Initialize_Heater(void);
 void SystemClock_Config(void);
-int Heater_PID_Control(int input);
+int16_t PID_Routine(uint16_t UR); 
 
 /** @brief ADC values array 
  * Battery voltage, lambda value, sensor resistance, current sense 
@@ -41,6 +41,9 @@ uint16_t optimal_resistance;
 uint32_t currentV;
 
 #define CONDENSATION 3900
+#define Kp 20
+#define Ki 0.8
+#define Kd 1
 
 /**
  * @brief Main program entrypoint
@@ -53,10 +56,10 @@ int main(void)
     uint16_t response = 0;
     uint16_t lambda, temp, UA, UR;
     uint16_t optimal_lambda;
-    int16_t error, change, integral = 0;
     uint32_t Vbat, desiredV;
     //uint64_t t1, t2, diff; // Only used for timing
     float pwm_duty_cycle;
+    int16_t change; 
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -168,12 +171,9 @@ int main(void)
 
         Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
 
-        error = optimal_resistance - UR;
-        
-        integral = integral + error;
-        
-        change = (20 * error) + (0.8 * integral);
+        change = PID_Routine(UR);
 
+        // Set voltage based on desired change
         desiredV = currentV - change;
 
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
@@ -304,10 +304,27 @@ void Initialize_Heater(void) {
     } while (currentV < 11000 && UR > optimal_resistance);
 }
 
-/*
-int PID_Routine(int UR) {
-    int error = optimal_resistance - UR;
-    int change = kp * error;
+int16_t PID_Routine(uint16_t UR) {
+    int16_t error = optimal_resistance - UR;
+    static int16_t last_error = 0;
+    int16_t change; 
+    int16_t integral = 0;
+    int16_t derivative;
+
+    // Determine error between desired value and current value
+    error = optimal_resistance - UR;
+    
+    // Set integral term
+    integral = integral + error;
+
+    // Set derivative term
+    derivative = error - last_error;
+    
+    // Calculate desired change to result in 0 error
+    change = (20 * error) + (0.8 * integral) + (0 * derivative);
+
+    // Set current error to last error for next loop through
+    last_error = error;
+
     return change;
 }
-*/
