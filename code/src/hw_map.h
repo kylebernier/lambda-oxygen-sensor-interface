@@ -53,7 +53,7 @@
 /** @brief STM ADC Channel*/
 #define ADC_BAT_CHANNEL LL_ADC_CHANNEL_8
 /** @brief ADC sample rate*/
-#define ADC_BAT_SAMPLETIME LL_ADC_SAMPLINGTIME_12CYCLES_5
+#define ADC_BAT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @brief STM ADC interrupt */
 #define ADC_BAT_IRQ ADC1_2_IRQn
 /** @} */
@@ -76,7 +76,7 @@
 /** @brief STM ADC Channel*/
 #define ADC_LMD_CHANNEL LL_ADC_CHANNEL_11
 /** @brief STM ADC sample rate*/
-#define ADC_LMD_SAMPLETIME LL_ADC_SAMPLINGTIME_12CYCLES_5
+#define ADC_LMD_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
@@ -98,7 +98,7 @@
 /** @brief STM ADC Channel */
 #define ADC_RES_CHANNEL LL_ADC_CHANNEL_12
 /** @brief STM ADC sample rate */
-#define ADC_RES_SAMPLETIME LL_ADC_SAMPLINGTIME_12CYCLES_5
+#define ADC_RES_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
@@ -117,7 +117,7 @@
 /** @brief STM ADC Channel */
 #define ADC_CRNT_CHANNEL LL_ADC_CHANNEL_16
 /** @brief STM ADC sample rate */
-#define ADC_CRNT_SAMPLETIME LL_ADC_SAMPLINGTIME_12CYCLES_5
+#define ADC_CRNT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**

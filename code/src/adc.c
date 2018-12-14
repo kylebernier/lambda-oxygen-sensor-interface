@@ -269,11 +269,13 @@ void ADC_ConvComplete_Callback(void)
     // Update the ADC conversion status
     adcConversionStatus = 1;
     
+    /*
     if (PWM_GetState()) {
         pwm_adc_valid = 1;
     } else {
         pwm_adc_valid = 0;
     }
+    */
 }
 
 /* ADC group regular overrun interruption callback */

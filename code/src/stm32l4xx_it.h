@@ -72,4 +72,11 @@ void ADC1_2_IRQHandler(void);
   */
 void DMA1_Channel1_IRQHandler(void);
 
+/**
+* @brief  This function handles TIM2 interrupt.
+* @param  None
+* @retval None
+*/
+void TIM8_CC_IRQHandler(void);
+
 #endif // __STM32L4XX_IT_H

@@ -34,16 +34,35 @@ void SystemClock_Config(void);
 /** @brief ADC values array 
  * Battery voltage, lambda value, sensor resistance, current sense 
  */
-uint16_t adc_vals[4] = {0, 0, 0, 0};
+uint16_t adc_vals[5] = {0, 0, 0, 0, 0};
 
 uint16_t optimal_resistance;
 uint32_t currentV;
-uint32_t Vbat = 12000;
+uint32_t Vbat, VDDA;
 
+/**
+ * @def CONDENSATION Sensor resistance once condensation point has been reached
+ * @brief Sensor must be at a certain condensation temperature before being heated up.
+ */
 #define CONDENSATION 3900
-#define Kp 60   // Proportional Coefficient
-#define Ki 0.8  // Integral Coefficient
-#define Kd 0    // Derivative Coefficient 
+
+/**
+ * @def Kp Proportional coefficient for the PID controller
+ * @brief 
+ */
+#define Kp 60
+
+/**
+ * @def Ki Integral coefficient for the PID controller
+ * @brief 
+ */
+#define Ki 0.8
+
+/**
+ * @def Kd Derivative coefficient for the PID controller
+ * @brief 
+ */
+#define Kd 0
 
 /**
  * @brief Main program entrypoint
@@ -54,16 +73,17 @@ int main(void)
 {
     uint8_t *data_out;
     uint16_t response = 0;
-    uint16_t lambda, temp, UA, UR;
+    uint16_t lambda, lambda_adc, temp, temp_adc;
+    uint32_t uacal, ua, ip, urcal, ur, ri;
     uint16_t optimal_lambda;
-    uint32_t minVbat, desiredV;
     int16_t error;
-    static int16_t last_error = 0;
-    int16_t integral = 0;
-    int16_t derivative;
-    //uint64_t t1, t2, diff; // Only used for timing
-    float pwm_duty_cycle;
     int16_t change; 
+    int16_t integral = 0;
+    //int16_t derivative;
+    //int16_t last_error = 0;
+    uint32_t desiredV;
+    //uint64_t t1, t2, diff; // Only used for timing
+    float pwm_duty_cycle, o2;
     int i = 0;
 
     // Initialize the GPIO pins
@@ -72,8 +92,8 @@ int main(void)
     // Config the system clock to 8MHz
     SystemClock_Config();
 
-    // Initialize ADC on channels 8, 11, 12, and 16
-    Init_ADC(0x11900, (uint16_t *)adc_vals, 4);
+    // Initialize ADC on channels 0, 8, 11, 12, and 16
+    Init_ADC(0x11901, (uint16_t *)adc_vals, 5);
     // Initialize DAC
     Init_DAC();
     // Initialize PWM with duty cycle of 0%
@@ -82,6 +102,9 @@ int main(void)
     Init_USART();
     // Initialize SPI connection to CJ125
     Init_SPI();
+
+    // Determine actual value of 3.3V
+    VDDA = VREFINT_CAL_VREF*(*VREFINT_CAL_ADDR)/adc_vals[0];
 
     // Enable cycle counter; Use for timing
     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
@@ -100,8 +123,12 @@ int main(void)
     LL_mDelay(2000);
 
     // Store optimal values from CJ125
-    optimal_lambda = adc_vals[1];
-    optimal_resistance = adc_vals[2];
+    optimal_resistance = adc_vals[3];
+    ur = optimal_resistance * VDDA * (365 + 187) / 365 / 4096;
+    urcal = -((15.5 * 0.000158 * 301) * 1000 - ur) * 17;
+
+    optimal_lambda = adc_vals[2];
+    uacal = optimal_lambda * VDDA * (365 + 187) / 365 / 4096;    // 1.5V expected
 
     // Set CJ125 into normal operation mode with an amplification of 8
     response = SPI_Transfer(CJ125_V8_MODE);
@@ -122,32 +149,21 @@ int main(void)
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
         
+
         // Read in battery voltage, lambda voltage and restance values from CJ125
-        UA = adc_vals[1];
-        UR = adc_vals[2];
+        lambda_adc = adc_vals[2];
+        temp_adc = adc_vals[3];
 
-        // Calculate lambda value
-        // If using the V=8 on the CJ125 comment out V17 section and uncomment this section
-        if (UA >= 2142) {
-            lambda = 10159;
-        } else {
-            lambda = v8Lambda_Lookup[UA];
-        }
-         
-        // If using the V=17 on the CJ125 comment out V8 section and uncomment this section
-        //if (UA >= 3170) {
-        //    lambda = 10147;
-        //} else {
-        //    lambda = v17Lambda_Lookup[UA];
-        //} 
-        
+        // Get Lambda value
+        ua = lambda_adc * VDDA * (365 + 187) / 365 / 4096;     // mV
+        ip = (ua - uacal) * 1000 / (61.9 * 8);             // mA
+        o2 = ip * 0.2095 / 2.54;
+        lambda = (o2 / 3 + 1) / (1 - 4.77 * o2) * 1000;  // mLambda
 
-        // Calculate heater temperature
-        if (UR <= 315) {
-            temp = 1816;
-        } else {
-            temp = temp_Lookup[UR];
-        }
+        // Get temperature
+        ur = temp_adc * VDDA * (365 + 187) / 365 / 4096;
+        ri = (ur - urcal / 17) / (15.5 * 0.158);
+        temp = 4445 * pow(ri, -0.4449) + 428.6;
 
         // Output lambda value via DAC
         if (lambda >= 650 && lambda < 1360) {
@@ -164,9 +180,9 @@ int main(void)
         //SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
         // Output lambda and temperature via UART
-        data_out = (uint8_t *)(&lambda);
+        data_out = (uint16_t *)(&lambda);
         USART_Transmit(data_out, 2);
-        data_out = (uint8_t *)(&temp);
+        data_out = (uint16_t *)(&temp);
         USART_Transmit(data_out, 2);
 
         // Turn off LED after UART transmission
@@ -174,11 +190,11 @@ int main(void)
 
         // Determine battery voltage
         //if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[0] * 3300 / 4096) * 955 / 187;
+            Vbat = (adc_vals[1] * VDDA / 4096) * 955 / 187;
         //}
 
         // Determine error between desired value and current value
-        error = optimal_resistance - UR;
+        error = optimal_resistance - temp_adc;
         
         // Set integral term
         integral = integral + error;
@@ -263,47 +279,45 @@ void SystemClock_Config(void)
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;
-    uint32_t avgCur, res;
-    uint16_t CurADC, avgCurADC = 0;
+    uint32_t maxCur, res;
+    uint16_t CurADC, VbatADC, maxCurADC = 0;
     uint16_t UR;
 
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
     do {
         // Calculate the battery voltage from the ADC
-        if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[0] * 3279 / 4096) * 955 / 187;
-        }
+        //if (ADC_GetPWMValid()) {
+            Vbat = (adc_vals[1] * VDDA / 4096) * 955 / 187;
+        //}
 
         // Set PWM signal to equivalent of 2Vrms
         currentV = 2000;
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
-        // Sample current sense ADC to determine the average value
-        while(i < 50) {
-            CurADC = adc_vals[3];
-            if (CurADC > 450) {
-                avgCurADC += CurADC;
-                i++;
+        // Sample current sense ADC to determine the maximum value
+        for (i= 0; i < 50; i++) {
+            CurADC = adc_vals[4];
+            if (CurADC > maxCurADC) {
+                maxCurADC = CurADC;
+                VbatADC = adc_vals[1];
             }
-        }
-
-        avgCurADC /= i;
-
-        // Calculate the most recent battery voltage
-        if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+            // Delay 10ms
+            LL_mDelay(10);
         }
 
         // Determine the actual current based on ADC values
-        avgCur = (avgCurADC * 3300 / 4096);
+        maxCur = (maxCurADC * VDDA / 4096);
+
+        // Determine the actual voltage at highest ADC value
+        Vbat = (VbatADC * VDDA / 4096) * 955 / 187;
 
         // Determine sensor resisitance
-        res = Vbat * 7 * 50 / avgCur - 23;
+        res = Vbat * 7 * 50 / maxCur - 23;
 
         // Reset max current value for next loop through
-        avgCurADC = 0;
+        maxCurADC = 0;
 
         // Delay for 500ms
         LL_mDelay(50);
@@ -313,14 +327,14 @@ void Initialize_Heater(void) {
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
     do {
         // Get the current battery voltage
-        if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[0] * 3278 / 4096) * 955 / 187;
-        }
+        //if (ADC_GetPWMValid()) {
+            Vbat = (adc_vals[1] * VDDA / 4096) * 955 / 187;
+        //}
         // Set PWM signal to equivalent of ramp up voltage RMS
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
-        UR = adc_vals[2];
+        UR = adc_vals[3];
 
         // Ramp up voltage by 200mV/s
         currentV += 1;
