@@ -1,0 +1,13 @@
+// Get Lambda value
+cal = lambda_adc * VDDA * (365 / 187) / 4096;    // 1.5V expected
+ua = lambda_adc * VDDA * (365 / 187) / 4096;     // mV
+ip = (ua - cal) * 1000 / (61.9 * 8);             // mA
+o2 = ip / 1000 * 0.2095 / 2.54;
+lambda = (o2 / 3 + 1) / (1 - 4.77 * o2) * 1000;  // mLambda
+
+// Get temperature
+ur = temp_adc * VDDA * (365 / 187) / 4096;
+cal = -((15.5 * 0.000158 * 301) * 1000 - ur) * 17;
+ur = temp_adc * VDDA * (365 / 187) / 4096;
+ri = (ur - cal / 17) / (15.5 * 0.000158);
+temp = 4445 * pow(Ri, -0.4449) + 428.6;

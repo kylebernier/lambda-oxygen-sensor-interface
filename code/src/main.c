@@ -38,6 +38,7 @@ uint16_t adc_vals[4] = {0, 0, 0, 0};
 
 uint16_t optimal_resistance;
 uint32_t currentV;
+uint32_t Vbat = 12000;
 
 #define CONDENSATION 3900
 #define Kp 60   // Proportional Coefficient
@@ -55,7 +56,7 @@ int main(void)
     uint16_t response = 0;
     uint16_t lambda, temp, UA, UR;
     uint16_t optimal_lambda;
-    uint32_t Vbat, minVbat, desiredV;
+    uint32_t minVbat, desiredV;
     int16_t error;
     static int16_t last_error = 0;
     int16_t integral = 0;
@@ -172,7 +173,9 @@ int main(void)
         //CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
         // Determine battery voltage
-        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        //if (ADC_GetPWMValid()) {
+            Vbat = (adc_vals[0] * 3300 / 4096) * 955 / 187;
+        //}
 
         // Determine error between desired value and current value
         error = optimal_resistance - UR;
@@ -260,7 +263,7 @@ void SystemClock_Config(void)
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;
-    uint32_t Vbat, avgCur, res;
+    uint32_t avgCur, res;
     uint16_t CurADC, avgCurADC = 0;
     uint16_t UR;
 
@@ -268,7 +271,9 @@ void Initialize_Heater(void) {
     // Uses the current sense value to determine when condensation phase is over
     do {
         // Calculate the battery voltage from the ADC
-        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        if (ADC_GetPWMValid()) {
+            Vbat = (adc_vals[0] * 3279 / 4096) * 955 / 187;
+        }
 
         // Set PWM signal to equivalent of 2Vrms
         currentV = 2000;
@@ -287,7 +292,9 @@ void Initialize_Heater(void) {
         avgCurADC /= i;
 
         // Calculate the most recent battery voltage
-        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        if (ADC_GetPWMValid()) {
+            Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        }
 
         // Determine the actual current based on ADC values
         avgCur = (avgCurADC * 3300 / 4096);
@@ -306,7 +313,9 @@ void Initialize_Heater(void) {
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
     do {
         // Get the current battery voltage
-        Vbat = (adc_vals[0] * 3300 / 4096) * 973 / 187;
+        if (ADC_GetPWMValid()) {
+            Vbat = (adc_vals[0] * 3278 / 4096) * 955 / 187;
+        }
         // Set PWM signal to equivalent of ramp up voltage RMS
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
@@ -314,8 +323,8 @@ void Initialize_Heater(void) {
         UR = adc_vals[2];
 
         // Ramp up voltage by 200mV/s
-        currentV += 5;
+        currentV += 1;
         // Delay 25ms
-        LL_mDelay(25);
+        LL_mDelay(5);
     } while (currentV < 11000 && UR > optimal_resistance);
 }

@@ -7,12 +7,11 @@
  */
 #include "stm32l4xx.h"
 
-#include "stm32l4xx_ll_adc.h"
-#include "stm32l4xx_ll_dma.h"
-#include "stm32l4xx_ll_spi.h"
+#include "hw_map.h"
 
 #include "adc.h"
 #include "spi.h"
+#include "pwm.h"
 
 /* This function handles NMI exceptions */
 void NMI_Handler(void)
@@ -108,5 +107,31 @@ void DMA1_Channel1_IRQHandler(void)
 
         // Call the DMA transfer error callback
         ADC_DMA_TransferError_Callback();
+    }
+}
+
+/**
+* @brief  This function handles TIM2 interrupt.
+* @param  None
+* @retval None
+*/
+void TIM8_CC_IRQHandler(void)
+{
+    // Check whether CC1 interrupt is pending 
+    if(LL_TIM_IsActiveFlag_CC1(PWMx_BASE) == 1) {
+        // Clear the update interrupt flag
+        LL_TIM_ClearFlag_CC1(PWMx_BASE);
+
+        // Timer capture/compare interrupt processing(function defined in main.c) 
+        TimerCC1_Callback();
+    }
+
+    // Check whether CC2 interrupt is pending 
+    if(LL_TIM_IsActiveFlag_CC2(PWMx_BASE) == 1) {
+        // Clear the update interrupt flag
+        LL_TIM_ClearFlag_CC2(PWMx_BASE);
+
+        // Timer capture/compare interrupt processing(function defined in main.c) 
+        TimerCC2_Callback();
     }
 }

@@ -10,6 +10,7 @@
 #include "stm32l4xx_ll_dma.h"
 
 #include "adc.h"
+#include "pwm.h"
 
 
 /**
@@ -47,9 +48,9 @@ uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {
     LL_ADC_CHANNEL_14,
     LL_ADC_CHANNEL_15,
     LL_ADC_CHANNEL_16,
-    LL_ADC_CHANNEL_VREFINT,         // ADC_BAT_BASE Only, Uses Channel 0
-    LL_ADC_CHANNEL_TEMPSENSOR,      // ADC_BAT_BASE or ADC3
-    LL_ADC_CHANNEL_VBAT,            // ADC_BAT_BASE or ADC3
+    LL_ADC_CHANNEL_VREFINT,         // ADC1 Only, Uses Channel 0
+    LL_ADC_CHANNEL_TEMPSENSOR,      // ADC1 or ADC3
+    LL_ADC_CHANNEL_VBAT,            // ADC1 or ADC3
     LL_ADC_CHANNEL_DAC1CH1_ADC2,    // ADC2 Only
     LL_ADC_CHANNEL_DAC1CH2_ADC2,    // ADC2 Only
     LL_ADC_CHANNEL_DAC1CH1_ADC3,    // ADC3 Only, Uses Channel 14
@@ -91,13 +92,16 @@ volatile uint8_t dmaTransferStatus = 2;
  */
 volatile uint8_t adcConversionStatus = 0;
 
+uint8_t pwm_adc_valid = 0;
+uint8_t pwm_adc_dma_valid = 0;
+
 /* Initialize ADC with DMA*/
 void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
 {
     int i, j;
 
     // Check if the ADC is already enabled
-    if (LL_ADC_IsEnabled(ADC_BAT_BASE)) {
+    if (LL_ADC_IsEnabled(ADCx_BASE)) {
         return;
     }
 
@@ -113,10 +117,10 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     ADCx_CLK_ENABLE();
 
     // Set the ADC clock
-    LL_ADC_SetCommonClock(__LL_ADC_COMMON_INSTANCE(ADC_BAT_BASE), LL_ADC_CLOCK_SYNC_PCLK_DIV2);
+    LL_ADC_SetCommonClock(__LL_ADC_COMMON_INSTANCE(ADCx_BASE), LL_ADC_CLOCK_SYNC_PCLK_DIV2);
 
     // Enable the internal ADC channels
-    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC_BAT_BASE), (LL_ADC_PATH_INTERNAL_VREFINT | LL_ADC_PATH_INTERNAL_TEMPSENSOR | LL_ADC_PATH_INTERNAL_VBAT));
+    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADCx_BASE), (LL_ADC_PATH_INTERNAL_VREFINT | LL_ADC_PATH_INTERNAL_TEMPSENSOR | LL_ADC_PATH_INTERNAL_VBAT));
 
     // Delay for the internal ADC channels to stablize
     // The temperature sensor takes the longest time to stabalize
@@ -126,41 +130,41 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     }
 
     // Set the ADC to have a software trigger source
-    LL_ADC_REG_SetTriggerSource(ADC_BAT_BASE, LL_ADC_REG_TRIG_SOFTWARE);
+    LL_ADC_REG_SetTriggerSource(ADCx_BASE, LL_ADC_REG_TRIG_SOFTWARE);
 
     // Set the ADC to convert continuously
-    LL_ADC_REG_SetContinuousMode(ADC_BAT_BASE, LL_ADC_REG_CONV_CONTINUOUS);
+    LL_ADC_REG_SetContinuousMode(ADCx_BASE, LL_ADC_REG_CONV_CONTINUOUS);
 
     // Set the ADC conversion data transfer
-    LL_ADC_REG_SetDMATransfer(ADC_BAT_BASE, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
+    LL_ADC_REG_SetDMATransfer(ADCx_BASE, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
 
     // Set the ADC overrun behavior
-    LL_ADC_REG_SetOverrun(ADC_BAT_BASE, LL_ADC_REG_OVR_DATA_OVERWRITTEN);
+    LL_ADC_REG_SetOverrun(ADCx_BASE, LL_ADC_REG_OVR_DATA_OVERWRITTEN);
 
     // Set the ADC sequencer length
-    LL_ADC_REG_SetSequencerLength(ADC_BAT_BASE, numValues - 1);
+    LL_ADC_REG_SetSequencerLength(ADCx_BASE, numValues - 1);
 
     // Enable specified ADC channels
     for (i = 0, j = 0; i < ADC_NUM_CHANNELS; i++) {
         if (channels & (1 << i)) {
-            LL_ADC_REG_SetSequencerRanks(ADC_BAT_BASE, ADC_RANKS[j], ADC_CHANNELS[i]);
-            LL_ADC_SetChannelSamplingTime(ADC_BAT_BASE, ADC_CHANNELS[i], ADC_BAT_SAMPLETIME);
+            LL_ADC_REG_SetSequencerRanks(ADCx_BASE, ADC_RANKS[j], ADC_CHANNELS[i]);
+            LL_ADC_SetChannelSamplingTime(ADCx_BASE, ADC_CHANNELS[i], ADC_BAT_SAMPLETIME);
             j++;
         }
         if (j >= numValues || j >= 16) break;
     }
 
     // Enable ADC interupts for conversion completion
-    LL_ADC_EnableIT_EOS(ADC_BAT_BASE);
+    LL_ADC_EnableIT_EOS(ADCx_BASE);
 
     // Enable ADC interupts for overrun
-    LL_ADC_EnableIT_OVR(ADC_BAT_BASE);
+    LL_ADC_EnableIT_OVR(ADCx_BASE);
 
     // Disable the ADC deep power down mode
-    LL_ADC_DisableDeepPowerDown(ADC_BAT_BASE);
+    LL_ADC_DisableDeepPowerDown(ADCx_BASE);
 
     // Enable the ADC internal voltage regulator
-    LL_ADC_EnableInternalRegulator(ADC_BAT_BASE);
+    LL_ADC_EnableInternalRegulator(ADCx_BASE);
 
     // Delay for the ADC internal voltage regulator to stabilize
     i = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
@@ -169,10 +173,10 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     }
 
     // Start the ADC calibration
-    LL_ADC_StartCalibration(ADC_BAT_BASE, LL_ADC_SINGLE_ENDED);
+    LL_ADC_StartCalibration(ADCx_BASE, LL_ADC_SINGLE_ENDED);
 
     // Wait for the ADC calibration to finish
-    while (LL_ADC_IsCalibrationOnGoing(ADC_BAT_BASE) != 0);
+    while (LL_ADC_IsCalibrationOnGoing(ADCx_BASE) != 0);
 
     // Delay to allow ADC calibration to enable
     i = (ADC_DELAY_CALIB_ENABLE_CPU_CYCLES >> 1);
@@ -181,13 +185,13 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     }
 
     // Enable the ADC
-    LL_ADC_Enable(ADC_BAT_BASE);
+    LL_ADC_Enable(ADCx_BASE);
 
     // Wait for the ADC to be ready
-    while (LL_ADC_IsActiveFlag_ADRDY(ADC_BAT_BASE) == 0);
+    while (LL_ADC_IsActiveFlag_ADRDY(ADCx_BASE) == 0);
 
     // Start the continous ADC conversion
-    LL_ADC_REG_StartConversion(ADC_BAT_BASE);
+    LL_ADC_REG_StartConversion(ADCx_BASE);
 }
 
 static void ADC_Init_DMA(uint16_t *values, int numValues)
@@ -210,12 +214,12 @@ static void ADC_Init_DMA(uint16_t *values, int numValues)
         LL_DMA_MDATAALIGN_HALFWORD |
         LL_DMA_PRIORITY_HIGH );
 
-    // Select ADC_BAT_BASE as the DMA transfer request
+    // Select ADCx_BASE as the DMA transfer request
     LL_DMA_SetPeriphRequest(DMA_BASE, DMA_CHANNEL, LL_DMA_REQUEST_0);
 
     // Set the DMA transfer address source and destination
     LL_DMA_ConfigAddresses(DMA_BASE, DMA_CHANNEL,
-        LL_ADC_DMA_GetRegAddr(ADC_BAT_BASE, LL_ADC_DMA_REG_REGULAR_DATA),
+        LL_ADC_DMA_GetRegAddr(ADCx_BASE, LL_ADC_DMA_REG_REGULAR_DATA),
         (uint32_t)values, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
     // Set the DMA transfer size
@@ -242,6 +246,12 @@ void ADC_DMA_TransferComplete_Callback(void)
         ADC_DMA_TransferError_Callback();
     }
 
+    if (pwm_adc_valid) {
+        pwm_adc_dma_valid = 1;
+    } else {
+        pwm_adc_dma_valid = 0;
+    }
+
     // Reset the ADC conversion status
     adcConversionStatus = 0;
 }
@@ -258,11 +268,22 @@ void ADC_ConvComplete_Callback(void)
 {
     // Update the ADC conversion status
     adcConversionStatus = 1;
+    
+    if (PWM_GetState()) {
+        pwm_adc_valid = 1;
+    } else {
+        pwm_adc_valid = 0;
+    }
 }
 
 /* ADC group regular overrun interruption callback */
 void ADC_OverrunError_Callback(void)
 {
     // Disable ADC overrun interrupts
-    LL_ADC_DisableIT_OVR(ADC_BAT_BASE);
+    LL_ADC_DisableIT_OVR(ADCx_BASE);
+}
+
+uint8_t ADC_GetPWMValid(void)
+{
+    return pwm_adc_dma_valid;
 }

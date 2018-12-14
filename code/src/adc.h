@@ -71,4 +71,7 @@ void ADC_ConvComplete_Callback(void);
   */
 void ADC_OverrunError_Callback(void);
 
+
+uint8_t ADC_GetPWMValid(void);
+
 #endif // __ADC_H

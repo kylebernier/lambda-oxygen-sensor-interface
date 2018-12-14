@@ -23,4 +23,13 @@
  */
 void Init_PWM(void);
 
+/**
+* @brief  This function handles Timer interrupt.
+* @param  None
+* @retval None
+*/
+void TimerCC1_Callback(void);
+void TimerCC2_Callback(void);
+uint8_t PWM_GetState(void);
+
 #endif /* __PWM_H */
