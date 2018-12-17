@@ -23,44 +23,53 @@
 #include "pwm.h"
 #include "usart.h"
 #include "spi.h"
-#include "temp.h"
-#include "v8Lambda.h"
-#include "v17Lambda.h"
 #include "cj125.h"
 
 void Initialize_Heater(void);
 void SystemClock_Config(void);
+void Generate_Lookup_Tables(void);
 
 /** @brief ADC values array 
  * Battery voltage, lambda value, sensor resistance, current sense 
  */
 uint16_t adc_vals[5] = {0, 0, 0, 0, 0};
 
-uint16_t optimal_resistance;
+uint16_t lambda_Lookup[4096];
+uint16_t temp_Lookup[4096];
+
+uint16_t optimal_resistance, optimal_lambda;
 uint32_t currentV;
-uint32_t Vbat, VDDA;
+uint32_t VDDA;
 
 /**
  * @def CONDENSATION Sensor resistance once condensation point has been reached
  * @brief Sensor must be at a certain condensation temperature before being heated up.
+ * 
+ * This value represents the resistance of the actual sensor as it heats up. The higher
+ * the resistance, the hotter the sensor.
  */
 #define CONDENSATION 3900
 
 /**
  * @def Kp Proportional coefficient for the PID controller
- * @brief 
+ * @brief The proportional control is proportional to the error between
+ * the desired sensor resistance and the current resistance.
  */
 #define Kp 60
 
 /**
  * @def Ki Integral coefficient for the PID controller
- * @brief 
+ * @brief The integral control is used to overcome steady state error for the P control.
+ * 
+ * In general the integral component is used for accumulating the running errors until the system stabilizes.
  */
 #define Ki 0.8
 
 /**
  * @def Kd Derivative coefficient for the PID controller
- * @brief 
+ * @brief The derivative control is used to prevent overshoot from the P control.
+ * 
+ * In general the derivative component is used to prevent the system from overshooting the desired result.
  */
 #define Kd 0
 
@@ -72,19 +81,17 @@ uint32_t Vbat, VDDA;
 int main(void)
 {
     uint8_t *data_out;
+    uint8_t i = 0;
     uint16_t response = 0;
     uint16_t lambda, lambda_adc, temp, temp_adc;
-    uint32_t uacal, ua, ip, urcal, ur, ri;
-    uint16_t optimal_lambda;
     int16_t error;
     int16_t change; 
     int16_t integral = 0;
     //int16_t derivative;
     //int16_t last_error = 0;
-    uint32_t desiredV;
+    uint32_t desiredV, Vbat;
     //uint64_t t1, t2, diff; // Only used for timing
-    float pwm_duty_cycle, o2;
-    int i = 0;
+    float pwm_duty_cycle;
 
     // Initialize the GPIO pins
     HW_Init_GPIO();
@@ -103,7 +110,8 @@ int main(void)
     // Initialize SPI connection to CJ125
     Init_SPI();
 
-    // Determine actual value of 3.3V
+    // Determine actual value of the 3.3V the STM is using.
+    // This calculation is highlighted on page 583 of the RM0351 Reference Manual.
     VDDA = VREFINT_CAL_VREF*(*VREFINT_CAL_ADDR)/adc_vals[0];
 
     // Enable cycle counter; Use for timing
@@ -122,19 +130,16 @@ int main(void)
     response = SPI_Transfer(CJ125_CALIBRATE_MODE);
     LL_mDelay(2000);
 
-    // Store optimal values from CJ125
+    // Store optimal resistance the CJ125 sees for the sensor
     optimal_resistance = adc_vals[3];
-    ur = optimal_resistance * VDDA * (365 + 187) / 365 / 4096;
-    urcal = -((15.5 * 0.000158 * 301) * 1000 - ur) * 17;
 
+    // Store optimal lambda the CJ125 sees for the sensor; The result of this is close to 1
     optimal_lambda = adc_vals[2];
-    uacal = optimal_lambda * VDDA * (365 + 187) / 365 / 4096;    // 1.5V expected
 
     // Set CJ125 into normal operation mode with an amplification of 8
     response = SPI_Transfer(CJ125_V8_MODE);
     //response = SPI_Transfer(CJ125_V17_MODE);
     
-
     // Set t1 to how many clock cycles have gone by
     //t1 = DWT->CYCCNT;
     
@@ -148,24 +153,16 @@ int main(void)
 
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
-        
-
-        // Read in battery voltage, lambda voltage and restance values from CJ125
+        // Read lambda and temp values from CJ125
         lambda_adc = adc_vals[2];
         temp_adc = adc_vals[3];
 
-        // Get Lambda value
-        ua = lambda_adc * VDDA * (365 + 187) / 365 / 4096;     // mV
-        ip = (ua - uacal) * 1000 / (61.9 * 8);             // mA
-        o2 = ip * 0.2095 / 2.54;
-        lambda = (o2 / 3 + 1) / (1 - 4.77 * o2) * 1000;  // mLambda
+        // Find lambda values in lookup table
+        lambda = lambda_Lookup[lambda_adc];
+        temp = temp_Lookup[temp_adc];
 
-        // Get temperature
-        ur = temp_adc * VDDA * (365 + 187) / 365 / 4096;
-        ri = (ur - urcal / 17) / (15.5 * 0.158);
-        temp = 4445 * pow(ri, -0.4449) + 428.6;
-
-        // Output lambda value via DAC
+        // Output lambda value via DAC 
+        // Contract specification only calls for 0.65 to 1.36, so all other values are capped
         if (lambda >= 650 && lambda < 1360) {
             DAC_SetValue((lambda-650)*4096/710);
         } else if (lambda >= 1360) {
@@ -179,11 +176,14 @@ int main(void)
         // Turn on LED before UART Transmit
         //SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 
-        // Output lambda and temperature via UART
-        data_out = (uint16_t *)(&lambda);
-        USART_Transmit(data_out, 2);
-        data_out = (uint16_t *)(&temp);
-        USART_Transmit(data_out, 2);
+        if (i == 10) {
+            // Transmit lambda and temperature values via UART
+            data_out = (uint8_t *)(&lambda);
+            USART_Transmit(data_out, 2);
+            data_out = (uint8_t *)(&temp);
+            USART_Transmit(data_out, 2);
+            i = 0;
+        }
 
         // Turn off LED after UART transmission
         //CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
@@ -199,13 +199,13 @@ int main(void)
         // Set integral term
         integral = integral + error;
 
-        // Set derivative term
+        // Set derivative term; Found not required for this setup
         //derivative = error - last_error;
         
         // Calculate desired change to result in 0 error
         change = (Kp * error) + (Ki * integral);// + (Kd * derivative);
 
-        // Set current error to last error for next loop through
+        // Set current error to last error for next loop through; Found not required for this setup
         //last_error = error;
 
         // Set voltage based on desired change
@@ -217,7 +217,8 @@ int main(void)
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
         //LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
 
-        LL_mDelay(15);
+        i++;
+        LL_mDelay(10);
     }
 }
 
@@ -282,6 +283,7 @@ void Initialize_Heater(void) {
     uint32_t maxCur, res;
     uint16_t CurADC, VbatADC, maxCurADC = 0;
     uint16_t UR;
+    uint32_t Vbat;
 
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
@@ -323,6 +325,9 @@ void Initialize_Heater(void) {
         LL_mDelay(50);
     } while (res < CONDENSATION);
 
+    // Generate lookup tables for both lambda and temperature values
+    Generate_Lookup_Tables();
+
     //currentV = 8500;
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
     do {
@@ -341,4 +346,46 @@ void Initialize_Heater(void) {
         // Delay 25ms
         LL_mDelay(5);
     } while (currentV < 11000 && UR > optimal_resistance);
+}
+
+/**
+ * @brief Generates lookup tables for lambda and temperature values
+ * 
+ * 
+ */
+void Generate_Lookup_Tables(void) {
+    int16_t i;
+    uint32_t uacal, ua, urcal, ur;
+    int32_t lambda, temp;
+    float ip, o2, ri;
+    // Calulate the calibration value for calculations further on
+    ur = optimal_resistance * VDDA * (365 + 187) / 365 / 4096;
+    urcal = -((15.5 * 0.000158 * 301) * 1000 - ur) * 17;
+
+    // Calculate the calibration value for calculations further on
+    uacal = optimal_lambda * VDDA * (365 + 187) / 365 / 4096;    // 1.5V expected
+
+    for (i = 0; i < 4096; i++) {
+        // Calculate the Lambda value; These equations were derived using curve fitting
+        // The fits were applied to curves present in the Bosch LSU 4.9 manual
+        ua = i * VDDA * (365 + 187) / 365 / 4096;     // mV
+        ip = (ua - uacal) * 1000 / (61.9 * 8);             // mA
+        o2 = ip * 0.2095 / 2540;
+        lambda = (o2 / 3 + 1) / (1 - 4.77 * o2) * 1000;
+        if (lambda >= 10119 || lambda <= 0) {
+            lambda = 10119;
+        }
+        lambda_Lookup[i] = lambda;
+        //lambda_Lookup[i] = (492.3 * exp(-pow((ip - 3.869) / 0.772, 2)) + 2.183 * exp(-pow((ip - 2.288) / 0.714, 2)) + 1.09 * exp(-pow((ip - 2.8) / 6.656, 2)) + 1.011 * exp(-pow((ip - 1.697) / 1.112, 2))) * 1000;
+
+        // Calculate the temperature; These equations were derived using curve fitting
+        // The fits were applied to curves present in the Bosch LSU 4.9 manual
+        ur = i * VDDA * (365 + 187) / 365 / 4096;
+        ri = (ur - urcal / 17) / (15.5 * 0.158);
+        temp = 4445 * pow(ri, -0.4449) + 428.6;
+        if (temp >= 7049|| temp <= 0) {
+            temp = 7049;
+        }
+        temp_Lookup[i] = temp;
+    }
 }
