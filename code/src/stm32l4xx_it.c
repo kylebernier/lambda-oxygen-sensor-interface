@@ -14,61 +14,51 @@
 #include "pwm.h"
 
 /* This function handles NMI exceptions */
-void NMI_Handler(void)
-{
+void NMI_Handler(void) {
 }
 
 /* THis function handles Hard Fault exceptions */
-void HardFault_Handler(void)
-{
+void HardFault_Handler(void) {
     // Enter an infinite loop
     while (1);
 }
 
 /* This function handles Memory Manage exceptions */
-void MemManage_Handler(void)
-{
+void MemManage_Handler(void) {
     // Enter an infinite loop
     while (1);
 }
 
 /* This function handles Bus Fault exceptions */
-void BusFault_Handler(void)
-{
+void BusFault_Handler(void) {
     // Enter an infinite loop
     while (1);
 }
 
 /* This function handles Fault exceptions */
-void UsageFault_Handler(void)
-{
+void UsageFault_Handler(void) {
     // Enter an infinite loop
     while (1);
 }
 
 /* This function handles SVCall exceptions */
-void SVC_Handler(void)
-{
+void SVC_Handler(void) {
 }
 
 /* This function handles Debug Monitor exceptions */
-void DebugMon_Handler(void)
-{
+void DebugMon_Handler(void) {
 }
 
 /* This function handles PendSVC exceptions */
-void PendSV_Handler(void)
-{
+void PendSV_Handler(void) {
 }
 
 /* This function handles SysTick Handlers */
-void SysTick_Handler(void)
-{
+void SysTick_Handler(void) {
 }
 
 /* This function handles ADC1 interrupt requests */
-void ADC1_2_IRQHandler(void)
-{
+void ADC1_2_IRQHandler(void) {
     // Check if the interupt is end of conversion
     if (LL_ADC_IsActiveFlag_EOS(ADCx_BASE) != 0) {
         // Clear the end of conversion flag
@@ -89,8 +79,7 @@ void ADC1_2_IRQHandler(void)
 }
 
 /* This function handles DMA1 interrupts requests */
-void DMA1_Channel1_IRQHandler(void)
-{
+void DMA1_Channel1_IRQHandler(void) {
     // Check if the DMA transfer is complete
     if (LL_DMA_IsActiveFlag_TC1(DMA_BASE) == 1) {
         // Clear the DMA interupt flag
@@ -111,8 +100,7 @@ void DMA1_Channel1_IRQHandler(void)
 }
 
 /* This function handles TIM8 interrupt. */
-void TIM8_CC_IRQHandler(void)
-{
+void TIM8_CC_IRQHandler(void) {
     // Check whether CC1 interrupt is pending 
     if(LL_TIM_IsActiveFlag_CC1(PWMx_BASE) == 1) {
         // Clear the update interrupt flag

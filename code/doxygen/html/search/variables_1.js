@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dmatransferstatus',['dmaTransferStatus',['../adc_8c.html#ace3033559cd670dfef12cccf42e4926a',1,'adc.c']]]
+  ['currentv',['currentV',['../main_8c.html#ab6b74d1ed1a894d12518a97d0aa306ed',1,'main.c']]]
 ];

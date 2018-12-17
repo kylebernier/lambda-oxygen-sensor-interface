@@ -9,6 +9,11 @@
  */
 #include "pwm.h"
 
+/**
+ * @brief Current state of the PWM signal; 1: high, 0: low.
+ * 
+ * Value is set during PWM interrupts.
+ */
 uint8_t pwm_state = 0;
 
 /* Initialize PWM */
@@ -52,19 +57,21 @@ void Init_PWM(void)
   
     // Force update generation 
     LL_TIM_GenerateEvent_UPDATE(PWMx_BASE);
-    MODIFY_REG(GPIOA->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
 }
 
+/* Callback for Compare/Capture 1 Interrupt */
 void TimerCC1_Callback(void) {
     SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
     pwm_state = 1;
 }
 
+/* Callback for Compare/Capture 2 Interrupt */
 void TimerCC2_Callback(void) {
     CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
     pwm_state = 0;
 }
 
+/* Returns the current state of the PWM signal */
 uint8_t PWM_GetState(void) {
     return pwm_state;
 }

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['adc_20definitions',['ADC definitions',['../group___a_d_c.html',1,'']]],
+  ['adc_20definitions',['ADC Definitions',['../group___a_d_c.html',1,'']]],
   ['adc_2ec',['adc.c',['../adc_8c.html',1,'']]],
   ['adc_2eh',['adc.h',['../adc_8h.html',1,'']]],
   ['adc1_5f2_5firqhandler',['ADC1_2_IRQHandler',['../stm32l4xx__it_8c.html#a3e8fca6e2f18e433a9fbc3d2dcc0b411',1,'ADC1_2_IRQHandler(void):&#160;stm32l4xx_it.c'],['../stm32l4xx__it_8h.html#a3e8fca6e2f18e433a9fbc3d2dcc0b411',1,'ADC1_2_IRQHandler(void):&#160;stm32l4xx_it.c']]],
@@ -22,6 +22,7 @@ var searchData=
   ['adc_5fdelay_5fcalib_5fenable_5fcpu_5fcycles',['ADC_DELAY_CALIB_ENABLE_CPU_CYCLES',['../adc_8c.html#a9821dad231f5555aee36a85ca5be929a',1,'adc.c']]],
   ['adc_5fdma_5ftransfercomplete_5fcallback',['ADC_DMA_TransferComplete_Callback',['../adc_8c.html#a6a2727ff73e5d6855b57cbb008190e29',1,'ADC_DMA_TransferComplete_Callback(void):&#160;adc.c'],['../adc_8h.html#a6a2727ff73e5d6855b57cbb008190e29',1,'ADC_DMA_TransferComplete_Callback(void):&#160;adc.c']]],
   ['adc_5fdma_5ftransfererror_5fcallback',['ADC_DMA_TransferError_Callback',['../adc_8c.html#ac6b6eaf74efff4dc43038978a8fe7aaa',1,'ADC_DMA_TransferError_Callback(void):&#160;adc.c'],['../adc_8h.html#ac6b6eaf74efff4dc43038978a8fe7aaa',1,'ADC_DMA_TransferError_Callback(void):&#160;adc.c']]],
+  ['adc_5fgetpwmvalid',['ADC_GetPWMValid',['../adc_8c.html#a727b49771f36a6d415c1de918490d8bf',1,'ADC_GetPWMValid(void):&#160;adc.c'],['../adc_8h.html#a727b49771f36a6d415c1de918490d8bf',1,'ADC_GetPWMValid(void):&#160;adc.c']]],
   ['adc_20lambda_20value_20monitor',['ADC Lambda Value Monitor',['../group___a_d_c___l_m_d.html',1,'']]],
   ['adc_5flmd_5fbase',['ADC_LMD_BASE',['../group___a_d_c___l_m_d.html#ga38714a7bf795095f1611fce895e45492',1,'hw_map.h']]],
   ['adc_5flmd_5fchannel',['ADC_LMD_CHANNEL',['../group___a_d_c___l_m_d.html#gac40c21df5bbd00a45ed9a73691d0b1b6',1,'hw_map.h']]],
@@ -37,8 +38,9 @@ var searchData=
   ['adc_5fres_5fgpio_5fpin',['ADC_RES_GPIO_PIN',['../group___a_d_c___r_e_s.html#gabb0ec9014f2aa2f4680eb9dc81667ee7',1,'hw_map.h']]],
   ['adc_5fres_5fgpio_5fport',['ADC_RES_GPIO_PORT',['../group___a_d_c___r_e_s.html#ga863b89f48beb3d960fffbad8f29ba7e0',1,'hw_map.h']]],
   ['adc_5fres_5fsampletime',['ADC_RES_SAMPLETIME',['../group___a_d_c___r_e_s.html#ga24fdd858c0407e936a0741ec2d4b21a2',1,'hw_map.h']]],
-  ['adc_5fvals',['adc_vals',['../main_8c.html#aa26ab33f67f558bb8fec1d44e10af35f',1,'main.c']]],
+  ['adc_5fvals',['adc_vals',['../main_8c.html#a44f55761c6b2ea09753ac15d3dd731aa',1,'main.c']]],
   ['adcconversionstatus',['adcConversionStatus',['../adc_8c.html#a89c1fb421785a3c51ab7cf2be7b5a0f0',1,'adc.c']]],
+  ['adcx_5fbase',['ADCx_BASE',['../group___a_d_c.html#gaaef55b6b47896304d53ed4e855c5bb2e',1,'hw_map.h']]],
   ['adcx_5fclk_5fenable',['ADCx_CLK_ENABLE',['../group___a_d_c.html#ga5cc445b43172dd29efa93895fed356fd',1,'hw_map.h']]],
   ['adc_20dma',['ADC DMA',['../group___d_m_a___a_d_c.html',1,'']]]
 ];

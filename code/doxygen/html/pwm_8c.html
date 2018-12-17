@@ -86,7 +86,8 @@ $(document).ready(function(){initNavTree('pwm_8c.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">pwm.c File Reference</div>  </div>
 </div><!--header-->
@@ -103,6 +104,21 @@ Functions</h2></td></tr>
 <tr class="memitem:ad9239ecb694070e87dbf243d912b7064"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pwm_8c.html#ad9239ecb694070e87dbf243d912b7064">Init_PWM</a> (void)</td></tr>
 <tr class="memdesc:ad9239ecb694070e87dbf243d912b7064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize PWM.  <a href="#ad9239ecb694070e87dbf243d912b7064">More...</a><br /></td></tr>
 <tr class="separator:ad9239ecb694070e87dbf243d912b7064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cee72a42bf351572a8d48356c0751b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pwm_8c.html#a9cee72a42bf351572a8d48356c0751b8">TimerCC1_Callback</a> (void)</td></tr>
+<tr class="memdesc:a9cee72a42bf351572a8d48356c0751b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function handles timer Compare/Capture 1 interrupt.  <a href="#a9cee72a42bf351572a8d48356c0751b8">More...</a><br /></td></tr>
+<tr class="separator:a9cee72a42bf351572a8d48356c0751b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30c051c15176ba3af6508c30dd69fb88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pwm_8c.html#a30c051c15176ba3af6508c30dd69fb88">TimerCC2_Callback</a> (void)</td></tr>
+<tr class="memdesc:a30c051c15176ba3af6508c30dd69fb88"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function handles timer Compare/Capture 2 interrupt.  <a href="#a30c051c15176ba3af6508c30dd69fb88">More...</a><br /></td></tr>
+<tr class="separator:a30c051c15176ba3af6508c30dd69fb88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3fb1d1447cea1607a394127a4668d0e"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pwm_8c.html#ad3fb1d1447cea1607a394127a4668d0e">PWM_GetState</a> (void)</td></tr>
+<tr class="memdesc:ad3fb1d1447cea1607a394127a4668d0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the state of the PWM signal; 1-High, 0-Low.  <a href="#ad3fb1d1447cea1607a394127a4668d0e">More...</a><br /></td></tr>
+<tr class="separator:ad3fb1d1447cea1607a394127a4668d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a077047a5abb163709a0b96a028741191"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pwm_8c.html#a077047a5abb163709a0b96a028741191">pwm_state</a> = 0</td></tr>
+<tr class="memdesc:a077047a5abb163709a0b96a028741191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current state of the PWM signal; 1: high, 0: low.  <a href="#a077047a5abb163709a0b96a028741191">More...</a><br /></td></tr>
+<tr class="separator:a077047a5abb163709a0b96a028741191"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides basic PWM functionality. </p>
@@ -138,7 +154,106 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8c_source.html#l00013">13</a> of file <a class="el" href="pwm_8c_source.html">pwm.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8c_source.html#l00020">20</a> of file <a class="el" href="pwm_8c_source.html">pwm.c</a>.</p>
+
+</div>
+</div>
+<a id="ad3fb1d1447cea1607a394127a4668d0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3fb1d1447cea1607a394127a4668d0e">&#9670;&nbsp;</a></span>PWM_GetState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t PWM_GetState </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the state of the PWM signal; 1-High, 0-Low. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint8_t PWM state </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pwm_8c_source.html#l00075">75</a> of file <a class="el" href="pwm_8c_source.html">pwm.c</a>.</p>
+
+</div>
+</div>
+<a id="a9cee72a42bf351572a8d48356c0751b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cee72a42bf351572a8d48356c0751b8">&#9670;&nbsp;</a></span>TimerCC1_Callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TimerCC1_Callback </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function handles timer Compare/Capture 1 interrupt. </p>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="pwm_8c_source.html#l00063">63</a> of file <a class="el" href="pwm_8c_source.html">pwm.c</a>.</p>
+
+</div>
+</div>
+<a id="a30c051c15176ba3af6508c30dd69fb88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30c051c15176ba3af6508c30dd69fb88">&#9670;&nbsp;</a></span>TimerCC2_Callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TimerCC2_Callback </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function handles timer Compare/Capture 2 interrupt. </p>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="pwm_8c_source.html#l00069">69</a> of file <a class="el" href="pwm_8c_source.html">pwm.c</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a077047a5abb163709a0b96a028741191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a077047a5abb163709a0b96a028741191">&#9670;&nbsp;</a></span>pwm_state</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t pwm_state = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Current state of the PWM signal; 1: high, 0: low. </p>
+<p>Value is set during PWM interrupts. </p>
+
+<p class="definition">Definition at line <a class="el" href="pwm_8c_source.html#l00017">17</a> of file <a class="el" href="pwm_8c_source.html">pwm.c</a>.</p>
 
 </div>
 </div>

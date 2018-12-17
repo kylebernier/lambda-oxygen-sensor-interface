@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('adc_8c.html','');});
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;stm32l4xx_ll_dma.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="adc_8h_source.html">adc.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="pwm_8h_source.html">pwm.h</a>&quot;</code><br />
 </div>
 <p><a href="adc_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -129,6 +130,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8c.html#a6f099c9dd8b26e6cbfb424c4c927cee8">ADC_OverrunError_Callback</a> (void)</td></tr>
 <tr class="memdesc:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC group regular overrun interruption callback.  <a href="#a6f099c9dd8b26e6cbfb424c4c927cee8">More...</a><br /></td></tr>
 <tr class="separator:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a727b49771f36a6d415c1de918490d8bf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8c.html#a727b49771f36a6d415c1de918490d8bf">ADC_GetPWMValid</a> (void)</td></tr>
+<tr class="memdesc:a727b49771f36a6d415c1de918490d8bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the status of the ADC being written to the DMA.  <a href="#a727b49771f36a6d415c1de918490d8bf">More...</a><br /></td></tr>
+<tr class="separator:a727b49771f36a6d415c1de918490d8bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -140,12 +144,22 @@ Variables</h2></td></tr>
 <tr class="separator:a82fea6e48f7a983ea9b4908fa8c0927b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace3033559cd670dfef12cccf42e4926a"><td class="memItemLeft" align="right" valign="top"><a id="ace3033559cd670dfef12cccf42e4926a"></a>
 volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8c.html#ace3033559cd670dfef12cccf42e4926a">dmaTransferStatus</a> = 2</td></tr>
-<tr class="memdesc:ace3033559cd670dfef12cccf42e4926a"><td class="mdescLeft">&#160;</td><td class="mdescRight">DMA transfer value 0: DMA transfer is not completed 1: DMA transfer is completed 2: DMA transfer has not been started yet (initial state) <br /></td></tr>
+<tr class="memdesc:ace3033559cd670dfef12cccf42e4926a"><td class="mdescLeft">&#160;</td><td class="mdescRight">DMA transfer value 0: DMA transfer is not completed <br />
+1: DMA transfer is completed <br />
+2: DMA transfer has not been started yet (initial state) <br /></td></tr>
 <tr class="separator:ace3033559cd670dfef12cccf42e4926a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c1fb421785a3c51ab7cf2be7b5a0f0"><td class="memItemLeft" align="right" valign="top"><a id="a89c1fb421785a3c51ab7cf2be7b5a0f0"></a>
 volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8c.html#a89c1fb421785a3c51ab7cf2be7b5a0f0">adcConversionStatus</a> = 0</td></tr>
 <tr class="memdesc:a89c1fb421785a3c51ab7cf2be7b5a0f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC group sequence conversion value 0: ADC group regular sequence conversions are not completed 1: ADC group regular sequence conversions are completed. <br /></td></tr>
 <tr class="separator:a89c1fb421785a3c51ab7cf2be7b5a0f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6702a190a3fd7ab7f0d536ff0d1a84d0"><td class="memItemLeft" align="right" valign="top"><a id="a6702a190a3fd7ab7f0d536ff0d1a84d0"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8c.html#a6702a190a3fd7ab7f0d536ff0d1a84d0">pwm_adc_valid</a> = 0</td></tr>
+<tr class="memdesc:a6702a190a3fd7ab7f0d536ff0d1a84d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PWM signal is high/low Used with PWM to read the ADC only when the signal is high. <br /></td></tr>
+<tr class="separator:a6702a190a3fd7ab7f0d536ff0d1a84d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac848a8633f21934fdfdd9dea2f36dcef"><td class="memItemLeft" align="right" valign="top"><a id="ac848a8633f21934fdfdd9dea2f36dcef"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8c.html#ac848a8633f21934fdfdd9dea2f36dcef">pwm_adc_dma_valid</a> = 0</td></tr>
+<tr class="memdesc:ac848a8633f21934fdfdd9dea2f36dcef"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC has succesfully written to DMA Used with PWM to read the ADC only when the signal is high. <br /></td></tr>
+<tr class="separator:ac848a8633f21934fdfdd9dea2f36dcef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides basic ADC functionality. </p>
@@ -181,7 +195,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00257">257</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00276">276</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -210,7 +224,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00235">235</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00248">248</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -239,7 +253,30 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00250">250</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00269">269</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+
+</div>
+</div>
+<a id="a727b49771f36a6d415c1de918490d8bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a727b49771f36a6d415c1de918490d8bf">&#9670;&nbsp;</a></span>ADC_GetPWMValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t ADC_GetPWMValid </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reports the status of the ADC being written to the DMA. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint8_t DMA has successfully written. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00298">298</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -268,7 +305,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00264">264</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00291">291</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -305,7 +342,7 @@ Daeghan Elkin </dd></dl>
 </div><div class="memdoc">
 
 <p>Initialize the ADC with DMA. </p>
-<p>Initialization of the desired channels is done by taking the reverse of the binary expansion of the channels. ie. For enabling channels 3, 8, 11, &amp; 12 the representation would be:</p><ul>
+<p>Initialization of the desired channels is done by taking the reverse of the binary expansion of the channels. ie. Enabling channels 3, 8, 11, &amp; 12 the representation would be:</p><ul>
 <li>- - 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 0 0 0 0| 0 0 0 1| 1 0 0 1|0 0 0 0|1 0 0 0</li>
 </ul>
 <p>Which results in a hexidecimal number of 0x01908</p>
@@ -324,7 +361,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00095">95</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00108">108</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -343,7 +380,7 @@ Daeghan Elkin </dd></dl>
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div><div class="line">    LL_ADC_CHANNEL_0,</div><div class="line">    LL_ADC_CHANNEL_1,</div><div class="line">    LL_ADC_CHANNEL_2,</div><div class="line">    LL_ADC_CHANNEL_3,</div><div class="line">    LL_ADC_CHANNEL_4,</div><div class="line">    LL_ADC_CHANNEL_5,</div><div class="line">    LL_ADC_CHANNEL_6,</div><div class="line">    LL_ADC_CHANNEL_7,</div><div class="line">    LL_ADC_CHANNEL_8,</div><div class="line">    LL_ADC_CHANNEL_9,</div><div class="line">    LL_ADC_CHANNEL_10,</div><div class="line">    LL_ADC_CHANNEL_11,</div><div class="line">    LL_ADC_CHANNEL_12,</div><div class="line">    LL_ADC_CHANNEL_13,</div><div class="line">    LL_ADC_CHANNEL_14,</div><div class="line">    LL_ADC_CHANNEL_15,</div><div class="line">    LL_ADC_CHANNEL_16,</div><div class="line">    LL_ADC_CHANNEL_VREFINT,         </div><div class="line">    LL_ADC_CHANNEL_TEMPSENSOR,      </div><div class="line">    LL_ADC_CHANNEL_VBAT,            </div><div class="line">    LL_ADC_CHANNEL_DAC1CH1_ADC2,    </div><div class="line">    LL_ADC_CHANNEL_DAC1CH2_ADC2,    </div><div class="line">    LL_ADC_CHANNEL_DAC1CH1_ADC3,    </div><div class="line">    LL_ADC_CHANNEL_DAC1CH2_ADC3     </div><div class="line">}</div></div><!-- fragment -->
 <p>Array of ADC channels. </p>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00032">32</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00033">33</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -361,7 +398,7 @@ Daeghan Elkin </dd></dl>
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div><div class="line">    LL_ADC_REG_RANK_1,</div><div class="line">    LL_ADC_REG_RANK_2,</div><div class="line">    LL_ADC_REG_RANK_3,</div><div class="line">    LL_ADC_REG_RANK_4,</div><div class="line">    LL_ADC_REG_RANK_5,</div><div class="line">    LL_ADC_REG_RANK_6,</div><div class="line">    LL_ADC_REG_RANK_7,</div><div class="line">    LL_ADC_REG_RANK_8,</div><div class="line">    LL_ADC_REG_RANK_9,</div><div class="line">    LL_ADC_REG_RANK_10,</div><div class="line">    LL_ADC_REG_RANK_11,</div><div class="line">    LL_ADC_REG_RANK_12,</div><div class="line">    LL_ADC_REG_RANK_13,</div><div class="line">    LL_ADC_REG_RANK_14,</div><div class="line">    LL_ADC_REG_RANK_15,</div><div class="line">    LL_ADC_REG_RANK_16</div><div class="line">}</div></div><!-- fragment -->
 <p>Array of ADC channel ranks. </p>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00060">60</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00061">61</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>

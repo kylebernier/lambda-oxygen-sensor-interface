@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['v17lambda_5flookup',['v17Lambda_Lookup',['../v17_lambda_8h.html#a5d429898945306f97f17a498093fe764',1,'v17Lambda.h']]],
-  ['v8lambda_5flookup',['v8Lambda_Lookup',['../v8_lambda_8h.html#a4d4478fe694c8631877e32142283c5e6',1,'v8Lambda.h']]]
+  ['optimal_5flambda',['optimal_lambda',['../main_8c.html#a3595ed0b02fcd9e0ad12c9149c94bdb8',1,'main.c']]],
+  ['optimal_5fresistance',['optimal_resistance',['../main_8c.html#a21da8ea764573261998bc78a9d69e1ee',1,'main.c']]]
 ];

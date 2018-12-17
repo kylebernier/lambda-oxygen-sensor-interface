@@ -24,12 +24,24 @@
 void Init_PWM(void);
 
 /**
-* @brief  This function handles Timer interrupt.
-* @param  None
+* @brief  This function handles timer Compare/Capture 1 interrupt.
+
 * @retval None
 */
 void TimerCC1_Callback(void);
+
+/**
+* @brief  This function handles timer Compare/Capture 2 interrupt.
+
+* @retval None
+*/
 void TimerCC2_Callback(void);
+
+/**
+ * @brief Returns the state of the PWM signal; 1-High, 0-Low.
+ * 
+ * @return uint8_t PWM state
+ */
 uint8_t PWM_GetState(void);
 
 #endif /* __PWM_H */

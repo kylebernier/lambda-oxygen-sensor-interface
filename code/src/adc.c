@@ -79,8 +79,8 @@ uint32_t ADC_RANKS[16] = {
 
 /**
  * @brief DMA transfer value
- * 0: DMA transfer is not completed
- * 1: DMA transfer is completed
+ * 0: DMA transfer is not completed @n
+ * 1: DMA transfer is completed @n
  * 2: DMA transfer has not been started yet (initial state) 
  */
 volatile uint8_t dmaTransferStatus = 2;
@@ -92,7 +92,16 @@ volatile uint8_t dmaTransferStatus = 2;
  */
 volatile uint8_t adcConversionStatus = 0;
 
+/**
+ * @brief The PWM signal is high/low
+ * Used with PWM to read the ADC only when the signal is high
+ */
 uint8_t pwm_adc_valid = 0;
+
+/**
+ * @brief ADC has succesfully written to DMA
+ * Used with PWM to read the ADC only when the signal is high
+ */
 uint8_t pwm_adc_dma_valid = 0;
 
 /* Initialize ADC with DMA*/
@@ -285,6 +294,7 @@ void ADC_OverrunError_Callback(void)
     LL_ADC_DisableIT_OVR(ADCx_BASE);
 }
 
+/* ADC check if PWM signal is valid or not */
 uint8_t ADC_GetPWMValid(void)
 {
     return pwm_adc_dma_valid;

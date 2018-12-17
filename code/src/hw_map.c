@@ -124,4 +124,10 @@ void HW_Init_GPIO(void)
     LL_GPIO_SetAFPin_8_15(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_AF_5);
     LL_GPIO_SetPinSpeed(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_SPEED_FREQ_HIGH);
     LL_GPIO_SetPinPull(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_PULL_DOWN);
+
+    //---------------------------------
+    // LED initialization 
+    //---------------------------------
+    MODIFY_REG(GPIOA->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0);
+    MODIFY_REG(GPIOC->MODER, GPIO_MODER_MODE9, GPIO_MODER_MODE9_0);
 }

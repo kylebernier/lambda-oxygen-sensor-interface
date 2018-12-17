@@ -115,6 +115,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8h.html#a6f099c9dd8b26e6cbfb424c4c927cee8">ADC_OverrunError_Callback</a> (void)</td></tr>
 <tr class="memdesc:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC group regular overrun interruption callback.  <a href="#a6f099c9dd8b26e6cbfb424c4c927cee8">More...</a><br /></td></tr>
 <tr class="separator:a6f099c9dd8b26e6cbfb424c4c927cee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a727b49771f36a6d415c1de918490d8bf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="adc_8h.html#a727b49771f36a6d415c1de918490d8bf">ADC_GetPWMValid</a> (void)</td></tr>
+<tr class="memdesc:a727b49771f36a6d415c1de918490d8bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the status of the ADC being written to the DMA.  <a href="#a727b49771f36a6d415c1de918490d8bf">More...</a><br /></td></tr>
+<tr class="separator:a727b49771f36a6d415c1de918490d8bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides ADC functionality. </p>
@@ -150,7 +153,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00257">257</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00276">276</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -179,7 +182,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00235">235</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00248">248</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -208,7 +211,30 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00250">250</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00269">269</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+
+</div>
+</div>
+<a id="a727b49771f36a6d415c1de918490d8bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a727b49771f36a6d415c1de918490d8bf">&#9670;&nbsp;</a></span>ADC_GetPWMValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t ADC_GetPWMValid </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reports the status of the ADC being written to the DMA. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint8_t DMA has successfully written. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00298">298</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -237,7 +263,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00264">264</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00291">291</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>
@@ -274,7 +300,7 @@ Daeghan Elkin </dd></dl>
 </div><div class="memdoc">
 
 <p>Initialize the ADC with DMA. </p>
-<p>Initialization of the desired channels is done by taking the reverse of the binary expansion of the channels. ie. For enabling channels 3, 8, 11, &amp; 12 the representation would be:</p><ul>
+<p>Initialization of the desired channels is done by taking the reverse of the binary expansion of the channels. ie. Enabling channels 3, 8, 11, &amp; 12 the representation would be:</p><ul>
 <li>- - 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 0 0 0 0| 0 0 0 1| 1 0 0 1|0 0 0 0|1 0 0 0</li>
 </ul>
 <p>Which results in a hexidecimal number of 0x01908</p>
@@ -293,7 +319,7 @@ Daeghan Elkin </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00095">95</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="adc_8c_source.html#l00108">108</a> of file <a class="el" href="adc_8c_source.html">adc.c</a>.</p>
 
 </div>
 </div>

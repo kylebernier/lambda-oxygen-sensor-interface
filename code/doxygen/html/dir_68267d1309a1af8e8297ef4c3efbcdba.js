@@ -15,9 +15,6 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "stm32l4xx_it.c", "stm32l4xx__it_8c.html", "stm32l4xx__it_8c" ],
     [ "stm32l4xx_it.h", "stm32l4xx__it_8h.html", "stm32l4xx__it_8h" ],
     [ "system_stm32l4xx.c", "system__stm32l4xx_8c.html", "system__stm32l4xx_8c" ],
-    [ "temp.h", "temp_8h.html", "temp_8h" ],
     [ "usart.c", "usart_8c.html", "usart_8c" ],
-    [ "usart.h", "usart_8h.html", "usart_8h" ],
-    [ "v17Lambda.h", "v17_lambda_8h.html", "v17_lambda_8h" ],
-    [ "v8Lambda.h", "v8_lambda_8h.html", "v8_lambda_8h" ]
+    [ "usart.h", "usart_8h.html", "usart_8h" ]
 ];

@@ -25,11 +25,11 @@
 #include "stm32l4xx_ll_bus.h"
 
 /**
- * @defgroup ADC ADC definitions
+ * @defgroup ADC ADC Definitions
  */
 
 /**
- * @def ADCx_BASE General ADC used
+ * @def ADCx_BASE
  * @ingroup ADC
  * @brief ADC channel used for all.
  */
