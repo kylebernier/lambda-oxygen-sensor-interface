@@ -125,8 +125,8 @@ int main(void)
     int16_t error;
     int16_t change; 
     int16_t integral = 0;
-    //int16_t derivative;
-    //int16_t last_error = 0;
+    int16_t derivative;
+    int16_t last_error = 0;
     uint32_t desiredV, Vbat;
     //uint64_t t1, t2, diff; // Only used for timing
     float pwm_duty_cycle;
@@ -240,13 +240,13 @@ int main(void)
         integral = integral + error;
 
         // Set derivative term; Found not required for this setup
-        //derivative = error - last_error;
+        derivative = error - last_error;
         
         // Calculate desired change to result in 0 error
-        change = (Kp * error) + (Ki * integral);// + (Kd * derivative);
+        change = (Kp * error) + (Ki * integral) + (Kd * derivative);
 
         // Set current error to last error for next loop through; Found not required for this setup
-        //last_error = error;
+        last_error = error;
 
         // Set voltage based on desired change
         if (currentV - change > Vbat) {
@@ -359,7 +359,9 @@ void Initialize_Heater(void) {
         maxCur = (maxCurADC * VDDA / 4096);
 
         // Determine the actual voltage at highest ADC value
-        Vbat = (VbatADC * VDDA / 4096) * 955 / 187;
+        //if (ADC_GetPWMValid()) {
+            Vbat = (VbatADC * VDDA / 4096) * 955 / 187;
+        //}
 
         // Determine sensor resisitance
         res = Vbat * 7 * 50 / maxCur - 23;
