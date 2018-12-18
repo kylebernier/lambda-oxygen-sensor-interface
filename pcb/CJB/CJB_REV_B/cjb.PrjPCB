@@ -207,40 +207,6 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FJAGLTHY
 
-[Document11]
-DocumentPath=CAMtastic1.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document12]
-DocumentPath=CAMtastic2.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
 [GeneratedDocument1]
 DocumentPath=Project_Outputs\cjb-RoundHoles.TXT
 DItemRevisionGUID=
@@ -648,7 +614,7 @@ OutputVariantName2=[No Variations]
 OutputDefault2=1
 PageOptions2=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=2.15|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
 Configuration2_Name1=OutputConfigurationParameter1
-Configuration2_Item1=Record=Pcb3DPrintView|ResX=300|ResY=300|ViewX=51083844|ViewY=36059184|LookAtX=24583698|LookAtY=33490550|LookAtZ=-52000|UpX=3.32018024185032E-10|UpY=0.45291069149971|UpZ=-0.89155638217926|FOV=45|QuatX=-0.523016631603241|QuatY=-8.68254218522324E-11|QuatZ=-1.41493136651683E-10|QuatW=0.852322459220886|Zoom=2.56245400319929E-5|UnitsPercent=True|UnitsDPI=True|LockResAspect=True|ViewConfigType=.config_3d|CustomCamera=True|ViewFromTop=True|ViewConfig= 
+Configuration2_Item1=Record=Pcb3DPrintView|ResX=300|ResY=300|ViewX=51083844|ViewY=36059184|LookAtX=24583698|LookAtY=33490550|LookAtZ=-52000|UpX=3.32018024185032E-10|UpY=0.45291069149971|UpZ=-0.89155638217926|FOV=45|QuatX=-0.523016631603241|QuatY=-8.68254218522324E-11|QuatZ=-1.41493136651683E-10|QuatW=0.852322459220886|Zoom=2.56245400319929E-5|UnitsPercent=True|UnitsDPI=True|LockResAspect=True|ViewConfigType=.config_3d|CustomCamera=True|ViewFromTop=True|ViewConfig=
 OutputType3=PCB 3D Video
 OutputName3=PCB 3D Video
 OutputDocumentPath3=
