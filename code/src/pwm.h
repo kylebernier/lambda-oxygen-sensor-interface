@@ -37,11 +37,4 @@ void TimerCC1_Callback(void);
 */
 void TimerCC2_Callback(void);
 
-/**
- * @brief Returns the state of the PWM signal; 1-High, 0-Low.
- * 
- * @return uint8_t PWM state
- */
-uint8_t PWM_GetState(void);
-
 #endif /* __PWM_H */

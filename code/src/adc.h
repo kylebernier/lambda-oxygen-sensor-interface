@@ -71,12 +71,4 @@ void ADC_ConvComplete_Callback(void);
   */
 void ADC_OverrunError_Callback(void);
 
-
-/**
- * @brief Reports the status of the ADC being written to the DMA
- * 
- * @return uint8_t DMA has successfully written.
- */
-uint8_t ADC_GetPWMValid(void);
-
 #endif // __ADC_H

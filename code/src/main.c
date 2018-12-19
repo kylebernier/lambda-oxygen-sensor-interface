@@ -414,7 +414,7 @@ void Initialize_Heater(void) {
  * @retval None
  */
 void Generate_Lookup_Tables(void) {
-    int16_t i;
+    uint16_t i;
     uint32_t uacal, ua, urcal, ur;
     int32_t lambda, temp;
     float ip, o2, ri;

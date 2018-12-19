@@ -23,7 +23,7 @@ void Init_PWM(void)
     NVIC_SetPriority(PWMx_IRQ, 2);
     NVIC_EnableIRQ(PWMx_IRQ);
 
-    // Set the pre-scaler value to 10 kHz 
+    // Set the pre-scaler value 
     LL_TIM_SetPrescaler(PWMx_BASE, __LL_TIM_CALC_PSC(SystemCoreClock, 100000));
   
     // Set the auto-reload value to have a counter frequency of 100 Hz 
@@ -33,6 +33,7 @@ void Init_PWM(void)
     LL_TIM_OC_SetMode(PWMx_BASE, PWMx_CHANNEL, LL_TIM_OCMODE_PWM1);
     LL_TIM_OC_SetMode(PWMx_BASE, PWMx_IRQ_CHANNEL, LL_TIM_OCMODE_PWM1);
 
+    // Set external trigger to output on Capture/Compare Output Channel 1
     LL_TIM_SetTriggerOutput(PWMx_BASE, LL_TIM_TRGO_OC1REF);
 
     // Set compare value have a 0% duty cycle
@@ -64,16 +65,9 @@ void Init_PWM(void)
 /* Callback for Compare/Capture 1 Interrupt */
 void TimerCC1_Callback(void) {
     SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
-    pwm_state = 1;
 }
 
 /* Callback for Compare/Capture 2 Interrupt */
 void TimerCC2_Callback(void) {
     CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
-    pwm_state = 0;
-}
-
-/* Returns the current state of the PWM signal */
-uint8_t PWM_GetState(void) {
-    return pwm_state;
 }

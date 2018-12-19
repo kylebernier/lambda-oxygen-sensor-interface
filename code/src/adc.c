@@ -10,8 +10,6 @@
 #include "stm32l4xx_ll_dma.h"
 
 #include "adc.h"
-#include "pwm.h"
-
 
 /**
  * @brief Initialize DMA for the ADC 
@@ -92,17 +90,6 @@ volatile uint8_t dmaTransferStatus = 2;
  */
 volatile uint8_t adcConversionStatus = 0;
 
-/**
- * @brief The PWM signal is high/low
- * Used with PWM to read the ADC only when the signal is high
- */
-uint8_t pwm_adc_valid = 0;
-
-/**
- * @brief ADC has succesfully written to DMA
- * Used with PWM to read the ADC only when the signal is high
- */
-uint8_t pwm_adc_dma_valid = 0;
 
 /* Initialize ADC with DMA*/
 void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
@@ -257,12 +244,6 @@ void ADC_DMA_TransferComplete_Callback(void)
         ADC_DMA_TransferError_Callback();
     }
 
-    if (pwm_adc_valid) {
-        pwm_adc_dma_valid = 1;
-    } else {
-        pwm_adc_dma_valid = 0;
-    }
-
     // Reset the ADC conversion status
     adcConversionStatus = 0;
 }
@@ -279,14 +260,6 @@ void ADC_ConvComplete_Callback(void)
 {
     // Update the ADC conversion status
     adcConversionStatus = 1;
-    
-    /*
-    if (PWM_GetState()) {
-        pwm_adc_valid = 1;
-    } else {
-        pwm_adc_valid = 0;
-    }
-    */
 }
 
 /* ADC group regular overrun interruption callback */
@@ -294,10 +267,4 @@ void ADC_OverrunError_Callback(void)
 {
     // Disable ADC overrun interrupts
     LL_ADC_DisableIT_OVR(ADCx_BASE);
-}
-
-/* ADC check if PWM signal is valid or not */
-uint8_t ADC_GetPWMValid(void)
-{
-    return pwm_adc_dma_valid;
 }
