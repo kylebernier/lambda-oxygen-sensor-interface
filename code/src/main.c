@@ -112,6 +112,13 @@ uint32_t VDDA;
 #define PREAMBLE 0xFFFF
 
 /**
+ * @def Vbat3V3
+ * @brief Actual measured value for the 3V3 line on the PCB.
+ * This value is required to make acurate readings of the battery voltage.
+ */
+#define Vbat3V3 3286
+
+/**
  * @brief Main program entrypoint.
  * 
  * @return Should not return.
@@ -122,10 +129,8 @@ int main(void)
     uint8_t i = 0;
     uint16_t response = 0;
     uint16_t lambda, lambda_adc, temp, temp_adc;
-    int16_t error;
-    int16_t change; 
+    int16_t derivative, error, change; 
     int16_t integral = 0;
-    int16_t derivative;
     int16_t last_error = 0;
     uint32_t desiredV, Vbat;
     //uint64_t t1, t2, diff; // Only used for timing
@@ -149,13 +154,15 @@ int main(void)
     Init_SPI();
 
     // Determine actual value of the 3.3V the STM is using.
+    LL_mDelay(500);
     VDDA = VREFINT_CAL_VREF*(*VREFINT_CAL_ADDR)/adc_vals[0];
 
+    /*
     // Enable cycle counter; Use for timing
     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
     DWT->CYCCNT = 0;
     DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-
+    */
     
     // Loop until CJ125 is ready. When CJ125 responds OK move on.
     while (response != CJ125_DIAG_REG_OK) {
@@ -215,9 +222,12 @@ int main(void)
             
             // Transmit preamble before data
             USART_Transmit((uint8_t *)PREAMBLE, 2);
-            // Transmit lambda and temperature values via UART
+
+            // Transmit lambda value over UART
             data_out = (uint8_t *)(&lambda);
             USART_Transmit(data_out, 2);
+            
+            // Transmit temperature value over UART
             data_out = (uint8_t *)(&temp);
             USART_Transmit(data_out, 2);
 
@@ -229,9 +239,7 @@ int main(void)
 
 
         // Determine battery voltage
-        //if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[1] * VDDA / 4096) * 955 / 187;
-        //}
+        Vbat = (adc_vals[1] * 3286 / 4096) * 955 / 187;
 
         // Determine error between desired value and current value
         error = optimal_resistance - temp_adc;
@@ -259,12 +267,13 @@ int main(void)
 
         // Calculate PWM duty cycle
         pwm_duty_cycle = pow((float)desiredV / Vbat, 2);
-        //pwm_duty_cycle = pow((float)0 / Vbat, 2);
+        //pwm_duty_cycle = pow((float)2000 / Vbat, 2);
 
         // Adjust PWM signal for heater so it stays at 780C
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
         i++;
+        // Delay 10ms
         LL_mDelay(10);
     }
 }
@@ -326,22 +335,23 @@ void SystemClock_Config(void) {
 void Initialize_Heater(void) {
     int i = 0;
     float pwm_duty_cycle;
-    uint32_t maxCur, res;
-    uint16_t CurADC, VbatADC, maxCurADC = 0;
-    uint16_t UR;
-    uint32_t Vbat;
+    uint16_t CurADC, VbatADC, UR;
+    uint16_t maxCurADC = 0;
+    uint32_t Vbat, maxCur, res;
 
     // Warm up heater, supply <= 2V to heater until out of condensation phase
     // Uses the current sense value to determine when condensation phase is over
     do {
         // Calculate the battery voltage from the ADC
-        //if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[1] * VDDA / 4096) * 955 / 187;
-        //}
+        Vbat = (adc_vals[1] * 3286 / 4096) * 955 / 187;
+
+        // Set initial "warm-up" voltage to 2V
+        currentV = 2000;
+
+        // Calculate PWM duty cycle using equation found in LSU 4.9 manual
+        pwm_duty_cycle = pow((float)currentV / Vbat, 2);
 
         // Set PWM signal to equivalent of 2Vrms
-        currentV = 2000;
-        pwm_duty_cycle = pow((float)currentV / Vbat, 2);
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
         // Sample current sense ADC to determine the maximum value
@@ -359,9 +369,7 @@ void Initialize_Heater(void) {
         maxCur = (maxCurADC * VDDA / 4096);
 
         // Determine the actual voltage at highest ADC value
-        //if (ADC_GetPWMValid()) {
-            Vbat = (VbatADC * VDDA / 4096) * 955 / 187;
-        //}
+        Vbat = (VbatADC * 3286 / 4096) * 955 / 187;
 
         // Determine sensor resisitance
         res = Vbat * 7 * 50 / maxCur - 23;
@@ -380,11 +388,12 @@ void Initialize_Heater(void) {
     // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
     do {
         // Get the current battery voltage
-        //if (ADC_GetPWMValid()) {
-            Vbat = (adc_vals[1] * VDDA / 4096) * 955 / 187;
-        //}
-        // Set PWM signal to equivalent of ramp up voltage RMS
+        Vbat = (adc_vals[1] * 3286 / 4096) * 955 / 187;
+
+        // Calculate duty cycle, equation from LSU 4.9 datasheet
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
+
+        // Set PWM signal to equivalent of ramp up voltage RMS
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
         UR = adc_vals[3];

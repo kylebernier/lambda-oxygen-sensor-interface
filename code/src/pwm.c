@@ -24,7 +24,7 @@ void Init_PWM(void)
     NVIC_EnableIRQ(PWMx_IRQ);
 
     // Set the pre-scaler value to 10 kHz 
-    LL_TIM_SetPrescaler(PWMx_BASE, __LL_TIM_CALC_PSC(SystemCoreClock, 10000));
+    LL_TIM_SetPrescaler(PWMx_BASE, __LL_TIM_CALC_PSC(SystemCoreClock, 100000));
   
     // Set the auto-reload value to have a counter frequency of 100 Hz 
     LL_TIM_SetAutoReload(PWMx_BASE, __LL_TIM_CALC_ARR(SystemCoreClock, LL_TIM_GetPrescaler(PWMx_BASE), 100));
@@ -32,10 +32,12 @@ void Init_PWM(void)
     // Set output mode 
     LL_TIM_OC_SetMode(PWMx_BASE, PWMx_CHANNEL, LL_TIM_OCMODE_PWM1);
     LL_TIM_OC_SetMode(PWMx_BASE, PWMx_IRQ_CHANNEL, LL_TIM_OCMODE_PWM1);
-  
+
+    LL_TIM_SetTriggerOutput(PWMx_BASE, LL_TIM_TRGO_OC1REF);
+
     // Set compare value have a 0% duty cycle
     LL_TIM_OC_SetCompareCH2(PWMx_BASE, 0);
-    LL_TIM_OC_SetCompareCH1(PWMx_BASE, 0);
+    LL_TIM_OC_SetCompareCH1(PWMx_BASE, 1);
   
     // Enable PWM register preload. 
     LL_TIM_OC_EnablePreload(PWMx_BASE, PWMx_CHANNEL);

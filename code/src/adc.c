@@ -139,10 +139,12 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     }
 
     // Set the ADC to have a software trigger source
-    LL_ADC_REG_SetTriggerSource(ADCx_BASE, LL_ADC_REG_TRIG_SOFTWARE);
+    LL_ADC_REG_SetTriggerSource(ADCx_BASE, LL_ADC_REG_TRIG_EXT_TIM8_TRGO);
+
+    LL_ADC_REG_SetTriggerEdge(ADCx_BASE, LL_ADC_REG_TRIG_EXT_RISING);
 
     // Set the ADC to convert continuously
-    LL_ADC_REG_SetContinuousMode(ADCx_BASE, LL_ADC_REG_CONV_CONTINUOUS);
+    LL_ADC_REG_SetContinuousMode(ADCx_BASE, LL_ADC_REG_CONV_SINGLE);
 
     // Set the ADC conversion data transfer
     LL_ADC_REG_SetDMATransfer(ADCx_BASE, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
@@ -269,7 +271,7 @@ void ADC_DMA_TransferComplete_Callback(void)
 void ADC_DMA_TransferError_Callback(void)
 {
     // Handle the error
-    while(1);
+    //while(1);
 }
 
 /* ADC group regular end of sequence conversions interruption callback */
