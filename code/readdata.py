@@ -33,9 +33,12 @@ fig.show()
 
 ser.flushInput()
 while True:
-    rdbytes = ser.read(2)
-    while rdbytes != b'\xff\xff':
-        rdbytes = ser.read(2)
+    while True:
+        rdbytes = ser.read(1)
+        if rdbytes == b'\xff':
+            rdbytes = ser.read(1)
+            if rdbytes == b'\xff':
+                break
     rdbytes = ser.read(4)
     values = struct.unpack('<HH', rdbytes)
     lamb.popleft()
