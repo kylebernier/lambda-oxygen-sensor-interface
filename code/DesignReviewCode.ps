@@ -1,0 +1,5565 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: Enscript Output
+%%For: 
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Thu Dec 20 11:34:12 2018
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 6
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 9 9 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6 6
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      5 0 moveto fname show
+      45 0 rmoveto fmodstr show
+      45 0 rmoveto pagenumstr show
+    } ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 536 def
+/d_page_h 744 def
+/d_header_x 0 def
+/d_header_y 729 def
+/d_header_w 536 def
+/d_header_h 15 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 536 def
+/d_footer_h 0 def
+/d_output_w 536 def
+/d_output_h 729 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/adc.c) def
+/fdir (src) def
+/ftail (adc.c) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:30:43 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (adc.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file adc.c) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 15) s
+5 667 M
+( * ) s
+5 657 M
+( * @brief Provides basic ADC functionality) s
+5 647 M
+( */) s
+5 627 M
+(#include "stm32l4xx_ll_dma.h") s
+5 607 M
+(#include "adc.h") s
+5 587 M
+(/**) s
+5 577 M
+( * @brief Initialize DMA for the ADC ) s
+5 567 M
+( * ) s
+5 557 M
+( * @param values Array to store ADC values) s
+5 547 M
+( * @param numValues Number of values in values array) s
+5 537 M
+( * ) s
+5 527 M
+( * @retval None) s
+5 517 M
+( */) s
+5 507 M
+(static void ADC_Init_DMA\(uint16_t * values, int numValues\);) s
+5 487 M
+(/** @brief Delay between ADC end of calibration and ADC enable */) s
+5 477 M
+(#define ADC_DELAY_CALIB_ENABLE_CPU_CYCLES \(LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES * 32\)) s
+5 457 M
+(/** @brief Number of possible ADC channels */) s
+5 447 M
+(#define ADC_NUM_CHANNELS 24) s
+5 427 M
+(/** @brief Array of ADC channels */) s
+5 417 M
+(uint32_t ADC_CHANNELS[ADC_NUM_CHANNELS] = {) s
+5 407 M
+(    LL_ADC_CHANNEL_0,) s
+5 397 M
+(    LL_ADC_CHANNEL_1,) s
+5 387 M
+(    LL_ADC_CHANNEL_2,) s
+5 377 M
+(    LL_ADC_CHANNEL_3,) s
+5 367 M
+(    LL_ADC_CHANNEL_4,) s
+5 357 M
+(    LL_ADC_CHANNEL_5,) s
+5 347 M
+(    LL_ADC_CHANNEL_6,) s
+5 337 M
+(    LL_ADC_CHANNEL_7,) s
+5 327 M
+(    LL_ADC_CHANNEL_8,) s
+5 317 M
+(    LL_ADC_CHANNEL_9,) s
+5 307 M
+(    LL_ADC_CHANNEL_10,) s
+5 297 M
+(    LL_ADC_CHANNEL_11,) s
+5 287 M
+(    LL_ADC_CHANNEL_12,) s
+5 277 M
+(    LL_ADC_CHANNEL_13,) s
+5 267 M
+(    LL_ADC_CHANNEL_14,) s
+5 257 M
+(    LL_ADC_CHANNEL_15,) s
+5 247 M
+(    LL_ADC_CHANNEL_16,) s
+5 237 M
+(    LL_ADC_CHANNEL_VREFINT,         // ADC1 Only, Uses Channel 0) s
+5 227 M
+(    LL_ADC_CHANNEL_TEMPSENSOR,      // ADC1 or ADC3) s
+5 217 M
+(    LL_ADC_CHANNEL_VBAT,            // ADC1 or ADC3) s
+5 207 M
+(    LL_ADC_CHANNEL_DAC1CH1_ADC2,    // ADC2 Only) s
+5 197 M
+(    LL_ADC_CHANNEL_DAC1CH2_ADC2,    // ADC2 Only) s
+5 187 M
+(    LL_ADC_CHANNEL_DAC1CH1_ADC3,    // ADC3 Only, Uses Channel 14) s
+5 177 M
+(    LL_ADC_CHANNEL_DAC1CH2_ADC3     // ADC3 Only, Uses Channel 15) s
+5 167 M
+(};) s
+5 147 M
+(/** @brief Array of ADC channel ranks */) s
+5 137 M
+(uint32_t ADC_RANKS[16] = {) s
+5 127 M
+(    LL_ADC_REG_RANK_1,) s
+5 117 M
+(    LL_ADC_REG_RANK_2,) s
+5 107 M
+(    LL_ADC_REG_RANK_3,) s
+5 97 M
+(    LL_ADC_REG_RANK_4,) s
+5 87 M
+(    LL_ADC_REG_RANK_5,) s
+5 77 M
+(    LL_ADC_REG_RANK_6,) s
+5 67 M
+(    LL_ADC_REG_RANK_7,) s
+5 57 M
+(    LL_ADC_REG_RANK_8,) s
+5 47 M
+(    LL_ADC_REG_RANK_9,) s
+5 37 M
+(    LL_ADC_REG_RANK_10,) s
+5 27 M
+(    LL_ADC_REG_RANK_11,) s
+5 17 M
+(    LL_ADC_REG_RANK_12,) s
+5 7 M
+(    LL_ADC_REG_RANK_13,) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/adc.c) def
+/fdir (src) def
+/ftail (adc.c) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:30:43 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (adc.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    LL_ADC_REG_RANK_14,) s
+5 707 M
+(    LL_ADC_REG_RANK_15,) s
+5 697 M
+(    LL_ADC_REG_RANK_16) s
+5 687 M
+(};) s
+5 667 M
+(/**) s
+5 657 M
+( * @brief DMA transfer value) s
+5 647 M
+( * 0: DMA transfer is not completed @n) s
+5 637 M
+( * 1: DMA transfer is completed @n) s
+5 627 M
+( * 2: DMA transfer has not been started yet \(initial state\) ) s
+5 617 M
+( */) s
+5 607 M
+(volatile uint8_t dmaTransferStatus = 2;) s
+5 587 M
+(/**) s
+5 577 M
+( * @brief ADC group sequence conversion value) s
+5 567 M
+( * 0: ADC group regular sequence conversions are not completed) s
+5 557 M
+( * 1: ADC group regular sequence conversions are completed ) s
+5 547 M
+( */) s
+5 537 M
+(volatile uint8_t adcConversionStatus = 0;) s
+5 507 M
+(/* Initialize ADC with DMA*/) s
+5 497 M
+(void Init_ADC\(uint32_t channels, uint16_t * values, int numValues\)) s
+5 487 M
+({) s
+5 477 M
+(    int i, j;) s
+5 457 M
+(    // Check if the ADC is already enabled) s
+5 447 M
+(    if \(LL_ADC_IsEnabled\(ADCx_BASE\)\) {) s
+5 437 M
+(        return;) s
+5 427 M
+(    }) s
+5 407 M
+(    // Initialize DMA for the ADC) s
+5 397 M
+(    ADC_Init_DMA\(values, numValues\);) s
+5 377 M
+(    // Enable ADC interrupts) s
+5 367 M
+(    // Set the ADC IRQ to a greater priority than the DMA IRQ) s
+5 357 M
+(    NVIC_SetPriority\(ADCx_IRQ, 0\);) s
+5 347 M
+(    NVIC_EnableIRQ\(ADCx_IRQ\);) s
+5 327 M
+(    // Enable the ADC clock) s
+5 317 M
+(    ADCx_CLK_ENABLE\(\);) s
+5 297 M
+(    // Set the ADC clock) s
+5 287 M
+(    LL_ADC_SetCommonClock\(__LL_ADC_COMMON_INSTANCE\(ADCx_BASE\), LL_ADC_CLOCK_SYNC_PCLK_DIV2\);) s
+5 267 M
+(    // Enable the internal ADC channels) s
+5 257 M
+(    LL_ADC_SetCommonPathInternalCh\(__LL_ADC_COMMON_INSTANCE\(ADCx_BASE\), \(LL_ADC_PATH_INTERNAL_VRE) s
+5 247 M
+(FINT | LL_ADC_PATH_INTERNAL_TEMPSENSOR | LL_ADC_PATH_INTERNAL_VBAT\)\);) s
+5 227 M
+(    // Delay for the internal ADC channels to stablize) s
+5 217 M
+(    // The temperature sensor takes the longest time to stabalize) s
+5 207 M
+(    i = \(\(LL_ADC_DELAY_TEMPSENSOR_STAB_US * \(SystemCoreClock / \(100000 * 2\)\)\) / 10\);) s
+5 197 M
+(    while \(i != 0\) {) s
+5 187 M
+(        i--;) s
+5 177 M
+(    }) s
+5 157 M
+(    // Set the ADC to have a external timer trigger source) s
+5 147 M
+(    LL_ADC_REG_SetTriggerSource\(ADCx_BASE, LL_ADC_REG_TRIG_EXT_TIM8_TRGO\);) s
+5 127 M
+(    // Set the ADC to trigger on the rising edge) s
+5 117 M
+(    LL_ADC_REG_SetTriggerEdge\(ADCx_BASE, LL_ADC_REG_TRIG_EXT_RISING\);) s
+5 97 M
+(    // Set the ADC to perform a single conversion ) s
+5 87 M
+(    LL_ADC_REG_SetContinuousMode\(ADCx_BASE, LL_ADC_REG_CONV_SINGLE\);) s
+5 67 M
+(    // Set the ADC conversion data transfer) s
+5 57 M
+(    LL_ADC_REG_SetDMATransfer\(ADCx_BASE, LL_ADC_REG_DMA_TRANSFER_UNLIMITED\);) s
+5 37 M
+(    // Set the ADC overrun behavior) s
+5 27 M
+(    LL_ADC_REG_SetOverrun\(ADCx_BASE, LL_ADC_REG_OVR_DATA_OVERWRITTEN\);) s
+5 7 M
+(    // Set the ADC sequencer length) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (src/adc.c) def
+/fdir (src) def
+/ftail (adc.c) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:30:43 2018) def
+/pagenumstr (3) def
+/user_header_p true def
+/user_header_left_str (adc.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 3 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    LL_ADC_REG_SetSequencerLength\(ADCx_BASE, numValues - 1\);) s
+5 697 M
+(    // Enable specified ADC channels) s
+5 687 M
+(    for \(i = 0, j = 0; i < ADC_NUM_CHANNELS; i++\) {) s
+5 677 M
+(        if \(channels & \(1 << i\)\) {) s
+5 667 M
+(            LL_ADC_REG_SetSequencerRanks\(ADCx_BASE, ADC_RANKS[j], ADC_CHANNELS[i]\);) s
+5 657 M
+(            LL_ADC_SetChannelSamplingTime\(ADCx_BASE, ADC_CHANNELS[i], ADCx_SAMPLERATE\);) s
+5 647 M
+(            j++;) s
+5 637 M
+(        }) s
+5 627 M
+(        if \(j >= numValues || j >= 16\) break;) s
+5 617 M
+(    }) s
+5 597 M
+(    // Enable ADC interupts for conversion completion) s
+5 587 M
+(    LL_ADC_EnableIT_EOS\(ADCx_BASE\);) s
+5 567 M
+(    // Enable ADC interupts for overrun) s
+5 557 M
+(    LL_ADC_EnableIT_OVR\(ADCx_BASE\);) s
+5 537 M
+(    // Disable the ADC deep power down mode) s
+5 527 M
+(    LL_ADC_DisableDeepPowerDown\(ADCx_BASE\);) s
+5 507 M
+(    // Enable the ADC internal voltage regulator) s
+5 497 M
+(    LL_ADC_EnableInternalRegulator\(ADCx_BASE\);) s
+5 477 M
+(    // Delay for the ADC internal voltage regulator to stabilize) s
+5 467 M
+(    i = \(\(LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * \(SystemCoreClock / \(100000 * 2\)\)\) / 10\);) s
+5 457 M
+(    while \(i != 0\) {) s
+5 447 M
+(        i--;) s
+5 437 M
+(    }) s
+5 417 M
+(    // Start the ADC calibration) s
+5 407 M
+(    LL_ADC_StartCalibration\(ADCx_BASE, LL_ADC_SINGLE_ENDED\);) s
+5 387 M
+(    // Wait for the ADC calibration to finish) s
+5 377 M
+(    while \(LL_ADC_IsCalibrationOnGoing\(ADCx_BASE\) != 0\);) s
+5 357 M
+(    // Delay to allow ADC calibration to enable) s
+5 347 M
+(    i = \(ADC_DELAY_CALIB_ENABLE_CPU_CYCLES >> 1\);) s
+5 337 M
+(    while \(i != 0\) {) s
+5 327 M
+(        i--;) s
+5 317 M
+(    }) s
+5 297 M
+(    // Enable the ADC) s
+5 287 M
+(    LL_ADC_Enable\(ADCx_BASE\);) s
+5 267 M
+(    // Wait for the ADC to be ready) s
+5 257 M
+(    while \(LL_ADC_IsActiveFlag_ADRDY\(ADCx_BASE\) == 0\);) s
+5 237 M
+(    // Start the ADC conversion) s
+5 227 M
+(    LL_ADC_REG_StartConversion\(ADCx_BASE\);) s
+5 217 M
+(}) s
+5 197 M
+(static void ADC_Init_DMA\(uint16_t *values, int numValues\)) s
+5 187 M
+({) s
+5 177 M
+(    // Enable DMA interrupts) s
+5 167 M
+(    // Set the DMA IRQ to a lower priority than the ADC IRQ) s
+5 157 M
+(    NVIC_SetPriority\(DMAx_IRQ, 1\);) s
+5 147 M
+(    NVIC_EnableIRQ\(DMAx_IRQ\);) s
+5 127 M
+(    // Enable the DMA clock) s
+5 117 M
+(    DMAx_CLK_ENABLE\(\);) s
+5 97 M
+(    // Configure the DMA transfer) s
+5 87 M
+(    LL_DMA_ConfigTransfer\(DMAx_BASE, DMAx_CHANNEL,) s
+5 77 M
+(        LL_DMA_DIRECTION_PERIPH_TO_MEMORY |) s
+5 67 M
+(        LL_DMA_MODE_CIRCULAR |) s
+5 57 M
+(        LL_DMA_PERIPH_NOINCREMENT |) s
+5 47 M
+(        LL_DMA_MEMORY_INCREMENT |) s
+5 37 M
+(        LL_DMA_PDATAALIGN_HALFWORD |) s
+5 27 M
+(        LL_DMA_MDATAALIGN_HALFWORD |) s
+5 17 M
+(        LL_DMA_PRIORITY_HIGH \);) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (src/adc.c) def
+/fdir (src) def
+/ftail (adc.c) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:30:43 2018) def
+/pagenumstr (4) def
+/user_header_p true def
+/user_header_left_str (adc.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 4 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    // Select ADCx_BASE as the DMA transfer request) s
+5 707 M
+(    LL_DMA_SetPeriphRequest\(DMAx_BASE, DMAx_CHANNEL, LL_DMA_REQUEST_0\);) s
+5 687 M
+(    // Set the DMA transfer address source and destination) s
+5 677 M
+(    LL_DMA_ConfigAddresses\(DMAx_BASE, DMAx_CHANNEL,) s
+5 667 M
+(        LL_ADC_DMA_GetRegAddr\(ADCx_BASE, LL_ADC_DMA_REG_REGULAR_DATA\),) s
+5 657 M
+(        \(uint32_t\)values, LL_DMA_DIRECTION_PERIPH_TO_MEMORY\);) s
+5 637 M
+(    // Set the DMA transfer size) s
+5 627 M
+(    LL_DMA_SetDataLength\(DMAx_BASE, DMAx_CHANNEL, numValues\);) s
+5 607 M
+(    // Enable DMA transfer complete interrupts) s
+5 597 M
+(    LL_DMA_EnableIT_TC\(DMAx_BASE, DMAx_CHANNEL\);) s
+5 577 M
+(    // Enable DMA transfer error interrupts) s
+5 567 M
+(    LL_DMA_EnableIT_TE\(DMAx_BASE, DMAx_CHANNEL\);) s
+5 547 M
+(    // Enable the DMA channel) s
+5 537 M
+(    LL_DMA_EnableChannel\(DMAx_BASE, DMAx_CHANNEL\);) s
+5 527 M
+(}) s
+5 507 M
+(/* DMA transfer complete callback */) s
+5 497 M
+(void ADC_DMA_TransferComplete_Callback\(void\)) s
+5 487 M
+({) s
+5 477 M
+(    // Update the DMA transfer status) s
+5 467 M
+(    dmaTransferStatus = 1;) s
+5 447 M
+(    // Verify the ADC conversion was completed) s
+5 437 M
+(    if \(adcConversionStatus != 1\) {) s
+5 427 M
+(        ADC_DMA_TransferError_Callback\(\);) s
+5 417 M
+(    }) s
+5 397 M
+(    // Reset the ADC conversion status) s
+5 387 M
+(    adcConversionStatus = 0;) s
+5 377 M
+(}) s
+5 357 M
+(/* DMA transfer error callback */) s
+5 347 M
+(void ADC_DMA_TransferError_Callback\(void\)) s
+5 337 M
+({) s
+5 327 M
+(    // Handle the error) s
+5 317 M
+(    //while\(1\);) s
+5 307 M
+(}) s
+5 287 M
+(/* ADC group regular end of sequence conversions interruption callback */) s
+5 277 M
+(void ADC_ConvComplete_Callback\(void\)) s
+5 267 M
+({) s
+5 257 M
+(    // Update the ADC conversion status) s
+5 247 M
+(    adcConversionStatus = 1;) s
+5 237 M
+(}) s
+5 217 M
+(/* ADC group regular overrun interruption callback */) s
+5 207 M
+(void ADC_OverrunError_Callback\(void\)) s
+5 197 M
+({) s
+5 187 M
+(    // Disable ADC overrun interrupts) s
+5 177 M
+(    LL_ADC_DisableIT_OVR\(ADCx_BASE\);) s
+5 167 M
+(}) s
+_R
+S
+%%Page: (1) 5
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/dac.c) def
+/fdir (src) def
+/ftail (dac.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 10:09:01 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (dac.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file dac.c) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 29) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic DAC functionality) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 617 M
+(#include "dac.h") s
+5 597 M
+(/* Initialize the DAC interface */) s
+5 587 M
+(int Init_DAC\(void\)) s
+5 577 M
+({) s
+5 567 M
+(    volatile uint32_t i = 0;) s
+5 547 M
+(    // Enable the peripheral clock for the DAC) s
+5 537 M
+(    DACx_CLK_ENABLE\(\);) s
+5 517 M
+(    // Set the DAC trigger source to software) s
+5 507 M
+(    LL_DAC_SetTriggerSource\(DACx_BASE, DAC_LMD_CHANNEL, LL_DAC_TRIG_SOFTWARE\);) s
+5 487 M
+(    // Configure the DAC output for channel 1) s
+5 477 M
+(    LL_DAC_ConfigOutput\(DACx_BASE, DAC_LMD_CHANNEL, LL_DAC_OUTPUT_MODE_NORMAL, LL_DAC_OUTPUT_BUFF) s
+5 467 M
+(ER_ENABLE, LL_DAC_OUTPUT_CONNECT_GPIO\);) s
+5 447 M
+(    // Enable the DMA underrun interrupt for channel 1) s
+5 437 M
+(    //LL_DAC_EnableIT_DMAUDR2\(DACx_BASE\);) s
+5 417 M
+(    // Enable the DAC for channel 1) s
+5 407 M
+(    LL_DAC_Enable\(DACx_BASE, DAC_LMD_CHANNEL\);) s
+5 387 M
+(    // Delay to allow the DAC voltage to settle) s
+5 377 M
+(    i = \(\(LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * \(SystemCoreClock / \(100000 * 2\)\)\) / 10\);) s
+5 367 M
+(    while \(i != 0\)) s
+5 357 M
+(    {) s
+5 347 M
+(        i--;) s
+5 337 M
+(    }) s
+5 317 M
+(    // Enable the DAC) s
+5 307 M
+(    LL_DAC_EnableTrigger\(DACx_BASE, DAC_LMD_CHANNEL\);) s
+5 287 M
+(    return 0;) s
+5 277 M
+(}) s
+5 257 M
+(/* Adjust the DAC output value */) s
+5 247 M
+(void DAC_SetValue\(uint32_t value\)) s
+5 237 M
+({) s
+5 227 M
+(    // Set the DAC value) s
+5 217 M
+(    LL_DAC_ConvertData12RightAligned\(DACx_BASE, DAC_LMD_CHANNEL, 0xFFF & value\);) s
+5 207 M
+(    // Tigger a DAC conversion) s
+5 197 M
+(    LL_DAC_TrigSWConversion\(DACx_BASE, DAC_LMD_CHANNEL\);) s
+5 187 M
+(}) s
+_R
+S
+%%Page: (1) 6
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/hw_map.c) def
+/fdir (src) def
+/ftail (hw_map.c) def
+% User defined strings:
+/fmodstr (Mon Dec 17 13:49:58 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (hw_map.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file hw_map.c) s
+5 697 M
+( * @author Kyle Bernier ) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 September 8) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Maps hardware peripherals to board specific features) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 607 M
+(#include "hw_map.h") s
+5 587 M
+(/* Initializes hardware required by peripherals */) s
+5 577 M
+(void HW_Init_GPIO\(void\)) s
+5 567 M
+({) s
+5 557 M
+(    // Enable the clock for GPIO port A) s
+5 547 M
+(    LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_GPIOA\);) s
+5 527 M
+(    //------------------------) s
+5 517 M
+(    // ADC Setup ) s
+5 507 M
+(    //------------------------) s
+5 497 M
+(    // Enable the clock for GPIO port B) s
+5 487 M
+(    LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_GPIOB\);) s
+5 467 M
+(    // Enable the clock for GPIO port E) s
+5 457 M
+(    LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_GPIOE\);) s
+5 427 M
+(    // Configure the GPIO pin as a ADC input) s
+5 417 M
+(    LL_GPIO_SetPinMode\(ADC_BAT_GPIO_PORT, ADC_BAT_GPIO_PIN, LL_GPIO_MODE_ANALOG\);) s
+5 407 M
+(    // Map GPIO pin to the ADC) s
+5 397 M
+(    LL_GPIO_EnablePinAnalogControl\(ADC_BAT_GPIO_PORT, ADC_BAT_GPIO_PIN\);) s
+5 377 M
+(    // Configure the GPIO pin as a ADC input) s
+5 367 M
+(    LL_GPIO_SetPinMode\(ADC_LMD_GPIO_PORT, ADC_LMD_GPIO_PIN, LL_GPIO_MODE_ANALOG\);) s
+5 357 M
+(    // Map GPIO pin to the ADC) s
+5 347 M
+(    LL_GPIO_EnablePinAnalogControl\(ADC_LMD_GPIO_PORT, ADC_LMD_GPIO_PIN\);) s
+5 327 M
+(    // Configure the GPIO pin as a ADC input) s
+5 317 M
+(    LL_GPIO_SetPinMode\(ADC_RES_GPIO_PORT, ADC_RES_GPIO_PIN, LL_GPIO_MODE_ANALOG\);) s
+5 307 M
+(    // Map GPIO pin to the ADC) s
+5 297 M
+(    LL_GPIO_EnablePinAnalogControl\(ADC_RES_GPIO_PORT, ADC_RES_GPIO_PIN\);) s
+5 277 M
+(    // Configure the GPIO pin as a ADC input) s
+5 267 M
+(    LL_GPIO_SetPinMode\(ADC_CRNT_GPIO_PORT, ADC_CRNT_GPIO_PIN, LL_GPIO_MODE_ANALOG\);) s
+5 257 M
+(    // Map GPIO pin to the ADC) s
+5 247 M
+(    LL_GPIO_EnablePinAnalogControl\(ADC_CRNT_GPIO_PORT, ADC_CRNT_GPIO_PIN\);) s
+5 227 M
+(    //------------------------) s
+5 217 M
+(    // DAC Setup ) s
+5 207 M
+(    //------------------------) s
+5 197 M
+(    // Configure the GPIO pin as a DAC input) s
+5 187 M
+(    LL_GPIO_SetPinMode\(DAC_LMD_GPIO_PORT, DAC_LMD_GPIO_PIN, LL_GPIO_MODE_ANALOG\);) s
+5 167 M
+(    //-------------------------) s
+5 157 M
+(    // PWM Setup) s
+5 147 M
+(    //-------------------------) s
+5 137 M
+(    // Enable the peripheral clock of GPIOs) s
+5 127 M
+(    PWMx_GPIO_CLK_ENABLE\(\);) s
+5 117 M
+(  ) s
+5 107 M
+(    // GPIO TIM configuration ) s
+5 97 M
+(    LL_GPIO_SetPinMode\(PWMx_GPIO_PORT, PWMx_GPIO_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 87 M
+(    PWMx_SET_GPIO_AF\(\);) s
+5 77 M
+(    LL_GPIO_SetPinSpeed\(PWMx_GPIO_PORT, PWMx_GPIO_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 67 M
+(    LL_GPIO_SetPinOutputType\(PWMx_GPIO_PORT, PWMx_GPIO_PIN, LL_GPIO_OUTPUT_PUSHPULL\);) s
+5 57 M
+(    LL_GPIO_SetPinPull\(PWMx_GPIO_PORT, PWMx_GPIO_PIN, LL_GPIO_PULL_NO\);) s
+5 37 M
+(    // Enable the timer peripheral clock) s
+5 27 M
+(    PWMx_CLK_ENABLE\(\);) s
+5 7 M
+(    //-------------------------) s
+_R
+S
+%%Page: (2) 7
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/hw_map.c) def
+/fdir (src) def
+/ftail (hw_map.c) def
+% User defined strings:
+/fmodstr (Mon Dec 17 13:49:58 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (hw_map.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    // USART Setup) s
+5 707 M
+(    //-------------------------) s
+5 697 M
+(    // Enable the peripheral clock of GPIO Port) s
+5 687 M
+(    USARTx_GPIO_CLK_ENABLE\(\);) s
+5 667 M
+(    // Configure Tx Pin) s
+5 657 M
+(    LL_GPIO_SetPinMode\(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 647 M
+(    USARTx_SET_TX_GPIO_AF\(\);) s
+5 637 M
+(    LL_GPIO_SetPinSpeed\(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 627 M
+(    LL_GPIO_SetPinOutputType\(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_OUTPUT_PUSHPULL\);) s
+5 617 M
+(    LL_GPIO_SetPinPull\(USARTx_TX_GPIO_PORT, USARTx_TX_PIN, LL_GPIO_PULL_UP\);) s
+5 597 M
+(    // Configure Rx Pin) s
+5 587 M
+(    LL_GPIO_SetPinMode\(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 577 M
+(    USARTx_SET_RX_GPIO_AF\(\);) s
+5 567 M
+(    LL_GPIO_SetPinSpeed\(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 557 M
+(    LL_GPIO_SetPinOutputType\(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_OUTPUT_PUSHPULL\);) s
+5 547 M
+(    LL_GPIO_SetPinPull\(USARTx_RX_GPIO_PORT, USARTx_RX_PIN, LL_GPIO_PULL_UP\);) s
+5 527 M
+(    // Enable USART peripheral clock and clock source) s
+5 517 M
+(    USARTx_CLK_ENABLE\(\);) s
+5 497 M
+(    // Set clock source ) s
+5 487 M
+(    USARTx_CLK_SOURCE\(\);) s
+5 467 M
+(    //-------------------------) s
+5 457 M
+(    // SPI Setup) s
+5 447 M
+(    //-------------------------) s
+5 437 M
+(    // Enable the peripheral clock of GPIO Port) s
+5 427 M
+(    SPIx_GPIO_CLK_ENABLE\(\);) s
+5 407 M
+(    // Configure the SPI SCK pin) s
+5 397 M
+(    LL_GPIO_SetPinMode\(SPI_CJ125_SCK_PORT, SPI_CJ125_SCK_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 387 M
+(    LL_GPIO_SetAFPin_8_15\(SPI_CJ125_SCK_PORT, SPI_CJ125_SCK_PIN, LL_GPIO_AF_5\);) s
+5 377 M
+(    LL_GPIO_SetPinSpeed\(SPI_CJ125_SCK_PORT, SPI_CJ125_SCK_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 367 M
+(    LL_GPIO_SetPinPull\(SPI_CJ125_SCK_PORT, SPI_CJ125_SCK_PIN, LL_GPIO_PULL_DOWN\);) s
+5 347 M
+(    // Configure the SPI MISO pin) s
+5 337 M
+(    LL_GPIO_SetPinMode\(SPI_CJ125_MISO_PORT, SPI_CJ125_MISO_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 327 M
+(    LL_GPIO_SetAFPin_8_15\(SPI_CJ125_MISO_PORT, SPI_CJ125_MISO_PIN, LL_GPIO_AF_5\);) s
+5 317 M
+(    LL_GPIO_SetPinSpeed\(SPI_CJ125_MISO_PORT, SPI_CJ125_MISO_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 307 M
+(    LL_GPIO_SetPinPull\(SPI_CJ125_MISO_PORT, SPI_CJ125_MISO_PIN, LL_GPIO_PULL_DOWN\);) s
+5 287 M
+(    // Configure the SPI MOSI pin) s
+5 277 M
+(    LL_GPIO_SetPinMode\(SPI_CJ125_MOSI_PORT, SPI_CJ125_MOSI_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 267 M
+(    LL_GPIO_SetAFPin_8_15\(SPI_CJ125_MOSI_PORT, SPI_CJ125_MOSI_PIN, LL_GPIO_AF_5\);) s
+5 257 M
+(    LL_GPIO_SetPinSpeed\(SPI_CJ125_MOSI_PORT, SPI_CJ125_MOSI_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 247 M
+(    LL_GPIO_SetPinPull\(SPI_CJ125_MOSI_PORT, SPI_CJ125_MOSI_PIN, LL_GPIO_PULL_DOWN\);) s
+5 227 M
+(    // Configure the SPI Select pin) s
+5 217 M
+(    LL_GPIO_SetPinMode\(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_MODE_ALTERNATE\);) s
+5 207 M
+(    LL_GPIO_SetAFPin_8_15\(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_AF_5\);) s
+5 197 M
+(    LL_GPIO_SetPinSpeed\(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_SPEED_FREQ_HIGH\);) s
+5 187 M
+(    LL_GPIO_SetPinPull\(SPI_CJ125_SEL_PORT, SPI_CJ125_SEL_PIN, LL_GPIO_PULL_DOWN\);) s
+5 167 M
+(    //---------------------------------) s
+5 157 M
+(    // LED initialization ) s
+5 147 M
+(    //---------------------------------) s
+5 137 M
+(    MODIFY_REG\(GPIOA->MODER, GPIO_MODER_MODE8, GPIO_MODER_MODE8_0\);) s
+5 127 M
+(    MODIFY_REG\(GPIOC->MODER, GPIO_MODER_MODE9, GPIO_MODER_MODE9_0\);) s
+5 117 M
+(}) s
+_R
+S
+%%Page: (1) 8
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file main.c) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 May 27) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Runs overall control for the CJ125 and LSU4.9 sensor.) s
+5 647 M
+( * ) s
+5 637 M
+( * This program uses the values provided by the CJ125 to maintain the temperature of) s
+5 627 M
+( * the LSU4.9 sensor. It utilizes the calibration values seen by the CJ125 to generate a) s
+5 617 M
+( * lookup table for both Lambda and Temperature values. This removes the need for ) s
+5 607 M
+( * hard-coding a lookup table, at the expense of speed. This, however, results in more ) s
+5 597 M
+( * accurate readings and control.) s
+5 587 M
+( */) s
+5 557 M
+(#include "stm32l4xx.h") s
+5 537 M
+(#include "stm32l4xx_ll_rcc.h") s
+5 527 M
+(#include "stm32l4xx_ll_system.h") s
+5 517 M
+(#include "stm32l4xx_ll_utils.h") s
+5 507 M
+(#include "arm_math.h") s
+5 497 M
+(#include <math.h>) s
+5 477 M
+(#include "hw_map.h") s
+5 467 M
+(#include "adc.h") s
+5 457 M
+(#include "dac.h") s
+5 447 M
+(#include "pwm.h") s
+5 437 M
+(#include "usart.h") s
+5 427 M
+(#include "spi.h") s
+5 417 M
+(#include "cj125.h") s
+5 397 M
+(void Initialize_Heater\(void\);) s
+5 387 M
+(void SystemClock_Config\(void\);) s
+5 377 M
+(void Generate_Lookup_Tables\(void\);) s
+5 357 M
+(/** ) s
+5 347 M
+( * @brief ADC values array. ) s
+5 337 M
+( * ) s
+5 327 M
+( * Array index pertains to: @n) s
+5 317 M
+( * 0: Internal 3V3 reference @n) s
+5 307 M
+( * 1: Battery voltage @n) s
+5 297 M
+( * 2: Lambda value from CJ125 @n) s
+5 287 M
+( * 3: Sensor resistance from CJ125 @n) s
+5 277 M
+( * 4: Current sense ) s
+5 267 M
+( */) s
+5 257 M
+(uint16_t adc_vals[5] = {0, 0, 0, 0, 0};) s
+5 237 M
+(/**) s
+5 227 M
+( * @brief Lookup table for lambda values.) s
+5 217 M
+( * ) s
+5 207 M
+( * Values are calculated and inserted into array based on all possible ADC values.) s
+5 197 M
+( */) s
+5 187 M
+(uint16_t lambda_Lookup[4096];) s
+5 167 M
+(/**) s
+5 157 M
+( * @brief Lookup table for temperature values.) s
+5 147 M
+( * ) s
+5 137 M
+( * Values are calculated and inserted into array based on all possible ADC values.) s
+5 127 M
+( */) s
+5 117 M
+(uint16_t temp_Lookup[4096];) s
+5 97 M
+(/**) s
+5 87 M
+( * @brief The optimal ADC resistance value the CJ125 outputs during calibration.) s
+5 77 M
+( * ) s
+5 67 M
+( * This value is used to generate the temperature lookup table and as the control for the PID.) s
+5 57 M
+( */) s
+5 47 M
+(uint16_t optimal_resistance;) s
+5 27 M
+(/**) s
+5 17 M
+( * @brief The optimal ADC resistance value the CJ125 outputs during calibration.) s
+5 7 M
+( * ) s
+_R
+S
+%%Page: (2) 9
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+( * This value is used to generate the lambda lookup table.) s
+5 707 M
+( */) s
+5 697 M
+(uint16_t optimal_lambda;) s
+5 677 M
+(/**) s
+5 667 M
+( * @brief The current voltage the PWM signal is using.) s
+5 657 M
+( * ) s
+5 647 M
+( * Used as a reference during the PID control of the PWM signal) s
+5 637 M
+( */) s
+5 627 M
+(uint32_t currentV;) s
+5 607 M
+(/**) s
+5 597 M
+( * @brief Internal reference voltage of STM32.) s
+5 587 M
+( * ) s
+5 577 M
+( * This calculation is highlighted on page 583 of the RM0351 Reference Manual.) s
+5 567 M
+( */) s
+5 557 M
+(uint32_t VDDA;) s
+5 537 M
+(/**) s
+5 527 M
+( * @def CONDENSATION ) s
+5 517 M
+( * @brief Sensor resistance once condensation point has been reached.) s
+5 507 M
+( * ) s
+5 497 M
+( * This value represents the resistance of the actual sensor as it heats up. The higher) s
+5 487 M
+( * the resistance, the hotter the sensor.) s
+5 477 M
+( */) s
+5 467 M
+(#define CONDENSATION 3900) s
+5 447 M
+(/**) s
+5 437 M
+( * @def Kp ) s
+5 427 M
+( * @brief Proportional coefficient for the PID controller.) s
+5 417 M
+( * ) s
+5 407 M
+( * The proportional control is proportional to the error between the desired sensor ) s
+5 397 M
+( * resistance and the current resistance.) s
+5 387 M
+( */) s
+5 377 M
+(#define Kp 60) s
+5 357 M
+(/**) s
+5 347 M
+( * @def Ki ) s
+5 337 M
+( * @brief Integral coefficient for the PID controller.) s
+5 327 M
+( * ) s
+5 317 M
+( * The integral control is used to overcome steady state error for the P control. @n) s
+5 307 M
+( * In general the integral component is used for accumulating the running errors until the system) s
+5 297 M
+( stabilizes.) s
+5 287 M
+( */) s
+5 277 M
+(#define Ki 0.8) s
+5 257 M
+(/**) s
+5 247 M
+( * @def Kd) s
+5 237 M
+( * @brief Derivative coefficient for the PID controller.) s
+5 227 M
+( * ) s
+5 217 M
+( * The derivative control is used to prevent overshoot from the P control. @n) s
+5 207 M
+( * In general the derivative component is used to prevent the system from overshooting the desire) s
+5 197 M
+(d result.) s
+5 187 M
+( */) s
+5 177 M
+(#define Kd 0) s
+5 157 M
+(/**) s
+5 147 M
+( * @def PREAMBLE) s
+5 137 M
+( * @brief Preamble signifies the start of a UART transmission.) s
+5 127 M
+( */) s
+5 117 M
+(#define PREAMBLE 0xFFFF) s
+5 97 M
+(/**) s
+5 87 M
+( * @def Vbat3V3) s
+5 77 M
+( * @brief Actual measured value for the 3V3 line on the PCB.) s
+5 67 M
+( * This value is required to make acurate readings of the battery voltage.) s
+5 57 M
+( */) s
+5 47 M
+(#define Vbat3V3 3286) s
+5 27 M
+(/**) s
+5 17 M
+( * @brief Main program entrypoint.) s
+5 7 M
+( * ) s
+_R
+S
+%%Page: (3) 10
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (3) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 3 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+( * @return Should not return.) s
+5 707 M
+( */) s
+5 697 M
+(int main\(void\)) s
+5 687 M
+({) s
+5 677 M
+(    uint8_t i = 0;) s
+5 667 M
+(    uint16_t response = 0;) s
+5 657 M
+(    uint16_t lambda, lambda_adc, temp, temp_adc;) s
+5 647 M
+(    int16_t derivative, error, change; ) s
+5 637 M
+(    int16_t integral = 0;) s
+5 627 M
+(    int16_t last_error = 0;) s
+5 617 M
+(    uint32_t desiredV, Vbat;) s
+5 607 M
+(    //uint64_t t1, t2, diff; // Only used for timing) s
+5 597 M
+(    float pwm_duty_cycle;) s
+5 577 M
+(    // Initialize the GPIO pins) s
+5 567 M
+(    HW_Init_GPIO\(\);) s
+5 547 M
+(    // Config the system clock to 8MHz) s
+5 537 M
+(    SystemClock_Config\(\);) s
+5 517 M
+(    // Initialize ADC on channels 0, 8, 11, 12, and 16) s
+5 507 M
+(    Init_ADC\(0x11901, \(uint16_t *\)adc_vals, 5\);) s
+5 497 M
+(    // Initialize DAC) s
+5 487 M
+(    Init_DAC\(\);) s
+5 477 M
+(    // Initialize PWM with duty cycle of 0%) s
+5 467 M
+(    Init_PWM\(\);) s
+5 457 M
+(    // Initialize USART connection to external device) s
+5 447 M
+(    Init_USART\(\);) s
+5 437 M
+(    // Initialize SPI connection to CJ125) s
+5 427 M
+(    Init_SPI\(\);) s
+5 407 M
+(    // Determine actual value of the 3.3V the STM is using.) s
+5 397 M
+(    LL_mDelay\(500\);) s
+5 387 M
+(    __disable_irq\(\);) s
+5 377 M
+(    VDDA = VREFINT_CAL_VREF*\(*VREFINT_CAL_ADDR\)/adc_vals[0];) s
+5 367 M
+(    __enable_irq\(\);) s
+5 347 M
+(    // Enable cycle counter; Used for timing) s
+5 337 M
+(    //CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;) s
+5 327 M
+(    //DWT->CYCCNT = 0;) s
+5 317 M
+(    //DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;) s
+5 307 M
+(    ) s
+5 297 M
+(    // Loop until CJ125 is ready. When CJ125 responds OK move on.) s
+5 287 M
+(    while \(response != CJ125_DIAG_REG_OK\) {) s
+5 277 M
+(        response = SPI_Transfer\(CJ125_DIAG_REG\);) s
+5 267 M
+(        LL_mDelay\(200\);) s
+5 257 M
+(    } ) s
+5 237 M
+(    // Enter CJ125 calibration mode) s
+5 227 M
+(    response = SPI_Transfer\(CJ125_CALIBRATE_MODE\);) s
+5 217 M
+(    // Delay to allow CJ125 to properly calibrate) s
+5 207 M
+(    LL_mDelay\(2000\);) s
+5 187 M
+(    // Store optimal resistance the CJ125 sees for the sensor) s
+5 177 M
+(    do {) s
+5 167 M
+(        __disable_irq\(\);) s
+5 157 M
+(        optimal_resistance = adc_vals[3];) s
+5 147 M
+(        __enable_irq\(\);) s
+5 137 M
+(    } while \(optimal_resistance > 830 || optimal_resistance < 780\);) s
+5 117 M
+(    // Store optimal lambda the CJ125 sees for the sensor) s
+5 107 M
+(    do {) s
+5 97 M
+(        __disable_irq\(\);) s
+5 87 M
+(        optimal_lambda = adc_vals[2];) s
+5 77 M
+(        __enable_irq\(\);) s
+5 67 M
+(    } while \(optimal_lambda > 1300 || optimal_lambda < 1100\);) s
+5 47 M
+(    // Set CJ125 into normal operation mode with an amplification of 8) s
+5 37 M
+(    response = SPI_Transfer\(CJ125_V8_MODE\);) s
+5 27 M
+(    //response = SPI_Transfer\(CJ125_V17_MODE\);) s
+5 17 M
+(    ) s
+5 7 M
+(    // Set t1 to how many clock cycles have gone by) s
+_R
+S
+%%Page: (4) 11
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (4) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 4 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    //t1 = DWT->CYCCNT;) s
+5 707 M
+(    ) s
+5 697 M
+(    // Initialize heater before using it) s
+5 687 M
+(    Initialize_Heater\(\);) s
+5 677 M
+(    ) s
+5 667 M
+(    // Set t2 to how many clock cycles have gone by) s
+5 657 M
+(    //t2 = DWT->CYCCNT;) s
+5 647 M
+(    // Determine the amount of time passed since start) s
+5 637 M
+(    //diff = t2-t1;) s
+5 617 M
+(    // Continuous loop to read in values from CJ125, adjust heater, and output data.) s
+5 607 M
+(    while\(1\) {) s
+5 597 M
+(        // Read lambda and temp values from CJ125) s
+5 587 M
+(        __disable_irq\(\);) s
+5 577 M
+(        lambda_adc = adc_vals[2];) s
+5 567 M
+(        temp_adc = adc_vals[3];) s
+5 557 M
+(        __enable_irq\(\);) s
+5 537 M
+(        // Find lambda and temp values in lookup table) s
+5 527 M
+(        lambda = lambda_Lookup[lambda_adc];) s
+5 517 M
+(        temp = temp_Lookup[temp_adc];) s
+5 497 M
+(        // Output lambda value via DAC ) s
+5 487 M
+(        // Contract specification only calls for 0.65 to 1.36, so all other values are capped) s
+5 477 M
+(        if \(lambda >= 650 && lambda < 1360\) {) s
+5 467 M
+(            DAC_SetValue\(\(lambda-650\)*4096/710\);) s
+5 457 M
+(        } else if \(lambda >= 1360\) {) s
+5 447 M
+(            DAC_SetValue\(4095\);) s
+5 437 M
+(        } else if \(lambda < 650\) {) s
+5 427 M
+(            DAC_SetValue\(0\);) s
+5 417 M
+(        }) s
+5 397 M
+(        // Determine battery voltage) s
+5 387 M
+(        __disable_irq\(\);) s
+5 377 M
+(        Vbat = \(adc_vals[1] * Vbat3V3 / 4096\) * 955 / 187;) s
+5 367 M
+(        __enable_irq\(\);) s
+5 347 M
+(        // Determine error between desired value and current value) s
+5 337 M
+(        error = optimal_resistance - temp_adc;) s
+5 327 M
+(        ) s
+5 317 M
+(        // Set integral term) s
+5 307 M
+(        integral = integral + error;) s
+5 287 M
+(        // Set derivative term) s
+5 277 M
+(        derivative = error - last_error;) s
+5 267 M
+(        ) s
+5 257 M
+(        // Calculate desired change to result in 0 error) s
+5 247 M
+(        change = \(Kp * error\) + \(Ki * integral\) + \(Kd * derivative\);) s
+5 227 M
+(        // Set current error to last error for next loop through) s
+5 217 M
+(        last_error = error;) s
+5 197 M
+(        // Set voltage based on desired change) s
+5 187 M
+(        if \(currentV - change > Vbat\) {) s
+5 177 M
+(            desiredV = Vbat;) s
+5 167 M
+(        } else if \(currentV - change < 0\) {) s
+5 157 M
+(            desiredV = 0;) s
+5 147 M
+(        } else {) s
+5 137 M
+(            desiredV = currentV - change;) s
+5 127 M
+(        }) s
+5 107 M
+(        // Transmit over UART every 200ms) s
+5 97 M
+(        if \(i == 20\) {) s
+5 87 M
+(            // Turn on LED before UART Transmit) s
+5 77 M
+(            SET_BIT\(GPIOC->ODR, GPIO_ODR_OD9_Msk\);) s
+5 67 M
+(            ) s
+5 57 M
+(            // Transmit preamble before data) s
+5 47 M
+(            USART_Transmit\(\(uint8_t *\)PREAMBLE, 2\);) s
+5 27 M
+(            // Transmit lambda value over UART) s
+5 17 M
+(            USART_Transmit\(\(uint8_t *\)\(&lambda\), 2\);) s
+5 7 M
+(            ) s
+_R
+S
+%%Page: (5) 12
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (5) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 5 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(            // Transmit temperature value over UART) s
+5 707 M
+(            USART_Transmit\(\(uint8_t *\)\(&temp\), 2\);) s
+5 687 M
+(            // Transmit Current PWM voltage) s
+5 677 M
+(            USART_Transmit\(\(uint8_t *\)\(&desiredV\), 2\);) s
+5 657 M
+(            // Turn off LED after UART transmission) s
+5 647 M
+(            CLEAR_BIT\(GPIOC->ODR, GPIO_ODR_OD9_Msk\);) s
+5 627 M
+(            i = 0;) s
+5 617 M
+(        }) s
+5 597 M
+(        // Calculate PWM duty cycle) s
+5 587 M
+(        pwm_duty_cycle = pow\(\(float\)desiredV / Vbat, 2\);) s
+5 577 M
+(        //pwm_duty_cycle = pow\(\(float\)2000 / Vbat, 2\);) s
+5 557 M
+(        // Adjust PWM signal for heater so it stays at 780C) s
+5 547 M
+(        LL_TIM_OC_SetCompareCH2\(PWMx_BASE, LL_TIM_GetAutoReload\(PWMx_BASE\)*pwm_duty_cycle\);) s
+5 527 M
+(        i++;) s
+5 517 M
+(        // Delay 10ms) s
+5 507 M
+(        LL_mDelay\(10\);) s
+5 497 M
+(    }) s
+5 487 M
+(}) s
+5 467 M
+(/**) s
+5 457 M
+( * @brief  System Clock Configuration.) s
+5 447 M
+( * ) s
+5 437 M
+( * The system Clock is configured as follows :) s
+5 427 M
+( *    System Clock source            = PLL \(MSI\)    @n) s
+5 417 M
+( *    SYSCLK\(Hz\)                     = 80000000     @n) s
+5 407 M
+( *    HCLK\(Hz\)                       = 80000000     @n) s
+5 397 M
+( *    AHB Prescaler                  = 1            @n) s
+5 387 M
+( *    APB1 Prescaler                 = 1            @n) s
+5 377 M
+( *    APB2 Prescaler                 = 1            @n) s
+5 367 M
+( *    MSI Frequency\(Hz\)              = 4000000      @n) s
+5 357 M
+( *    PLL_M                          = 1            @n) s
+5 347 M
+( *    PLL_N                          = 40           @n) s
+5 337 M
+( *    PLL_R                          = 2            @n) s
+5 327 M
+( *    Flash Latency\(WS\)              = 4            @n) s
+5 317 M
+( * @retval None) s
+5 307 M
+( */) s
+5 297 M
+(void SystemClock_Config\(void\) {) s
+5 287 M
+(    // MSI configuration and activation) s
+5 277 M
+(    LL_FLASH_SetLatency\(LL_FLASH_LATENCY_4\);) s
+5 267 M
+(    LL_RCC_MSI_Enable\(\);) s
+5 257 M
+(    while\(LL_RCC_MSI_IsReady\(\) != 1\);) s
+5 237 M
+(    // Main PLL configuration and activation) s
+5 227 M
+(    LL_RCC_PLL_ConfigDomain_SYS\(LL_RCC_PLLSOURCE_MSI, LL_RCC_PLLM_DIV_1, 4, LL_RCC_PLLR_DIV_2\);) s
+5 217 M
+(    LL_RCC_PLL_Enable\(\);) s
+5 207 M
+(    LL_RCC_PLL_EnableDomain_SYS\(\);) s
+5 197 M
+(    while\(LL_RCC_PLL_IsReady\(\) != 1\);) s
+5 177 M
+(    // Sysclk activation on the main PLL) s
+5 167 M
+(    LL_RCC_SetAHBPrescaler\(LL_RCC_SYSCLK_DIV_1\);) s
+5 157 M
+(    LL_RCC_SetSysClkSource\(LL_RCC_SYS_CLKSOURCE_PLL\);) s
+5 147 M
+(    while\(LL_RCC_GetSysClkSource\(\) != LL_RCC_SYS_CLKSOURCE_STATUS_PLL\);) s
+5 127 M
+(    // Set APB1 & APB2 prescaler) s
+5 117 M
+(    LL_RCC_SetAPB1Prescaler\(LL_RCC_APB1_DIV_1\);) s
+5 107 M
+(    LL_RCC_SetAPB2Prescaler\(LL_RCC_APB2_DIV_1\);) s
+5 87 M
+(    // Set systick to 1ms in using frequency set to 80MHz) s
+5 77 M
+(    LL_Init1msTick\(8000000\);) s
+5 57 M
+(    // Update CMSIS variable) s
+5 47 M
+(    LL_SetSystemCoreClock\(8000000\);) s
+5 37 M
+(}) s
+5 17 M
+(/**) s
+5 7 M
+( * @brief Heater initialization routine) s
+_R
+S
+%%Page: (6) 13
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 6 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (6) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 6 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+( * ) s
+5 707 M
+( * Initializes heater to a starting voltage of less than 2V during the condensation phase.) s
+5 697 M
+( * Once past condensation phase heater voltage is ramped up at a rate of 0.4V/s until) s
+5 687 M
+( * reaching a maximum of 13V. This is highlighted in section 1.6 of the LSU 4.9 manual.) s
+5 677 M
+( * ) s
+5 667 M
+( * @retval None) s
+5 657 M
+( */) s
+5 647 M
+(void Initialize_Heater\(void\) {) s
+5 637 M
+(    int i = 0;) s
+5 627 M
+(    float pwm_duty_cycle;) s
+5 617 M
+(    uint16_t CurADC, VbatADC, UR;) s
+5 607 M
+(    uint16_t maxCurADC = 0;) s
+5 597 M
+(    uint32_t Vbat, maxCur, res;) s
+5 577 M
+(    // Warm up heater, supply <= 2V to heater until out of condensation phase) s
+5 567 M
+(    // Uses the current sense value to determine when condensation phase is over) s
+5 557 M
+(    do {) s
+5 547 M
+(        // Calculate the battery voltage from the ADC) s
+5 537 M
+(        __disable_irq\(\);) s
+5 527 M
+(        Vbat = \(adc_vals[1] * Vbat3V3 / 4096\) * 955 / 187;) s
+5 517 M
+(        __enable_irq\(\);) s
+5 497 M
+(        // Set initial "warm-up" voltage to 2V) s
+5 487 M
+(        currentV = 2000;) s
+5 467 M
+(        // Calculate PWM duty cycle using equation found in LSU 4.9 manual) s
+5 457 M
+(        pwm_duty_cycle = pow\(\(float\)currentV / Vbat, 2\);) s
+5 437 M
+(        // Set PWM signal to equivalent of 2Vrms) s
+5 427 M
+(        LL_TIM_OC_SetCompareCH2\(PWMx_BASE, LL_TIM_GetAutoReload\(PWMx_BASE\)*pwm_duty_cycle\);) s
+5 407 M
+(        // Sample current sense ADC to determine the maximum value) s
+5 397 M
+(        for \(i= 0; i < 50; i++\) {) s
+5 387 M
+(            __disable_irq\(\);) s
+5 377 M
+(            CurADC = adc_vals[4];) s
+5 367 M
+(            __enable_irq\(\);) s
+5 357 M
+(            if \(CurADC > maxCurADC\) {) s
+5 347 M
+(                maxCurADC = CurADC;) s
+5 337 M
+(                __disable_irq\(\);) s
+5 327 M
+(                VbatADC = adc_vals[1];) s
+5 317 M
+(                __enable_irq\(\);) s
+5 307 M
+(            }) s
+5 297 M
+(            // Delay 10ms) s
+5 287 M
+(            LL_mDelay\(10\);) s
+5 277 M
+(        }) s
+5 257 M
+(        // Determine the actual current based on ADC values) s
+5 247 M
+(        maxCur = \(maxCurADC * VDDA / 4096\);) s
+5 227 M
+(        // Determine the actual voltage at highest ADC value) s
+5 217 M
+(        Vbat = \(VbatADC * Vbat3V3 / 4096\) * 955 / 187;) s
+5 197 M
+(        // Determine sensor resisitance) s
+5 187 M
+(        res = Vbat * 7 * 50 / maxCur - 23;) s
+5 167 M
+(        // Reset max current value for next loop through) s
+5 157 M
+(        maxCurADC = 0;) s
+5 137 M
+(        // Delay for 500ms) s
+5 127 M
+(        LL_mDelay\(50\);) s
+5 117 M
+(    } while \(res < CONDENSATION\);) s
+5 97 M
+(    // Generate lookup tables for both lambda and temperature values) s
+5 87 M
+(    Generate_Lookup_Tables\(\);) s
+5 67 M
+(    //currentV = 8500;) s
+5 57 M
+(    // Ramp up voltage at a rate of ) s
+5 47 M
+(    i = 0;) s
+5 37 M
+(    do {) s
+5 27 M
+(        // Get the current battery voltage) s
+5 17 M
+(        __disable_irq\(\);) s
+5 7 M
+(        Vbat = \(adc_vals[1] * Vbat3V3 / 4096\) * 955 / 187;) s
+_R
+S
+%%Page: (7) 14
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 7 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (7) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 7 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(        __enable_irq\(\);) s
+5 697 M
+(        // Transmit over UART every 200ms) s
+5 687 M
+(        if \(i == 40\) {) s
+5 677 M
+(            // Turn on LED before UART Transmit) s
+5 667 M
+(            SET_BIT\(GPIOC->ODR, GPIO_ODR_OD9_Msk\);) s
+5 657 M
+(            ) s
+5 647 M
+(            // Transmit preamble before data) s
+5 637 M
+(            USART_Transmit\(\(uint8_t *\)PREAMBLE, 2\);) s
+5 617 M
+(            // Transmit lambda value over UART) s
+5 607 M
+(            USART_Transmit\(\(uint8_t *\)\(&lambda_Lookup[optimal_lambda]\), 2\);) s
+5 597 M
+(            ) s
+5 587 M
+(            // Transmit temperature value over UART) s
+5 577 M
+(            USART_Transmit\(\(uint8_t *\)\(&temp_Lookup[optimal_resistance]\), 2\);) s
+5 557 M
+(            // Transmit Current PWM voltage) s
+5 547 M
+(            USART_Transmit\(\(uint8_t *\)\(&currentV\), 2\);) s
+5 527 M
+(            // Turn off LED after UART transmission) s
+5 517 M
+(            CLEAR_BIT\(GPIOC->ODR, GPIO_ODR_OD9_Msk\);) s
+5 497 M
+(            i = 0;) s
+5 487 M
+(        }) s
+5 467 M
+(        // Calculate duty cycle, equation from LSU 4.9 datasheet) s
+5 457 M
+(        pwm_duty_cycle = pow\(\(float\)currentV / Vbat, 2\);) s
+5 437 M
+(        // Set PWM signal to equivalent of ramp up voltage RMS) s
+5 427 M
+(        LL_TIM_OC_SetCompareCH2\(PWMx_BASE, LL_TIM_GetAutoReload\(PWMx_BASE\)*pwm_duty_cycle\);) s
+5 407 M
+(        // Read resistance value of sensor; Won't be valid till 780C is hit) s
+5 397 M
+(        __disable_irq\(\);) s
+5 387 M
+(        UR = adc_vals[3];) s
+5 377 M
+(        __enable_irq\(\);) s
+5 357 M
+(        // Ramp up voltage by 200mV/s) s
+5 347 M
+(        currentV += 1;) s
+5 327 M
+(        // Delay 5ms) s
+5 317 M
+(        LL_mDelay\(5\);) s
+5 297 M
+(        i++;) s
+5 287 M
+(    } while \(currentV < 11000 && UR > optimal_resistance\);) s
+5 277 M
+(}) s
+5 257 M
+(/**) s
+5 247 M
+( * @brief Generates lookup tables for lambda and temperature values) s
+5 237 M
+( * Equations were determined by applying best fit curves to plots present in) s
+5 227 M
+( * the LSU4.9 manual. @n) s
+5 217 M
+( * MATLAB was used to fit the plots.) s
+5 207 M
+( * ) s
+5 197 M
+( * @retval None) s
+5 187 M
+( */) s
+5 177 M
+(void Generate_Lookup_Tables\(void\) {) s
+5 167 M
+(    uint16_t i;) s
+5 157 M
+(    int32_t uacal, ua, urcal, ur, lambda, temp;) s
+5 147 M
+(    float ip, o2, ri;) s
+5 127 M
+(    // Determine resistance calibration value for calculations further on) s
+5 117 M
+(    ur = optimal_resistance * VDDA * \(365 + 187\) / 365 / 4096;) s
+5 107 M
+(    urcal = -\(\(15.5 * 0.000158 * 301\) * 1000 - ur\) * 17;) s
+5 87 M
+(    // Determine lambda calibration value for calculations further on) s
+5 77 M
+(    uacal = optimal_lambda * VDDA * \(365 + 187\) / 365 / 4096;) s
+5 57 M
+(    for \(i = 0; i < 4096; i++\) {) s
+5 47 M
+(        // Calculate the Lambda value) s
+5 37 M
+(        ua = i * VDDA * \(365 + 187\) / 365 / 4096;) s
+5 27 M
+(        ip = \(ua - uacal\) * 1000 / \(61.9 * 8\); // / 1000;) s
+5 17 M
+(        o2 = ip * 0.2095 / 2540;) s
+5 7 M
+(        lambda = \(o2 / 3 + 1\) / \(1 - 4.77 * o2\) * 1000;) s
+_R
+S
+%%Page: (8) 15
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 8 def
+/fname (src/main.c) def
+/fdir (src) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:25:50 2018) def
+/pagenumstr (8) def
+/user_header_p true def
+/user_header_left_str (main.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 8 of 8) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(        //lambda = \(492.3 * exp\(-pow\(\(ip - 3.869\) / 0.772, 2\)\) + 2.183 * exp\(-pow\(\(ip - 2.288\) / ) s
+5 707 M
+(0.714, 2\)\) + 1.09 * exp\(-pow\(\(ip - 2.8\) / 6.656, 2\)\) + 1.011 * exp\(-pow\(\(ip - 1.697\) / 1.112, 2\)\)) s
+5 697 M
+(\) * 1000;) s
+5 677 M
+(        if \(lambda >= 10119 || lambda <= 0\) {) s
+5 667 M
+(            lambda = 10119;) s
+5 657 M
+(        }) s
+5 647 M
+(        // Set lambda lookup table value) s
+5 637 M
+(        lambda_Lookup[i] = lambda;) s
+5 617 M
+(        // Calculate the temperature value) s
+5 607 M
+(        ur = i * VDDA * \(365 + 187\) / 365 / 4096;) s
+5 597 M
+(        ri = \(ur - urcal / 17\) / \(15.5 * 0.158\);) s
+5 587 M
+(        temp = 4445 * pow\(ri, -0.4449\) + 428.6;) s
+5 567 M
+(        if \(temp >= 7049|| temp <= 0\) {) s
+5 557 M
+(            temp = 7049;) s
+5 547 M
+(        }) s
+5 537 M
+(        // Set temperature lookup table value) s
+5 527 M
+(        temp_Lookup[i] = temp;) s
+5 517 M
+(    }) s
+5 507 M
+(}) s
+_R
+S
+%%Page: (1) 16
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/pwm.c) def
+/fdir (src) def
+/ftail (pwm.c) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:31:33 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (pwm.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file pwm.c) s
+5 697 M
+( * @author Kyle Bernier ) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 September 9) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic PWM functionality) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 627 M
+(#include "pwm.h") s
+5 607 M
+(/**) s
+5 597 M
+( * @brief Current state of the PWM signal; 1: high, 0: low.) s
+5 587 M
+( * ) s
+5 577 M
+( * Value is set during PWM interrupts.) s
+5 567 M
+( */) s
+5 557 M
+(uint8_t pwm_state = 0;) s
+5 537 M
+(/* Initialize PWM */) s
+5 527 M
+(void Init_PWM\(void\)) s
+5 517 M
+({) s
+5 507 M
+(    // Enable PWM interrupts) s
+5 497 M
+(    NVIC_SetPriority\(PWMx_IRQ, 2\);) s
+5 487 M
+(    NVIC_EnableIRQ\(PWMx_IRQ\);) s
+5 467 M
+(    // Set the pre-scaler value ) s
+5 457 M
+(    LL_TIM_SetPrescaler\(PWMx_BASE, __LL_TIM_CALC_PSC\(SystemCoreClock, 100000\)\);) s
+5 447 M
+(  ) s
+5 437 M
+(    // Set the auto-reload value to have a counter frequency of 100 Hz ) s
+5 427 M
+(    LL_TIM_SetAutoReload\(PWMx_BASE, __LL_TIM_CALC_ARR\(SystemCoreClock, LL_TIM_GetPrescaler\(PWMx_B) s
+5 417 M
+(ASE\), 100\)\);) s
+5 407 M
+(  ) s
+5 397 M
+(    // Set output mode ) s
+5 387 M
+(    LL_TIM_OC_SetMode\(PWMx_BASE, PWMx_CHANNEL, LL_TIM_OCMODE_PWM1\);) s
+5 377 M
+(    LL_TIM_OC_SetMode\(PWMx_BASE, PWMx_IRQ_CHANNEL, LL_TIM_OCMODE_PWM1\);) s
+5 357 M
+(    // Set external trigger to output on Capture/Compare Output Channel 1) s
+5 347 M
+(    LL_TIM_SetTriggerOutput\(PWMx_BASE, LL_TIM_TRGO_OC1REF\);) s
+5 327 M
+(    // Set compare value have a 0% duty cycle) s
+5 317 M
+(    LL_TIM_OC_SetCompareCH2\(PWMx_BASE, 0\);) s
+5 307 M
+(    LL_TIM_OC_SetCompareCH1\(PWMx_BASE, 1\);) s
+5 297 M
+(  ) s
+5 287 M
+(    // Enable PWM register preload. ) s
+5 277 M
+(    LL_TIM_OC_EnablePreload\(PWMx_BASE, PWMx_CHANNEL\);) s
+5 267 M
+(    LL_TIM_OC_EnablePreload\(PWMx_BASE, PWMx_IRQ_CHANNEL\);) s
+5 257 M
+(  ) s
+5 247 M
+(    // Enable output channel ) s
+5 237 M
+(    LL_TIM_CC_EnableChannel\(PWMx_BASE, PWMx_CHANNEL\);) s
+5 227 M
+(    LL_TIM_CC_EnableChannel\(PWMx_BASE, PWMx_IRQ_CHANNEL\);) s
+5 207 M
+(    // Enable outputs ) s
+5 197 M
+(    LL_TIM_EnableAllOutputs\(PWMx_BASE\);) s
+5 177 M
+(    // Enable the interrupts) s
+5 167 M
+(    LL_TIM_EnableIT_CC1\(PWMx_BASE\);) s
+5 157 M
+(    LL_TIM_EnableIT_CC2\(PWMx_BASE\);) s
+5 147 M
+(  ) s
+5 137 M
+(    // Enable counter ) s
+5 127 M
+(    LL_TIM_EnableCounter\(PWMx_BASE\);) s
+5 117 M
+(  ) s
+5 107 M
+(    // Force update generation ) s
+5 97 M
+(    LL_TIM_GenerateEvent_UPDATE\(PWMx_BASE\);) s
+5 87 M
+(}) s
+5 67 M
+(/* Callback for Compare/Capture 1 Interrupt */) s
+5 57 M
+(void TimerCC1_Callback\(void\) {) s
+5 47 M
+(    // Turn on LED ) s
+5 37 M
+(    SET_BIT\(GPIOA->ODR, GPIO_ODR_OD8_Msk\);) s
+5 27 M
+(}) s
+5 7 M
+(/* Callback for Compare/Capture 2 Interrupt */) s
+_R
+S
+%%Page: (2) 17
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/pwm.c) def
+/fdir (src) def
+/ftail (pwm.c) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:31:33 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (pwm.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(void TimerCC2_Callback\(void\) {) s
+5 707 M
+(    // Turn off LED) s
+5 697 M
+(    CLEAR_BIT\(GPIOA->ODR, GPIO_ODR_OD8_Msk\);) s
+5 687 M
+(}) s
+_R
+S
+%%Page: (1) 18
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/spi.c) def
+/fdir (src) def
+/ftail (spi.c) def
+% User defined strings:
+/fmodstr (Fri Dec 07 16:43:13 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (spi.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file spi.c) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 15) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic SPI functionality) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 617 M
+(#include "spi.h") s
+5 597 M
+(/* Inialize the SPI interface */) s
+5 587 M
+(void Init_SPI\(void\)) s
+5 577 M
+({) s
+5 567 M
+(    // Enable the clock for the SPI) s
+5 557 M
+(    SPIx_CLK_ENABLE\(\);) s
+5 537 M
+(    // Configure the SPI interface) s
+5 527 M
+(    LL_SPI_SetBaudRatePrescaler\(SPI_CJ125_BASE, LL_SPI_BAUDRATEPRESCALER_DIV256\);) s
+5 517 M
+(    LL_SPI_SetTransferDirection\(SPI_CJ125_BASE,LL_SPI_FULL_DUPLEX\);) s
+5 507 M
+(    LL_SPI_SetClockPhase\(SPI_CJ125_BASE, LL_SPI_PHASE_2EDGE\);) s
+5 497 M
+(    LL_SPI_SetClockPolarity\(SPI_CJ125_BASE, LL_SPI_POLARITY_LOW\);) s
+5 487 M
+(    LL_SPI_SetDataWidth\(SPI_CJ125_BASE, LL_SPI_DATAWIDTH_8BIT\);) s
+5 477 M
+(    LL_SPI_SetNSSMode\(SPI_CJ125_BASE, LL_SPI_NSS_SOFT\);) s
+5 467 M
+(    LL_SPI_SetRxFIFOThreshold\(SPI_CJ125_BASE, LL_SPI_RX_FIFO_TH_QUARTER\);) s
+5 457 M
+(    LL_SPI_SetMode\(SPI_CJ125_BASE, LL_SPI_MODE_MASTER\);) s
+5 437 M
+(    // Enable the SPI interface) s
+5 427 M
+(    LL_SPI_Enable\(SPI_CJ125_BASE\);) s
+5 407 M
+(    // Enable select line) s
+5 397 M
+(    MODIFY_REG\(GPIOB->MODER, GPIO_MODER_MODE12, GPIO_MODER_MODE12_0\);) s
+5 377 M
+(    // Enable reset line) s
+5 367 M
+(    MODIFY_REG\(GPIOC->MODER, GPIO_MODER_MODE6, GPIO_MODER_MODE6_0\);) s
+5 357 M
+(    // Set SPI reset line high) s
+5 347 M
+(    SET_BIT\(GPIOC->ODR, GPIO_ODR_OD6_Msk\);) s
+5 337 M
+(}) s
+5 317 M
+(/* Complete an SPI transfer */) s
+5 307 M
+(uint16_t SPI_Transfer\(uint16_t send\)) s
+5 297 M
+({) s
+5 287 M
+(    uint16_t recv;) s
+5 277 M
+(    //int i;) s
+5 257 M
+(    // Set SPI select line low) s
+5 247 M
+(    CLEAR_BIT\(GPIOB->ODR, GPIO_ODR_OD12_Msk\);) s
+5 227 M
+(    //for \(i = 0; i < send_size; i++\) {) s
+5 217 M
+(        // Wait for TX buffer to be empty) s
+5 207 M
+(        while\(!LL_SPI_IsActiveFlag_TXE\(SPI_CJ125_BASE\)\);) s
+5 197 M
+(        // Reverse byte order) s
+5 187 M
+(        send = \(\(send << 8\) & 0xff00\) | \(\(send >> 8\) & 0x00ff\);) s
+5 177 M
+(        // Transmit a byte) s
+5 167 M
+(        LL_SPI_TransmitData16\(SPI_CJ125_BASE, send\);) s
+5 157 M
+(        // Wait for transmit to finish) s
+5 147 M
+(        while \(SPI_CJ125_BASE->SR & SPI_SR_BSY\);) s
+5 137 M
+(    //}) s
+5 117 M
+(    //for \(i = 0; i < recv_size; i++\) {) s
+5 107 M
+(        // Wait for TX buffer to be empty) s
+5 97 M
+(        while\(!LL_SPI_IsActiveFlag_TXE\(SPI_CJ125_BASE\)\);) s
+5 87 M
+(        // Receive a byte) s
+5 77 M
+(        recv = LL_SPI_ReceiveData16\(SPI_CJ125_BASE\);) s
+5 67 M
+(        // Reverse byte order) s
+5 57 M
+(        recv = \(\(recv << 8\) & 0xff00\) | \(\(recv >> 8\) & 0x00ff\);) s
+5 47 M
+(        // Wait for transmit to finish) s
+5 37 M
+(        while \(SPI_CJ125_BASE->SR & SPI_SR_BSY\);) s
+5 27 M
+(    //}) s
+5 17 M
+(    ) s
+5 7 M
+(    // Set SPI select line high) s
+_R
+S
+%%Page: (2) 19
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/spi.c) def
+/fdir (src) def
+/ftail (spi.c) def
+% User defined strings:
+/fmodstr (Fri Dec 07 16:43:13 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (spi.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    SET_BIT\(GPIOB->ODR, GPIO_ODR_OD12_Msk\);) s
+5 697 M
+(    return recv;) s
+5 687 M
+(}) s
+_R
+S
+%%Page: (1) 20
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/stm32l4xx_it.c) def
+/fdir (src) def
+/ftail (stm32l4xx_it.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 10:17:42 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (stm32l4xx_it.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file stm32l4xx_it.c) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @brief Interrupt setup for STM32L4xx) s
+5 667 M
+( * @date 2018-11-27) s
+5 657 M
+( */) s
+5 647 M
+(#include "stm32l4xx.h") s
+5 627 M
+(#include "hw_map.h") s
+5 607 M
+(#include "adc.h") s
+5 597 M
+(#include "spi.h") s
+5 587 M
+(#include "pwm.h") s
+5 567 M
+(/* This function handles NMI exceptions */) s
+5 557 M
+(void NMI_Handler\(void\) {) s
+5 547 M
+(}) s
+5 527 M
+(/* THis function handles Hard Fault exceptions */) s
+5 517 M
+(void HardFault_Handler\(void\) {) s
+5 507 M
+(    // Enter an infinite loop) s
+5 497 M
+(    while \(1\);) s
+5 487 M
+(}) s
+5 467 M
+(/* This function handles Memory Manage exceptions */) s
+5 457 M
+(void MemManage_Handler\(void\) {) s
+5 447 M
+(    // Enter an infinite loop) s
+5 437 M
+(    while \(1\);) s
+5 427 M
+(}) s
+5 407 M
+(/* This function handles Bus Fault exceptions */) s
+5 397 M
+(void BusFault_Handler\(void\) {) s
+5 387 M
+(    // Enter an infinite loop) s
+5 377 M
+(    while \(1\);) s
+5 367 M
+(}) s
+5 347 M
+(/* This function handles Fault exceptions */) s
+5 337 M
+(void UsageFault_Handler\(void\) {) s
+5 327 M
+(    // Enter an infinite loop) s
+5 317 M
+(    while \(1\);) s
+5 307 M
+(}) s
+5 287 M
+(/* This function handles SVCall exceptions */) s
+5 277 M
+(void SVC_Handler\(void\) {) s
+5 267 M
+(}) s
+5 247 M
+(/* This function handles Debug Monitor exceptions */) s
+5 237 M
+(void DebugMon_Handler\(void\) {) s
+5 227 M
+(}) s
+5 207 M
+(/* This function handles PendSVC exceptions */) s
+5 197 M
+(void PendSV_Handler\(void\) {) s
+5 187 M
+(}) s
+5 167 M
+(/* This function handles SysTick Handlers */) s
+5 157 M
+(void SysTick_Handler\(void\) {) s
+5 147 M
+(}) s
+5 127 M
+(/* This function handles ADC1 interrupt requests */) s
+5 117 M
+(void ADC1_2_IRQHandler\(void\) {) s
+5 107 M
+(    // Check if the interupt is end of conversion) s
+5 97 M
+(    if \(LL_ADC_IsActiveFlag_EOS\(ADCx_BASE\) != 0\) {) s
+5 87 M
+(        // Clear the end of conversion flag) s
+5 77 M
+(        LL_ADC_ClearFlag_EOS\(ADCx_BASE\);) s
+5 57 M
+(        // Call the ADC conversion complete callback) s
+5 47 M
+(        ADC_ConvComplete_Callback\(\);) s
+5 37 M
+(    }) s
+5 17 M
+(    // Check if the interupt is overrun) s
+5 7 M
+(    if \(LL_ADC_IsActiveFlag_OVR\(ADCx_BASE\) != 0\) {) s
+_R
+S
+%%Page: (2) 21
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/stm32l4xx_it.c) def
+/fdir (src) def
+/ftail (stm32l4xx_it.c) def
+% User defined strings:
+/fmodstr (Thu Dec 20 10:17:42 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (stm32l4xx_it.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(        // Clear the ADC overrun flag) s
+5 707 M
+(        LL_ADC_ClearFlag_OVR\(ADCx_BASE\);) s
+5 687 M
+(        // Call the ADC conversion complete callback) s
+5 677 M
+(        ADC_OverrunError_Callback\(\);) s
+5 667 M
+(    }) s
+5 657 M
+(}) s
+5 637 M
+(/* This function handles DMA1 interrupts requests */) s
+5 627 M
+(void DMA1_Channel1_IRQHandler\(void\) {) s
+5 617 M
+(    // Check if the DMA transfer is complete) s
+5 607 M
+(    if \(LL_DMA_IsActiveFlag_TC1\(DMAx_BASE\) == 1\) {) s
+5 597 M
+(        // Clear the DMA interupt flag) s
+5 587 M
+(        LL_DMA_ClearFlag_GI1\(DMAx_BASE\);) s
+5 567 M
+(        // Call the DMA transfer complete callback) s
+5 557 M
+(        ADC_DMA_TransferComplete_Callback\(\);) s
+5 547 M
+(    }) s
+5 527 M
+(    // Check if the DMA transfer casused an error) s
+5 517 M
+(    if \(LL_DMA_IsActiveFlag_TE1\(DMAx_BASE\) == 1\) {) s
+5 507 M
+(        // Clear the DMA error flag) s
+5 497 M
+(        LL_DMA_ClearFlag_TE1\(DMAx_BASE\);) s
+5 477 M
+(        // Call the DMA transfer error callback) s
+5 467 M
+(        ADC_DMA_TransferError_Callback\(\);) s
+5 457 M
+(    }) s
+5 447 M
+(}) s
+5 427 M
+(/* This function handles TIM8 interrupt. */) s
+5 417 M
+(void TIM8_CC_IRQHandler\(void\) {) s
+5 407 M
+(    // Check whether CC1 interrupt is pending ) s
+5 397 M
+(    if\(LL_TIM_IsActiveFlag_CC1\(PWMx_BASE\) == 1\) {) s
+5 387 M
+(        // Clear the update interrupt flag) s
+5 377 M
+(        LL_TIM_ClearFlag_CC1\(PWMx_BASE\);) s
+5 357 M
+(        // Timer capture/compare interrupt processing\(function defined in main.c\) ) s
+5 347 M
+(        TimerCC1_Callback\(\);) s
+5 337 M
+(    }) s
+5 317 M
+(    // Check whether CC2 interrupt is pending ) s
+5 307 M
+(    if\(LL_TIM_IsActiveFlag_CC2\(PWMx_BASE\) == 1\) {) s
+5 297 M
+(        // Clear the update interrupt flag) s
+5 287 M
+(        LL_TIM_ClearFlag_CC2\(PWMx_BASE\);) s
+5 267 M
+(        // Timer capture/compare interrupt processing\(function defined in main.c\) ) s
+5 257 M
+(        TimerCC2_Callback\(\);) s
+5 247 M
+(    }) s
+5 237 M
+(}) s
+_R
+S
+%%Page: (1) 22
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/system_stm32l4xx.c) def
+/fdir (src) def
+/ftail (system_stm32l4xx.c) def
+% User defined strings:
+/fmodstr (Sun Sep 02 16:54:40 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (system_stm32l4xx.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 5) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+(  ******************************************************************************) s
+5 697 M
+(  * @file    system_stm32l4xx.c) s
+5 687 M
+(  * @author  MCD Application Team) s
+5 677 M
+(  * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer System Source File) s
+5 667 M
+(  *) s
+5 657 M
+(  *   This file provides two functions and one global variable to be called from) s
+5 647 M
+(  *   user application:) s
+5 637 M
+(  *      - SystemInit\(\): This function is called at startup just after reset and) s
+5 627 M
+(  *                      before branch to main program. This call is made inside) s
+5 617 M
+(  *                      the "startup_stm32l4xx.s" file.) s
+5 607 M
+(  *) s
+5 597 M
+(  *      - SystemCoreClock variable: Contains the core clock \(HCLK\), it can be used) s
+5 587 M
+(  *                                  by the user application to setup the SysTick) s
+5 577 M
+(  *                                  timer or configure other parameters.) s
+5 567 M
+(  *) s
+5 557 M
+(  *      - SystemCoreClockUpdate\(\): Updates the variable SystemCoreClock and must) s
+5 547 M
+(  *                                 be called whenever the core clock is changed) s
+5 537 M
+(  *                                 during program execution.) s
+5 527 M
+(  *) s
+5 517 M
+(  *   After each device reset the MSI \(4 MHz\) is used as system clock source.) s
+5 507 M
+(  *   Then SystemInit\(\) function is called, in "startup_stm32l4xx.s" file, to) s
+5 497 M
+(  *   configure the system clock before to branch to main program.) s
+5 487 M
+(  *) s
+5 477 M
+(  *   This file configures the system clock as follows:) s
+5 467 M
+(  *=============================================================================) s
+5 457 M
+(  *-----------------------------------------------------------------------------) s
+5 447 M
+(  *        System Clock source                    | MSI) s
+5 437 M
+(  *-----------------------------------------------------------------------------) s
+5 427 M
+(  *        SYSCLK\(Hz\)                             | 4000000) s
+5 417 M
+(  *-----------------------------------------------------------------------------) s
+5 407 M
+(  *        HCLK\(Hz\)                               | 4000000) s
+5 397 M
+(  *-----------------------------------------------------------------------------) s
+5 387 M
+(  *        AHB Prescaler                          | 1) s
+5 377 M
+(  *-----------------------------------------------------------------------------) s
+5 367 M
+(  *        APB1 Prescaler                         | 1) s
+5 357 M
+(  *-----------------------------------------------------------------------------) s
+5 347 M
+(  *        APB2 Prescaler                         | 1) s
+5 337 M
+(  *-----------------------------------------------------------------------------) s
+5 327 M
+(  *        PLL_M                                  | 1) s
+5 317 M
+(  *-----------------------------------------------------------------------------) s
+5 307 M
+(  *        PLL_N                                  | 8) s
+5 297 M
+(  *-----------------------------------------------------------------------------) s
+5 287 M
+(  *        PLL_P                                  | 7) s
+5 277 M
+(  *-----------------------------------------------------------------------------) s
+5 267 M
+(  *        PLL_Q                                  | 2) s
+5 257 M
+(  *-----------------------------------------------------------------------------) s
+5 247 M
+(  *        PLL_R                                  | 2) s
+5 237 M
+(  *-----------------------------------------------------------------------------) s
+5 227 M
+(  *        PLLSAI1_P                              | NA) s
+5 217 M
+(  *-----------------------------------------------------------------------------) s
+5 207 M
+(  *        PLLSAI1_Q                              | NA) s
+5 197 M
+(  *-----------------------------------------------------------------------------) s
+5 187 M
+(  *        PLLSAI1_R                              | NA) s
+5 177 M
+(  *-----------------------------------------------------------------------------) s
+5 167 M
+(  *        PLLSAI2_P                              | NA) s
+5 157 M
+(  *-----------------------------------------------------------------------------) s
+5 147 M
+(  *        PLLSAI2_Q                              | NA) s
+5 137 M
+(  *-----------------------------------------------------------------------------) s
+5 127 M
+(  *        PLLSAI2_R                              | NA) s
+5 117 M
+(  *-----------------------------------------------------------------------------) s
+5 107 M
+(  *        Require 48MHz for USB OTG FS,          | Disabled) s
+5 97 M
+(  *        SDIO and RNG clock                     |) s
+5 87 M
+(  *-----------------------------------------------------------------------------) s
+5 77 M
+(  *=============================================================================) s
+5 67 M
+(  ******************************************************************************) s
+5 57 M
+(  * @attention) s
+5 47 M
+(  *) s
+5 37 M
+(  * <h2><center>&copy; COPYRIGHT\(c\) 2017 STMicroelectronics</center></h2>) s
+5 27 M
+(  *) s
+5 17 M
+(  * Redistribution and use in source and binary forms, with or without modification,) s
+5 7 M
+(  * are permitted provided that the following conditions are met:) s
+_R
+S
+%%Page: (2) 23
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/system_stm32l4xx.c) def
+/fdir (src) def
+/ftail (system_stm32l4xx.c) def
+% User defined strings:
+/fmodstr (Sun Sep 02 16:54:40 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (system_stm32l4xx.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 5) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(  *   1. Redistributions of source code must retain the above copyright notice,) s
+5 707 M
+(  *      this list of conditions and the following disclaimer.) s
+5 697 M
+(  *   2. Redistributions in binary form must reproduce the above copyright notice,) s
+5 687 M
+(  *      this list of conditions and the following disclaimer in the documentation) s
+5 677 M
+(  *      and/or other materials provided with the distribution.) s
+5 667 M
+(  *   3. Neither the name of STMicroelectronics nor the names of its contributors) s
+5 657 M
+(  *      may be used to endorse or promote products derived from this software) s
+5 647 M
+(  *      without specific prior written permission.) s
+5 637 M
+(  *) s
+5 627 M
+(  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS") s
+5 617 M
+(  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE) s
+5 607 M
+(  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE) s
+5 597 M
+(  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE) s
+5 587 M
+(  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL) s
+5 577 M
+(  * DAMAGES \(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR) s
+5 567 M
+(  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION\) HOWEVER) s
+5 557 M
+(  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,) s
+5 547 M
+(  * OR TORT \(INCLUDING NEGLIGENCE OR OTHERWISE\) ARISING IN ANY WAY OUT OF THE USE) s
+5 537 M
+(  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.) s
+5 527 M
+(  *) s
+5 517 M
+(  ******************************************************************************) s
+5 507 M
+(  */) s
+5 487 M
+(/** @addtogroup CMSIS) s
+5 477 M
+(  * @{) s
+5 467 M
+(  */) s
+5 447 M
+(/** @addtogroup stm32l4xx_system) s
+5 437 M
+(  * @{) s
+5 427 M
+(  */) s
+5 407 M
+(/** @addtogroup STM32L4xx_System_Private_Includes) s
+5 397 M
+(  * @{) s
+5 387 M
+(  */) s
+5 367 M
+(#include "stm32l4xx.h") s
+5 347 M
+(#if !defined  \(HSE_VALUE\)) s
+5 337 M
+(  #define HSE_VALUE    \(\(uint32_t\)8000000\) /*!< Value of the External oscillator in Hz */) s
+5 327 M
+(#endif /* HSE_VALUE */) s
+5 307 M
+(#if !defined  \(MSI_VALUE\)) s
+5 297 M
+(  #define MSI_VALUE    \(\(uint32_t\)4000000\) /*!< Value of the Internal oscillator in Hz*/) s
+5 287 M
+(#endif /* MSI_VALUE */) s
+5 267 M
+(#if !defined  \(HSI_VALUE\)) s
+5 257 M
+(  #define HSI_VALUE    \(\(uint32_t\)16000000\) /*!< Value of the Internal oscillator in Hz*/) s
+5 247 M
+(#endif /* HSI_VALUE */) s
+5 227 M
+(/**) s
+5 217 M
+(  * @}) s
+5 207 M
+(  */) s
+5 187 M
+(/** @addtogroup STM32L4xx_System_Private_TypesDefinitions) s
+5 177 M
+(  * @{) s
+5 167 M
+(  */) s
+5 147 M
+(/**) s
+5 137 M
+(  * @}) s
+5 127 M
+(  */) s
+5 107 M
+(/** @addtogroup STM32L4xx_System_Private_Defines) s
+5 97 M
+(  * @{) s
+5 87 M
+(  */) s
+5 67 M
+(/************************* Miscellaneous Configuration ************************/) s
+5 57 M
+(/*!< Uncomment the following line if you need to relocate your vector Table in) s
+5 47 M
+(     Internal SRAM. */) s
+5 37 M
+(/* #define VECT_TAB_SRAM */) s
+5 27 M
+(#define VECT_TAB_OFFSET  0x00 /*!< Vector Table base offset field.) s
+5 17 M
+(                                   This value must be a multiple of 0x200. */) s
+5 7 M
+(/******************************************************************************/) s
+_R
+S
+%%Page: (3) 24
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (src/system_stm32l4xx.c) def
+/fdir (src) def
+/ftail (system_stm32l4xx.c) def
+% User defined strings:
+/fmodstr (Sun Sep 02 16:54:40 2018) def
+/pagenumstr (3) def
+/user_header_p true def
+/user_header_left_str (system_stm32l4xx.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 3 of 5) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+(  * @}) s
+5 697 M
+(  */) s
+5 677 M
+(/** @addtogroup STM32L4xx_System_Private_Macros) s
+5 667 M
+(  * @{) s
+5 657 M
+(  */) s
+5 637 M
+(/**) s
+5 627 M
+(  * @}) s
+5 617 M
+(  */) s
+5 597 M
+(/** @addtogroup STM32L4xx_System_Private_Variables) s
+5 587 M
+(  * @{) s
+5 577 M
+(  */) s
+5 567 M
+(  /* The SystemCoreClock variable is updated in three ways:) s
+5 557 M
+(      1\) by calling CMSIS function SystemCoreClockUpdate\(\)) s
+5 547 M
+(      2\) by calling HAL API function HAL_RCC_GetHCLKFreq\(\)) s
+5 537 M
+(      3\) each time HAL_RCC_ClockConfig\(\) is called to configure the system clock frequency) s
+5 527 M
+(         Note: If you use this function to configure the system clock; then there) s
+5 517 M
+(               is no need to call the 2 first functions listed above, since SystemCoreClock) s
+5 507 M
+(               variable is updated automatically.) s
+5 497 M
+(  */) s
+5 487 M
+(  uint32_t SystemCoreClock = 4000000;) s
+5 467 M
+(  const uint8_t  AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};) s
+5 457 M
+(  const uint8_t  APBPrescTable[8] =  {0, 0, 0, 0, 1, 2, 3, 4};) s
+5 447 M
+(  const uint32_t MSIRangeTable[12] = {100000, 200000, 400000, 800000, 1000000, 2000000, \\) s
+5 437 M
+(                                      4000000, 8000000, 16000000, 24000000, 32000000, 48000000};) s
+5 427 M
+(/**) s
+5 417 M
+(  * @}) s
+5 407 M
+(  */) s
+5 387 M
+(/** @addtogroup STM32L4xx_System_Private_FunctionPrototypes) s
+5 377 M
+(  * @{) s
+5 367 M
+(  */) s
+5 347 M
+(/**) s
+5 337 M
+(  * @}) s
+5 327 M
+(  */) s
+5 307 M
+(/** @addtogroup STM32L4xx_System_Private_Functions) s
+5 297 M
+(  * @{) s
+5 287 M
+(  */) s
+5 267 M
+(/**) s
+5 257 M
+(  * @brief  Setup the microcontroller system.) s
+5 247 M
+(  * @param  None) s
+5 237 M
+(  * @retval None) s
+5 227 M
+(  */) s
+5 207 M
+(void SystemInit\(void\)) s
+5 197 M
+({) s
+5 187 M
+(  /* FPU settings ------------------------------------------------------------*/) s
+5 177 M
+(  #if \(__FPU_PRESENT == 1\) && \(__FPU_USED == 1\)) s
+5 167 M
+(    SCB->CPACR |= \(\(3UL << 10*2\)|\(3UL << 11*2\)\);  /* set CP10 and CP11 Full Access */) s
+5 157 M
+(  #endif) s
+5 147 M
+(  /* Reset the RCC clock configuration to the default reset state ------------*/) s
+5 137 M
+(  /* Set MSION bit */) s
+5 127 M
+(  RCC->CR |= RCC_CR_MSION;) s
+5 107 M
+(  /* Reset CFGR register */) s
+5 97 M
+(  RCC->CFGR = 0x00000000;) s
+5 77 M
+(  /* Reset HSEON, CSSON , HSION, and PLLON bits */) s
+5 67 M
+(  RCC->CR &= \(uint32_t\)0xEAF6FFFF;) s
+5 47 M
+(  /* Reset PLLCFGR register */) s
+5 37 M
+(  RCC->PLLCFGR = 0x00001000;) s
+5 17 M
+(  /* Reset HSEBYP bit */) s
+5 7 M
+(  RCC->CR &= \(uint32_t\)0xFFFBFFFF;) s
+_R
+S
+%%Page: (4) 25
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (src/system_stm32l4xx.c) def
+/fdir (src) def
+/ftail (system_stm32l4xx.c) def
+% User defined strings:
+/fmodstr (Sun Sep 02 16:54:40 2018) def
+/pagenumstr (4) def
+/user_header_p true def
+/user_header_left_str (system_stm32l4xx.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 4 of 5) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 707 M
+(  /* Disable all interrupts */) s
+5 697 M
+(  RCC->CIER = 0x00000000;) s
+5 677 M
+(  /* Configure the Vector Table location add offset address ------------------*/) s
+5 667 M
+(#ifdef VECT_TAB_SRAM) s
+5 657 M
+(  SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */) s
+5 647 M
+(#else) s
+5 637 M
+(  SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */) s
+5 627 M
+(#endif) s
+5 617 M
+(}) s
+5 597 M
+(/**) s
+5 587 M
+(  * @brief  Update SystemCoreClock variable according to Clock Register Values.) s
+5 577 M
+(  *         The SystemCoreClock variable contains the core clock \(HCLK\), it can) s
+5 567 M
+(  *         be used by the user application to setup the SysTick timer or configure) s
+5 557 M
+(  *         other parameters.) s
+5 547 M
+(  *) s
+5 537 M
+(  * @note   Each time the core clock \(HCLK\) changes, this function must be called) s
+5 527 M
+(  *         to update SystemCoreClock variable value. Otherwise, any configuration) s
+5 517 M
+(  *         based on this variable will be incorrect.) s
+5 507 M
+(  *) s
+5 497 M
+(  * @note   - The system frequency computed by this function is not the real) s
+5 487 M
+(  *           frequency in the chip. It is calculated based on the predefined) s
+5 477 M
+(  *           constant and the selected clock source:) s
+5 467 M
+(  *) s
+5 457 M
+(  *           - If SYSCLK source is MSI, SystemCoreClock will contain the MSI_VALUE\(*\)) s
+5 447 M
+(  *) s
+5 437 M
+(  *           - If SYSCLK source is HSI, SystemCoreClock will contain the HSI_VALUE\(**\)) s
+5 427 M
+(  *) s
+5 417 M
+(  *           - If SYSCLK source is HSE, SystemCoreClock will contain the HSE_VALUE\(***\)) s
+5 407 M
+(  *) s
+5 397 M
+(  *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE\(***\)) s
+5 387 M
+(  *             or HSI_VALUE\(*\) or MSI_VALUE\(*\) multiplied/divided by the PLL factors.) s
+5 377 M
+(  *) s
+5 367 M
+(  *         \(*\) MSI_VALUE is a constant defined in stm32l4xx_hal.h file \(default value) s
+5 357 M
+(  *             4 MHz\) but the real value may vary depending on the variations) s
+5 347 M
+(  *             in voltage and temperature.) s
+5 337 M
+(  *) s
+5 327 M
+(  *         \(**\) HSI_VALUE is a constant defined in stm32l4xx_hal.h file \(default value) s
+5 317 M
+(  *              16 MHz\) but the real value may vary depending on the variations) s
+5 307 M
+(  *              in voltage and temperature.) s
+5 297 M
+(  *) s
+5 287 M
+(  *         \(***\) HSE_VALUE is a constant defined in stm32l4xx_hal.h file \(default value) s
+5 277 M
+(  *              8 MHz\), user has to ensure that HSE_VALUE is same as the real) s
+5 267 M
+(  *              frequency of the crystal used. Otherwise, this function may) s
+5 257 M
+(  *              have wrong result.) s
+5 247 M
+(  *) s
+5 237 M
+(  *         - The result of this function could be not correct when using fractional) s
+5 227 M
+(  *           value for HSE crystal.) s
+5 217 M
+(  *) s
+5 207 M
+(  * @param  None) s
+5 197 M
+(  * @retval None) s
+5 187 M
+(  */) s
+5 177 M
+(void SystemCoreClockUpdate\(void\)) s
+5 167 M
+({) s
+5 157 M
+(  uint32_t tmp = 0, msirange = 0, pllvco = 0, pllr = 2, pllsource = 0, pllm = 2;) s
+5 137 M
+(  /* Get MSI Range frequency--------------------------------------------------*/) s
+5 127 M
+(  if\(\(RCC->CR & RCC_CR_MSIRGSEL\) == RESET\)) s
+5 117 M
+(  { /* MSISRANGE from RCC_CSR applies */) s
+5 107 M
+(    msirange = \(RCC->CSR & RCC_CSR_MSISRANGE\) >> 8;) s
+5 97 M
+(  }) s
+5 87 M
+(  else) s
+5 77 M
+(  { /* MSIRANGE from RCC_CR applies */) s
+5 67 M
+(    msirange = \(RCC->CR & RCC_CR_MSIRANGE\) >> 4;) s
+5 57 M
+(  }) s
+5 47 M
+(  /*MSI frequency range in HZ*/) s
+5 37 M
+(  msirange = MSIRangeTable[msirange];) s
+5 17 M
+(  /* Get SYSCLK source -------------------------------------------------------*/) s
+5 7 M
+(  switch \(RCC->CFGR & RCC_CFGR_SWS\)) s
+_R
+S
+%%Page: (5) 26
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 5 def
+/fname (src/system_stm32l4xx.c) def
+/fdir (src) def
+/ftail (system_stm32l4xx.c) def
+% User defined strings:
+/fmodstr (Sun Sep 02 16:54:40 2018) def
+/pagenumstr (5) def
+/user_header_p true def
+/user_header_left_str (system_stm32l4xx.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 5 of 5) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(  {) s
+5 707 M
+(    case 0x00:  /* MSI used as system clock source */) s
+5 697 M
+(      SystemCoreClock = msirange;) s
+5 687 M
+(      break;) s
+5 667 M
+(    case 0x04:  /* HSI used as system clock source */) s
+5 657 M
+(      SystemCoreClock = HSI_VALUE;) s
+5 647 M
+(      break;) s
+5 627 M
+(    case 0x08:  /* HSE used as system clock source */) s
+5 617 M
+(      SystemCoreClock = HSE_VALUE;) s
+5 607 M
+(      break;) s
+5 587 M
+(    case 0x0C:  /* PLL used as system clock  source */) s
+5 577 M
+(      /* PLL_VCO = \(HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM\) * PLLN) s
+5 567 M
+(         SYSCLK = PLL_VCO / PLLR) s
+5 557 M
+(         */) s
+5 547 M
+(      pllsource = \(RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC\);) s
+5 537 M
+(      pllm = \(\(RCC->PLLCFGR & RCC_PLLCFGR_PLLM\) >> 4\) + 1 ;) s
+5 517 M
+(      switch \(pllsource\)) s
+5 507 M
+(      {) s
+5 497 M
+(        case 0x02:  /* HSI used as PLL clock source */) s
+5 487 M
+(          pllvco = \(HSI_VALUE / pllm\);) s
+5 477 M
+(          break;) s
+5 457 M
+(        case 0x03:  /* HSE used as PLL clock source */) s
+5 447 M
+(          pllvco = \(HSE_VALUE / pllm\);) s
+5 437 M
+(          break;) s
+5 417 M
+(        default:    /* MSI used as PLL clock source */) s
+5 407 M
+(          pllvco = \(msirange / pllm\);) s
+5 397 M
+(          break;) s
+5 387 M
+(      }) s
+5 377 M
+(      pllvco = pllvco * \(\(RCC->PLLCFGR & RCC_PLLCFGR_PLLN\) >> 8\);) s
+5 367 M
+(      pllr = \(\(\(RCC->PLLCFGR & RCC_PLLCFGR_PLLR\) >> 25\) + 1\) * 2;) s
+5 357 M
+(      SystemCoreClock = pllvco/pllr;) s
+5 347 M
+(      break;) s
+5 327 M
+(    default:) s
+5 317 M
+(      SystemCoreClock = msirange;) s
+5 307 M
+(      break;) s
+5 297 M
+(  }) s
+5 287 M
+(  /* Compute HCLK clock frequency --------------------------------------------*/) s
+5 277 M
+(  /* Get HCLK prescaler */) s
+5 267 M
+(  tmp = AHBPrescTable[\(\(RCC->CFGR & RCC_CFGR_HPRE\) >> 4\)];) s
+5 257 M
+(  /* HCLK clock frequency */) s
+5 247 M
+(  SystemCoreClock >>= tmp;) s
+5 237 M
+(}) s
+5 207 M
+(/**) s
+5 197 M
+(  * @}) s
+5 187 M
+(  */) s
+5 167 M
+(/**) s
+5 157 M
+(  * @}) s
+5 147 M
+(  */) s
+5 127 M
+(/**) s
+5 117 M
+(  * @}) s
+5 107 M
+(  */) s
+5 87 M
+(/************************ \(C\) COPYRIGHT STMicroelectronics *****END OF FILE****/) s
+_R
+S
+%%Page: (1) 27
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/usart.c) def
+/fdir (src) def
+/ftail (usart.c) def
+% User defined strings:
+/fmodstr (Fri Dec 07 16:43:13 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (usart.c) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file usart.c) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 September 12) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic USART functionality.) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 627 M
+(#include "usart.h") s
+5 607 M
+(/** @brief Send counter */) s
+5 597 M
+(uint8_t ubSend = 0;) s
+5 577 M
+(/* Initialize the USART */) s
+5 567 M
+(void Init_USART\(void\) {) s
+5 557 M
+(    // Set transfer direction \(Tx/Rx\) ) s
+5 547 M
+(    LL_USART_SetTransferDirection\(USARTx_BASE, LL_USART_DIRECTION_TX_RX\);) s
+5 527 M
+(    // Set 8 data bits, 1 start bit, 1 stop bit, and no parity ) s
+5 517 M
+(    LL_USART_ConfigCharacter\(USARTx_BASE, LL_USART_DATAWIDTH_8B, LL_USART_PARITY_NONE, LL_USART_S) s
+5 507 M
+(TOPBITS_1\);) s
+5 487 M
+(    // Set baud rate ) s
+5 477 M
+(    LL_USART_SetBaudRate\(USARTx_BASE, SystemCoreClock, LL_USART_OVERSAMPLING_16, 115200\); ) s
+5 457 M
+(    // Enable USART ) s
+5 447 M
+(    LL_USART_Enable\(USARTx_BASE\);) s
+5 427 M
+(    // Polling USART initialisation ) s
+5 417 M
+(    while\(\(!\(LL_USART_IsActiveFlag_TEACK\(USARTx_BASE\)\)\) || \(!\(LL_USART_IsActiveFlag_REACK\(USARTx_) s
+5 407 M
+(BASE\)\)\)\);) s
+5 397 M
+(}) s
+5 377 M
+(/* Transmit data */) s
+5 367 M
+(void USART_Transmit\(uint8_t *send, uint8_t size\) {) s
+5 357 M
+(    // Send characters one per one, until last char to be sent ) s
+5 347 M
+(    while \(ubSend < size\) {) s
+5 337 M
+(      // Wait for TXE flag to be raised ) s
+5 327 M
+(      while \(!LL_USART_IsActiveFlag_TXE\(USARTx_BASE\)\);) s
+5 307 M
+(      // If last char to be sent, clear TC flag ) s
+5 297 M
+(      if \(ubSend == \(size - 1\)\) {) s
+5 287 M
+(        LL_USART_ClearFlag_TC\(USARTx_BASE\); ) s
+5 277 M
+(      }) s
+5 257 M
+(      // Write character in Transmit Data register. TXE flag is cleared by writing data in TDR re) s
+5 247 M
+(gister ) s
+5 237 M
+(      LL_USART_TransmitData8\(USARTx_BASE, send[ubSend++]\);) s
+5 227 M
+(    }) s
+5 207 M
+(    // Wait for TC flag to be raised for last char ) s
+5 197 M
+(    while \(!LL_USART_IsActiveFlag_TC\(USARTx_BASE\)\);) s
+5 177 M
+(    // Transmission is over, reset send amount ) s
+5 167 M
+(    ubSend = 0;) s
+5 157 M
+(}) s
+_R
+S
+%%Page: (1) 28
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/adc.h) def
+/fdir (src) def
+/ftail (adc.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 09:56:22 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (adc.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file adc.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 15) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides ADC functionality) s
+5 647 M
+( */) s
+5 627 M
+(#ifndef __ADC_H) s
+5 617 M
+(#define __ADC_H) s
+5 597 M
+(#include "hw_map.h") s
+5 577 M
+(/**) s
+5 567 M
+( * @brief Initialize the ADC with DMA ) s
+5 557 M
+( * ) s
+5 547 M
+( * Initialization of the desired channels is done by taking the reverse of) s
+5 537 M
+( * the binary expansion of the channels.) s
+5 527 M
+( * ie. Enabling channels 3, 8, 11, & 12 the representation would be:) s
+5 517 M
+( * - - - 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0) s
+5 507 M
+( * 0 0 0  0| 0  0  0  1| 1  0 0 1|0 0 0 0|1 0 0 0) s
+5 497 M
+( * ) s
+5 487 M
+( * Which results in a hexidecimal number of 0x01908) s
+5 477 M
+( * ) s
+5 467 M
+( * @param channels ADC channels to read from) s
+5 457 M
+( * @param values Array to store ADC values) s
+5 447 M
+( * @param numValues Number of values in values array) s
+5 437 M
+( * ) s
+5 427 M
+( * @retval None) s
+5 417 M
+( */) s
+5 407 M
+(void Init_ADC\(uint32_t channels, uint16_t * values, int numValues\);) s
+5 387 M
+(/**) s
+5 377 M
+( * @brief DMA transfer complete callback) s
+5 367 M
+( * ) s
+5 357 M
+( * @note This function is executed when the transfer complete interrupt) s
+5 347 M
+( *         is generated) s
+5 337 M
+( * ) s
+5 327 M
+( * @retval None) s
+5 317 M
+( */) s
+5 307 M
+(void ADC_DMA_TransferComplete_Callback\(void\);) s
+5 287 M
+(/**) s
+5 277 M
+(  * @brief  DMA transfer error callback) s
+5 267 M
+(  * ) s
+5 257 M
+(  * @note   This function is executed when the transfer error interrupt) s
+5 247 M
+(  *         is generated during DMA transfer) s
+5 237 M
+(  * ) s
+5 227 M
+(  * @retval None) s
+5 217 M
+(  */) s
+5 207 M
+(void ADC_DMA_TransferError_Callback\(void\);) s
+5 187 M
+(/**) s
+5 177 M
+( * @brief ADC group regular end of sequence conversions interruption callback) s
+5 167 M
+( * ) s
+5 157 M
+( * @note This function is executed when the ADC group regular) s
+5 147 M
+( *         sequencer has converted all ranks of the sequence.) s
+5 137 M
+( * ) s
+5 127 M
+( * @retval None) s
+5 117 M
+( */) s
+5 107 M
+(void ADC_ConvComplete_Callback\(void\);) s
+5 87 M
+(/**) s
+5 77 M
+(  * @brief ADC group regular overrun interruption callback) s
+5 67 M
+(  * ) s
+5 57 M
+(  * @note This function is executed when ADC group regular) s
+5 47 M
+(  *         overrun error occurs.) s
+5 37 M
+(  * ) s
+5 27 M
+(  * @retval None) s
+5 17 M
+(  */) s
+5 7 M
+(void ADC_OverrunError_Callback\(void\);) s
+_R
+S
+%%Page: (2) 29
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/adc.h) def
+/fdir (src) def
+/ftail (adc.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 09:56:22 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (adc.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 707 M
+(#endif // __ADC_H) s
+_R
+S
+%%Page: (1) 30
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/cj125.h) def
+/fdir (src) def
+/ftail (cj125.h) def
+% User defined strings:
+/fmodstr (Fri Dec 07 16:43:13 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (cj125.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file cj125.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @brief Definitons for the CJ125 registers) s
+5 667 M
+( * @date 2018-11-27) s
+5 657 M
+( * ) s
+5 647 M
+( */) s
+5 627 M
+(/**) s
+5 617 M
+( * @defgroup CJ125 CJ125 Register definitions) s
+5 607 M
+( * @{) s
+5 597 M
+( */) s
+5 577 M
+(/** @brief Register value for identification request */) s
+5 567 M
+(#define CJ125_IDENT_REG         0x4800) s
+5 557 M
+(/** @brief Register value for diagnostic request */) s
+5 547 M
+(#define CJ125_DIAG_REG          0x7800) s
+5 537 M
+(/** @brief Diagnostic response from CJ125: Ready */) s
+5 527 M
+(#define CJ125_DIAG_REG_OK       0x28ff) s
+5 517 M
+(/** @brief Diagnostic response from CJ125: No/Low power */) s
+5 507 M
+(#define CJ125_DIAG_REG_NOPWR    0x2855) s
+5 497 M
+(/** @brief Diagnostic response from CJ125: No sensor */) s
+5 487 M
+(#define CJ125_DIAG_REG_NOSNSR   0x287f) s
+5 477 M
+(/** @brief Register value for setting CJ125 into calibration mode */) s
+5 467 M
+(#define CJ125_CALIBRATE_MODE    0x569d) s
+5 457 M
+(/** @brief Register value for setting CJ125 into V=8 mode */) s
+5 447 M
+(#define CJ125_V8_MODE           0x5688) s
+5 437 M
+(/** @brief Register value for setting CJ125 into V=17 mode */) s
+5 427 M
+(#define CJ125_V17_MODE          0x5689) s
+5 417 M
+(/** @} */ ) s
+_R
+S
+%%Page: (1) 31
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/dac.h) def
+/fdir (src) def
+/ftail (dac.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:31:06 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (dac.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file dac.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 29) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic DAC functionality) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 607 M
+(#ifndef __DAC_H) s
+5 597 M
+(#define __DAC_H) s
+5 577 M
+(#include "hw_map.h") s
+5 557 M
+(/**) s
+5 547 M
+( * @brief Initialize the DAC interface ) s
+5 537 M
+( * @retval None) s
+5 527 M
+( */) s
+5 517 M
+(int Init_DAC\(void\);) s
+5 497 M
+(/** ) s
+5 487 M
+( * @brief Adjust the DAC output value ) s
+5 477 M
+( * @param value Value to set the DAC output to) s
+5 467 M
+( * @retval None) s
+5 457 M
+( */) s
+5 447 M
+(void DAC_SetValue\(uint32_t value\);) s
+5 427 M
+(#endif // __DAC_H) s
+_R
+S
+%%Page: (1) 32
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/hw_map.h) def
+/fdir (src) def
+/ftail (hw_map.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:27:19 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (hw_map.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file hw_map.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 15) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Maps hardware peripherals to board specific features) s
+5 647 M
+( * ) s
+5 637 M
+( * Sets up definitions required for hardware peripherals. ) s
+5 627 M
+( * ) s
+5 617 M
+( * Includes: ADC, DAC, DMA, PWM, UART, SPI) s
+5 607 M
+( */) s
+5 587 M
+(#ifndef __HW_MAP_H) s
+5 577 M
+(#define __HW_MAP_H) s
+5 557 M
+(#include "stm32l4xx_ll_gpio.h") s
+5 547 M
+(#include "stm32l4xx_ll_adc.h") s
+5 537 M
+(#include "stm32l4xx_ll_dma.h") s
+5 527 M
+(#include "stm32l4xx_ll_dac.h") s
+5 517 M
+(#include "stm32l4xx_ll_tim.h") s
+5 507 M
+(#include "stm32l4xx_ll_usart.h") s
+5 497 M
+(#include "stm32l4xx_ll_rcc.h") s
+5 487 M
+(#include "stm32l4xx_ll_spi.h") s
+5 477 M
+(#include "stm32l4xx_ll_bus.h") s
+5 457 M
+(/**) s
+5 447 M
+( * @defgroup ADC ADC Definitions) s
+5 437 M
+( */) s
+5 417 M
+(/**) s
+5 407 M
+( * @def ADCx_BASE) s
+5 397 M
+( * @ingroup ADC) s
+5 387 M
+( * @brief ADC channel used for all.) s
+5 377 M
+( */) s
+5 367 M
+(#define ADCx_BASE ADC1) s
+5 347 M
+(/** ) s
+5 337 M
+( * @def ADCx_SAMPLERATE) s
+5 327 M
+( * @ingroup ADC) s
+5 317 M
+( * @brief ADC sample rate) s
+5 307 M
+( */) s
+5 297 M
+(#define ADCx_SAMPLERATE LL_ADC_SAMPLINGTIME_640CYCLES_5) s
+5 277 M
+(/** ) s
+5 267 M
+( * @def ADCx_IRQ) s
+5 257 M
+( * @ingroup ADC) s
+5 247 M
+( * @brief STM ADC interrupt ) s
+5 237 M
+( */) s
+5 227 M
+(#define ADCx_IRQ ADC1_2_IRQn) s
+5 207 M
+(/**) s
+5 197 M
+( * @defgroup ADC_BAT ADC Battery Voltage Monitor) s
+5 187 M
+( * @ingroup ADC) s
+5 177 M
+( * @brief ADC channel used to monitor battery voltage) s
+5 167 M
+( * ) s
+5 157 M
+( * These definitions are for the ADC that reads the current battery voltage.) s
+5 147 M
+( * ) s
+5 137 M
+( * @{) s
+5 127 M
+( */) s
+5 117 M
+(/** @brief STM ADC GPIO Pin*/) s
+5 107 M
+(#define ADC_BAT_GPIO_PIN LL_GPIO_PIN_3) s
+5 97 M
+(/** @brief STM ADC GPIO Port*/) s
+5 87 M
+(#define ADC_BAT_GPIO_PORT GPIOA) s
+5 77 M
+(/** @brief STM ADC Channel*/) s
+5 67 M
+(#define ADC_BAT_CHANNEL LL_ADC_CHANNEL_8) s
+5 57 M
+(/** @} */) s
+5 37 M
+(/**) s
+5 27 M
+( * @defgroup ADC_LMD ADC Lambda Value Monitor) s
+5 17 M
+( * @ingroup ADC) s
+5 7 M
+( * @brief ADC channel used to read lambda value) s
+_R
+S
+%%Page: (2) 33
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/hw_map.h) def
+/fdir (src) def
+/ftail (hw_map.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:27:19 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (hw_map.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+( * ) s
+5 707 M
+( * These definitions are for the ADC that reads the lambda value from the CJ125.) s
+5 697 M
+( * ) s
+5 687 M
+( * @{) s
+5 677 M
+( */ ) s
+5 667 M
+(/** @brief STM ADC GPIO Pin*/) s
+5 657 M
+(#define ADC_LMD_GPIO_PIN LL_GPIO_PIN_6) s
+5 647 M
+(/** @brief STM ADC GPIO Port*/) s
+5 637 M
+(#define ADC_LMD_GPIO_PORT GPIOA) s
+5 627 M
+(/** @brief STM ADC Channel*/) s
+5 617 M
+(#define ADC_LMD_CHANNEL LL_ADC_CHANNEL_11) s
+5 607 M
+(/** @} */) s
+5 587 M
+(/**) s
+5 577 M
+( * @defgroup ADC_RES ADC Resistance Monitor) s
+5 567 M
+( * @ingroup ADC) s
+5 557 M
+( * @brief ADC channel used to read sensor resitance) s
+5 547 M
+( * ) s
+5 537 M
+( * These definitions are for the ADC that reads the oxygen sensor resistance) s
+5 527 M
+( * from the CJ125.) s
+5 517 M
+( * ) s
+5 507 M
+( * @{) s
+5 497 M
+( */) s
+5 487 M
+(/** @brief STM ADC GPIO Pin */) s
+5 477 M
+(#define ADC_RES_GPIO_PIN LL_GPIO_PIN_7) s
+5 467 M
+(/** @brief STM ADC GPIO Port */) s
+5 457 M
+(#define ADC_RES_GPIO_PORT GPIOA) s
+5 447 M
+(/** @brief STM ADC Channel */) s
+5 437 M
+(#define ADC_RES_CHANNEL LL_ADC_CHANNEL_12) s
+5 427 M
+(/** @} */) s
+5 407 M
+(/**) s
+5 397 M
+( * @defgroup ADC_CRNT ADC PWM Current Sense) s
+5 387 M
+( * @ingroup ADC) s
+5 377 M
+( * @brief ADC channel used to sense current) s
+5 367 M
+( * ) s
+5 357 M
+( * @{) s
+5 347 M
+( */) s
+5 337 M
+(/** @brief STM ADC GPIO Pin */) s
+5 327 M
+(#define ADC_CRNT_GPIO_PIN LL_GPIO_PIN_1) s
+5 317 M
+(/** @brief STM ADC GPIO Port */) s
+5 307 M
+(#define ADC_CRNT_GPIO_PORT GPIOB) s
+5 297 M
+(/** @brief STM ADC Channel */) s
+5 287 M
+(#define ADC_CRNT_CHANNEL LL_ADC_CHANNEL_16) s
+5 277 M
+(/** @} */) s
+5 257 M
+(/**) s
+5 247 M
+( * @def ADCx_CLK_ENABLE\(\)) s
+5 237 M
+( * @ingroup ADC) s
+5 227 M
+( * @brief ADC definition for enabling peripheral clock.) s
+5 217 M
+( */) s
+5 207 M
+(#define ADCx_CLK_ENABLE\(\) LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_ADC\)) s
+5 187 M
+(/**) s
+5 177 M
+( * @defgroup DMA DMA Definitions) s
+5 167 M
+( */) s
+5 147 M
+(/**) s
+5 137 M
+( * @defgroup DMA_ADC ADC DMA ) s
+5 127 M
+( * @ingroup DMA) s
+5 117 M
+( * @{) s
+5 107 M
+( */) s
+5 97 M
+(/** @brief STM DMA */) s
+5 87 M
+(#define DMAx_BASE DMA1) s
+5 77 M
+(/** @brief STM DMA Channel */) s
+5 67 M
+(#define DMAx_CHANNEL LL_DMA_CHANNEL_1) s
+5 57 M
+(/** @brief DMA Interrupt */) s
+5 47 M
+(#define DMAx_IRQ DMA1_Channel1_IRQn) s
+5 37 M
+(/** @} */) s
+5 17 M
+(/**) s
+5 7 M
+( * @def DMAx_CLK_ENABLE\(\)) s
+_R
+S
+%%Page: (3) 34
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 3 def
+/fname (src/hw_map.h) def
+/fdir (src) def
+/ftail (hw_map.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:27:19 2018) def
+/pagenumstr (3) def
+/user_header_p true def
+/user_header_left_str (hw_map.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 3 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+( * @ingroup DMA) s
+5 707 M
+( * @brief Enable DMA peripheral clock) s
+5 697 M
+( */) s
+5 687 M
+(#define DMAx_CLK_ENABLE\(\) LL_AHB1_GRP1_EnableClock\(LL_AHB1_GRP1_PERIPH_DMA1\);) s
+5 657 M
+(/**) s
+5 647 M
+( * @defgroup DAC DAC Definitions) s
+5 637 M
+( */) s
+5 617 M
+(/** ) s
+5 607 M
+( * @def DACx_BASE) s
+5 597 M
+( * @ingroup DAC) s
+5 587 M
+( * @brief STM DAC ) s
+5 577 M
+( */) s
+5 567 M
+(#define DACx_BASE DAC1) s
+5 547 M
+(/**) s
+5 537 M
+( * @defgroup DAC_LMD DAC Lambda Output ) s
+5 527 M
+( * @ingroup DAC) s
+5 517 M
+( * @{) s
+5 507 M
+( */) s
+5 497 M
+(/** @brief STM DAC GPIO Pin */) s
+5 487 M
+(#define DAC_LMD_GPIO_PIN LL_GPIO_PIN_5) s
+5 477 M
+(/** @brief STM DAC GPIO Port */) s
+5 467 M
+(#define DAC_LMD_GPIO_PORT GPIOA) s
+5 457 M
+(/** @brief STM DAC Channel */) s
+5 447 M
+(#define DAC_LMD_CHANNEL LL_DAC_CHANNEL_2) s
+5 437 M
+(/** @} */) s
+5 417 M
+(/**) s
+5 407 M
+( * @defgroup DAC_CLK DAC Clock ) s
+5 397 M
+( * @ingroup DAC) s
+5 387 M
+( * @{) s
+5 377 M
+( */) s
+5 367 M
+(/** @brief Enable DAC peripheral clock */) s
+5 357 M
+(#define DACx_CLK_ENABLE\(\) LL_APB1_GRP1_EnableClock\(LL_APB1_GRP1_PERIPH_DAC1\)) s
+5 347 M
+(/** @} */) s
+5 317 M
+(/**) s
+5 307 M
+( * @defgroup PWM PWM Definitions) s
+5 297 M
+( * @{) s
+5 287 M
+( */) s
+5 277 M
+(/** @brief STM PWM timer */) s
+5 267 M
+(#define PWMx_BASE TIM8) s
+5 257 M
+(/** @brief STM PWM Timer channel */) s
+5 247 M
+(#define PWMx_CHANNEL LL_TIM_CHANNEL_CH2) s
+5 237 M
+(/** @brief STM PWM Timer Interrupt */) s
+5 227 M
+(#define PWMx_IRQ TIM8_CC_IRQn) s
+5 217 M
+(/** @brief STM PWM Interrupt channel */) s
+5 207 M
+(#define PWMx_IRQ_CHANNEL LL_TIM_CHANNEL_CH1) s
+5 197 M
+(/** @brief Enable PWM peripheral clock */) s
+5 187 M
+(#define PWMx_CLK_ENABLE\(\) LL_APB2_GRP1_EnableClock\(LL_APB2_GRP1_PERIPH_TIM8\)) s
+5 167 M
+(/** @brief Enable GPIO clock */) s
+5 157 M
+(#define PWMx_GPIO_CLK_ENABLE\(\) LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_GPIOC\)) s
+5 147 M
+(/** @brief STM PWM GPIO Pin */) s
+5 137 M
+(#define PWMx_GPIO_PIN LL_GPIO_PIN_7) s
+5 127 M
+(/** @brief STM PWM GPIO Port */) s
+5 117 M
+(#define PWMx_GPIO_PORT GPIOC) s
+5 107 M
+(/** @brief Set PWM alternative function */) s
+5 97 M
+(#define PWMx_SET_GPIO_AF\(\) LL_GPIO_SetAFPin_0_7\(GPIOC, LL_GPIO_PIN_7, LL_GPIO_AF_3\)) s
+5 87 M
+(/** @} */) s
+5 67 M
+(/**) s
+5 57 M
+( * @defgroup USART USART Definitions) s
+5 47 M
+( * @{) s
+5 37 M
+( */) s
+5 27 M
+(/** @brief STM USART */) s
+5 17 M
+(#define USARTx_BASE USART1) s
+5 7 M
+(/** @brief Enable peripheral clock */) s
+_R
+S
+%%Page: (4) 35
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 4 def
+/fname (src/hw_map.h) def
+/fdir (src) def
+/ftail (hw_map.h) def
+% User defined strings:
+/fmodstr (Wed Dec 19 21:27:19 2018) def
+/pagenumstr (4) def
+/user_header_p true def
+/user_header_left_str (hw_map.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 4 of 4) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(#define USARTx_CLK_ENABLE\(\) LL_APB2_GRP1_EnableClock\(LL_APB2_GRP1_PERIPH_USART1\)) s
+5 707 M
+(/** @brief Set USART clock source */) s
+5 697 M
+(#define USARTx_CLK_SOURCE\(\) LL_RCC_SetUSARTClockSource\(LL_RCC_USART1_CLKSOURCE_PCLK2\)) s
+5 677 M
+(/** @brief Enable GPIO clock */) s
+5 667 M
+(#define USARTx_GPIO_CLK_ENABLE\(\) LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_GPIOA\)   ) s
+5 657 M
+(/** @brief STM USART Transmit GPIO Pin */) s
+5 647 M
+(#define USARTx_TX_PIN LL_GPIO_PIN_9) s
+5 637 M
+(/** @brief STM USART Transmit GPIO Port */) s
+5 627 M
+(#define USARTx_TX_GPIO_PORT GPIOA) s
+5 617 M
+(/** @brief Set Transmit alternative function */) s
+5 607 M
+(#define USARTx_SET_TX_GPIO_AF\(\) LL_GPIO_SetAFPin_8_15\(GPIOA, LL_GPIO_PIN_9, LL_GPIO_AF_7\)) s
+5 597 M
+(/** @brief STM USART Receive GPIO Pin */) s
+5 587 M
+(#define USARTx_RX_PIN LL_GPIO_PIN_10) s
+5 577 M
+(/** @brief STM USART Receive GPIO Port */) s
+5 567 M
+(#define USARTx_RX_GPIO_PORT GPIOA) s
+5 557 M
+(/** @brief Set Receive alternative function */) s
+5 547 M
+(#define USARTx_SET_RX_GPIO_AF\(\) LL_GPIO_SetAFPin_8_15\(GPIOA, LL_GPIO_PIN_10, LL_GPIO_AF_7\)) s
+5 537 M
+(/** @} */) s
+5 517 M
+(/**) s
+5 507 M
+( * @defgroup SPI SPI Definitions) s
+5 497 M
+( * @{) s
+5 487 M
+( */) s
+5 477 M
+(/** @brief Enable GPIO clock */) s
+5 467 M
+(#define SPIx_GPIO_CLK_ENABLE\(\) LL_AHB2_GRP1_EnableClock\(LL_AHB2_GRP1_PERIPH_GPIOB\)) s
+5 457 M
+(/** @brief Enable peripheral clock */) s
+5 447 M
+(#define SPIx_CLK_ENABLE\(\) LL_APB1_GRP1_EnableClock\(LL_APB1_GRP1_PERIPH_SPI2\);) s
+5 437 M
+(/** @brief STM SPI */) s
+5 427 M
+(#define SPI_CJ125_BASE SPI2) s
+5 417 M
+(/** @brief STM SPI Clock GPIO Pin */) s
+5 407 M
+(#define SPI_CJ125_SCK_PIN LL_GPIO_PIN_13) s
+5 397 M
+(/** @brief STM SPI Clock GPIO Port */) s
+5 387 M
+(#define SPI_CJ125_SCK_PORT GPIOB) s
+5 377 M
+(/** @brief STM SPI MISO GPIO Pin */) s
+5 367 M
+(#define SPI_CJ125_MISO_PIN LL_GPIO_PIN_14) s
+5 357 M
+(/** @brief STM SPI MISO GPIO Port */) s
+5 347 M
+(#define SPI_CJ125_MISO_PORT GPIOB) s
+5 337 M
+(/** @brief STM SPI MOSI GPIO Pin */) s
+5 327 M
+(#define SPI_CJ125_MOSI_PIN LL_GPIO_PIN_15) s
+5 317 M
+(/** @brief STM SPI MOSI GPIO Port */) s
+5 307 M
+(#define SPI_CJ125_MOSI_PORT GPIOB) s
+5 297 M
+(/** @brief STM SPI Select GPIO Pin */) s
+5 287 M
+(#define SPI_CJ125_SEL_PIN LL_GPIO_PIN_12) s
+5 277 M
+(/** @brief STM SPI Select GPIO Port */) s
+5 267 M
+(#define SPI_CJ125_SEL_PORT GPIOB) s
+5 257 M
+(/** @} */) s
+5 237 M
+(/**) s
+5 227 M
+( * @brief Initializes hardware required by peripherals) s
+5 217 M
+( * @retval None) s
+5 207 M
+( */) s
+5 197 M
+(void HW_Init_GPIO\(void\);) s
+5 177 M
+(#endif // __HW_MAP_H) s
+_R
+S
+%%Page: (1) 36
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/pwm.h) def
+/fdir (src) def
+/ftail (pwm.h) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:01:40 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (pwm.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file pwm.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 September 9) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic PWM functionality) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 627 M
+(#ifndef __PWM_H) s
+5 617 M
+(#define __PWM_H) s
+5 597 M
+(#include "hw_map.h") s
+5 577 M
+(/**) s
+5 567 M
+( * @brief Initialize PWM) s
+5 557 M
+( * ) s
+5 547 M
+( * Sets up the PWM peripheral. The PWM has a counter rate of 100Hz.) s
+5 537 M
+( * Because the PWM signal is used to control the sensor heater, it ) s
+5 527 M
+( * is initialized to a 0% duty cycle. The Timer for PWM is also used) s
+5 517 M
+( * to trigger ADC conversions so the Capture/Compare Channel 1 is set) s
+5 507 M
+( * accordingly.) s
+5 497 M
+( * ) s
+5 487 M
+( * @retval None) s
+5 477 M
+( */) s
+5 467 M
+(void Init_PWM\(void\);) s
+5 447 M
+(/**) s
+5 437 M
+( * @brief This function handles timer Compare/Capture 1 interrupt.) s
+5 427 M
+( * ) s
+5 417 M
+( * This handler simply turns on the LED on PA8.) s
+5 407 M
+( * ) s
+5 397 M
+( * @retval None) s
+5 387 M
+( */) s
+5 377 M
+(void TimerCC1_Callback\(void\);) s
+5 357 M
+(/**) s
+5 347 M
+( * @brief  This function handles timer Compare/Capture 2 interrupt.) s
+5 337 M
+( * ) s
+5 327 M
+( * This handler simply turns off the LED on PA8.) s
+5 317 M
+( * ) s
+5 307 M
+( * @retval None) s
+5 297 M
+( */) s
+5 287 M
+(void TimerCC2_Callback\(void\);) s
+5 267 M
+(#endif /* __PWM_H */) s
+_R
+S
+%%Page: (1) 37
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/spi.h) def
+/fdir (src) def
+/ftail (spi.h) def
+% User defined strings:
+/fmodstr (Fri Dec 07 16:43:13 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (spi.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file spi.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 July 15) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic SPI functionality) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 617 M
+(#ifndef __SPI_H) s
+5 607 M
+(#define __SPI_H) s
+5 587 M
+(#include "hw_map.h") s
+5 567 M
+(/**) s
+5 557 M
+( * @brief Initialize the SPI Interface) s
+5 547 M
+( * ) s
+5 537 M
+( * @retval None) s
+5 527 M
+( */) s
+5 517 M
+(void Init_SPI\(void\);) s
+5 497 M
+(/**) s
+5 487 M
+( * @brief Complete an SPI Transfer) s
+5 477 M
+( * ) s
+5 467 M
+( * @param send Value to send) s
+5 457 M
+( * ) s
+5 447 M
+( * @returns Received data) s
+5 437 M
+( */) s
+5 427 M
+(uint16_t SPI_Transfer\(uint16_t send\);) s
+5 407 M
+(#endif // __SPI_H) s
+_R
+S
+%%Page: (1) 38
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/stm32l4xx_it.h) def
+/fdir (src) def
+/ftail (stm32l4xx_it.h) def
+% User defined strings:
+/fmodstr (Mon Dec 17 15:13:35 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (stm32l4xx_it.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file stm32l4xx_it.h) s
+5 697 M
+( * ) s
+5 687 M
+( */) s
+5 677 M
+(#ifndef __STM32L4XX_IT_H) s
+5 667 M
+(#define __STM32L4XX_IT_H) s
+5 637 M
+(/**) s
+5 627 M
+( * @brief   This function handles NMI exception.) s
+5 617 M
+( * @retval None) s
+5 607 M
+( */) s
+5 597 M
+(void NMI_Handler\(void\);) s
+5 577 M
+(/**) s
+5 567 M
+( * @brief  This function handles Hard Fault exception.) s
+5 557 M
+( * @retval None) s
+5 547 M
+( */) s
+5 537 M
+(void HardFault_Handler\(void\);) s
+5 517 M
+(/**) s
+5 507 M
+( * @brief  This function handles Memory Manage exception.) s
+5 497 M
+( * @retval None) s
+5 487 M
+( */) s
+5 477 M
+(void MemManage_Handler\(void\);) s
+5 457 M
+(/**) s
+5 447 M
+( * @brief  This function handles Bus Fault exception.) s
+5 437 M
+( * @retval None) s
+5 427 M
+( */) s
+5 417 M
+(void BusFault_Handler\(void\);) s
+5 397 M
+(/**) s
+5 387 M
+( * @brief  This function handles Usage Fault exception.) s
+5 377 M
+( * @retval None) s
+5 367 M
+( */) s
+5 357 M
+(void UsageFault_Handler\(void\);) s
+5 337 M
+(/**) s
+5 327 M
+( * @brief  This function handles SVCall exception.) s
+5 317 M
+( * @retval None) s
+5 307 M
+( */) s
+5 297 M
+(void SVC_Handler\(void\);) s
+5 277 M
+(/**) s
+5 267 M
+( * @brief  This function handles Debug Monitor exception.) s
+5 257 M
+( * @retval None) s
+5 247 M
+( */) s
+5 237 M
+(void DebugMon_Handler\(void\);) s
+5 217 M
+(/**) s
+5 207 M
+( * @brief  This function handles PendSVC exception.) s
+5 197 M
+( * @retval None) s
+5 187 M
+( */) s
+5 177 M
+(void PendSV_Handler\(void\);) s
+5 157 M
+(/**) s
+5 147 M
+( * @brief  This function handles SysTick Handler.) s
+5 137 M
+( * @retval None) s
+5 127 M
+( */) s
+5 117 M
+(void SysTick_Handler\(void\);) s
+5 97 M
+(/**) s
+5 87 M
+(  * @brief  This function handles ADC1 interrupt request.) s
+5 77 M
+(  * @retval None) s
+5 67 M
+(  */) s
+5 57 M
+(void ADC1_2_IRQHandler\(void\);) s
+5 37 M
+(/**) s
+5 27 M
+(  * @brief  This function handles DMA1 interrupt request.) s
+5 17 M
+(  * @retval None) s
+5 7 M
+(  */) s
+_R
+S
+%%Page: (2) 39
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (src/stm32l4xx_it.h) def
+/fdir (src) def
+/ftail (stm32l4xx_it.h) def
+% User defined strings:
+/fmodstr (Mon Dec 17 15:13:35 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (stm32l4xx_it.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(void DMA1_Channel1_IRQHandler\(void\);) s
+5 697 M
+(/**) s
+5 687 M
+(* @brief  This function handles TIM2 interrupt.) s
+5 677 M
+(* @retval None) s
+5 667 M
+(*/) s
+5 657 M
+(void TIM8_CC_IRQHandler\(void\);) s
+5 637 M
+(#endif // __STM32L4XX_IT_H) s
+_R
+S
+%%Page: (1) 40
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (src/usart.h) def
+/fdir (src) def
+/ftail (usart.h) def
+% User defined strings:
+/fmodstr (Thu Dec 20 10:55:55 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (usart.h) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 1) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(/**) s
+5 707 M
+( * @file usart.h) s
+5 697 M
+( * @author Kyle Bernier) s
+5 687 M
+( * @author Daeghan Elkin) s
+5 677 M
+( * @date 2018 September 12) s
+5 667 M
+( *) s
+5 657 M
+( * @brief Provides basic USART functionality.) s
+5 647 M
+( *) s
+5 637 M
+( */) s
+5 617 M
+(#ifndef __USART_H) s
+5 607 M
+(#define __USART_H) s
+5 587 M
+(#include "hw_map.h") s
+5 567 M
+(/**) s
+5 557 M
+( * @brief Initializes the USART.) s
+5 547 M
+( * ) s
+5 537 M
+( * The USART initialization sets the UART to a TX/RX transmisson.) s
+5 527 M
+( * The UART has the typical 8 data, 1 start, and 1 stop bits with no parity.) s
+5 517 M
+( * The baudrate for the UART is set to 115200.) s
+5 507 M
+( * ) s
+5 497 M
+( * @retval None ) s
+5 487 M
+( */) s
+5 477 M
+(void Init_USART\(\);) s
+5 457 M
+(/**) s
+5 447 M
+( * @brief Transfers data over the transmit line.) s
+5 437 M
+( *  ) s
+5 427 M
+( * The UART is set up to handle both transmit and receive, however, ) s
+5 417 M
+( * nothing is done with the received data. The receive line is ) s
+5 407 M
+( * available for future changes. ) s
+5 397 M
+( * ) s
+5 387 M
+( * @param send Array of desired send data) s
+5 377 M
+( * @param size Size of data array) s
+5 367 M
+( * @retval None) s
+5 357 M
+( */) s
+5 347 M
+(void USART_Transmit\(uint8_t *send, uint8_t size\);) s
+5 327 M
+(#endif /* __USART_H */) s
+_R
+S
+%%Page: (1) 41
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (Makefile) def
+/fdir (.) def
+/ftail (Makefile) def
+% User defined strings:
+/fmodstr (Mon Dec 17 12:12:15 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (Makefile) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(# @file Makefile) s
+5 707 M
+(# @author Kyle Bernier and Daeghan Elkin) s
+5 697 M
+(# @date 2018 May 27) s
+5 687 M
+(#) s
+5 677 M
+(# @brief Makefile to compile STM32L4 project with dependencies) s
+5 647 M
+(# System configuration) s
+5 637 M
+(CC = arm-none-eabi-gcc) s
+5 627 M
+(RM = rm -f) s
+5 617 M
+(MKDIR = mkdir -p) s
+5 597 M
+(# Hardware architecture) s
+5 587 M
+(ARCH = STM32L475xx) s
+5 577 M
+(ARCH_LOW = stm32l475xx) s
+5 557 M
+(# Assembler, Compiler and Linker flags and linker script settings) s
+5 547 M
+(LINKER_FLAGS = -lm -mthumb -mhard-float -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -Wl,--gc-sections -T$\(L) s
+5 537 M
+(INK_SCRIPT\) -static -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs -specs=nosys.spec) s
+5 527 M
+(s) s
+5 517 M
+(LINK_SCRIPT = linker_script.ld) s
+5 507 M
+(ASSEMBLER_FLAGS = -c -g -O0 -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mthumb -mhard-float -specs=nano.sp) s
+5 497 M
+(ecs -D"$\(ARCH\)" -D"ARM_MATH_CM4" -D"__FPU_PRESENT" -x assembler-with-cpp $\(INCLUDE_FLAGS\)) s
+5 487 M
+(COMPILER_FLAGS = -c -g -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -O0 -Wall -ffunction-sections -fdata-sec) s
+5 477 M
+(tions -mthumb -mhard-float -specs=nano.specs -D"$\(ARCH\)" -D"STM32L4" -D"USBD_SOF_DISABLED" -D"ARM) s
+5 467 M
+(_MATH_CM4" -D"__FPU_PRESENT" $\(INCLUDE_FLAGS\)) s
+5 447 M
+(# Define directories) s
+5 437 M
+(BIN_DIR = bin) s
+5 427 M
+(SRC_DIR = src) s
+5 417 M
+(LIB_DIR = lib) s
+5 397 M
+(# CMSIS directories) s
+5 387 M
+(CMSIS_DIR = $\(LIB_DIR\)/cmsis) s
+5 377 M
+(CMSIS_DEV_DIR = $\(CMSIS_DIR\)/device) s
+5 367 M
+(CMSIS_INC_DIR = $\(CMSIS_DIR\)/inc) s
+5 357 M
+(CMSIS_SRC_DIR = $\(CMSIS_DIR\)/src) s
+5 337 M
+(# FreeRTOS directories) s
+5 327 M
+(#FREERTOS_DIR = $\(LIB_DIR\)/freertos) s
+5 317 M
+(#FREERTOS_INC_DIR = $\(FREERTOS_DIR\)/include) s
+5 307 M
+(#FREERTOS_PRT_DIR = $\(FREERTOS_DIR\)/portable) s
+5 287 M
+(# HAL directories) s
+5 277 M
+(HAL_DIR = $\(LIB_DIR\)/hal) s
+5 267 M
+(HAL_INC_DIR = $\(HAL_DIR\)/inc) s
+5 257 M
+(HAL_SRC_DIR = $\(HAL_DIR\)/src) s
+5 237 M
+(# libUSB_stm32 directories) s
+5 227 M
+(LIBUSB_DIR = $\(LIB_DIR\)/libusb_stm32) s
+5 217 M
+(LIBUSB_INC_DIR = $\(LIBUSB_DIR\)/inc) s
+5 207 M
+(LIBUSB_SRC_DIR = $\(LIBUSB_DIR\)/src) s
+5 187 M
+(# Define include flags) s
+5 177 M
+(INCLUDE_FLAGS = -I$\(SRC_DIR\) -I$\(CMSIS_DEV_DIR\) -I$\(CMSIS_INC_DIR\) -I$\(CMSIS_SRC_DIR\) -I$\(HAL_DIR) s
+5 167 M
+(\) -I$\(HAL_INC_DIR\) -I$\(HAL_SRC_DIR\) -I$\(LIBUSB_DIR\) -I$\(LIBUSB_INC_DIR\) -I$\(LIBUSB_SRC_DIR\)) s
+5 147 M
+(# Define sources) s
+5 137 M
+(SRCS := $\(wildcard $\(HAL_SRC_DIR\)/*.c\) \\) s
+5 127 M
+(        $\(wildcard $\(HAL_SRC_LEG_DIR\)/*.c\) \\) s
+5 117 M
+(        $\(wildcard $\(SRC_DIR\)/*.c\) \\) s
+5 107 M
+(        $\(wildcard $\(CMSIS_SRC_DIR\)/*.c\) \\) s
+5 97 M
+(        $\(wildcard $\(LIBUSB_SRC_DIR\)/*.c\)) s
+5 87 M
+(SRCSASM := $\(CMSIS_SRC_DIR\)/startup_$\(ARCH_LOW\).s) s
+5 67 M
+(HDRS := $\(wildcard $\(HAL_INS_DIR\)/*.h\) \\) s
+5 57 M
+(        $\(wildcard $\(SRC_DIR\)/*.h\) \\) s
+5 47 M
+(        $\(wildcard $\(CMSIS_INC_DIR\)/*.h\) \\) s
+5 37 M
+(        $\(wildcard $\(CMSIS_DEV_DIR\)/*.h\) \\) s
+5 27 M
+(        $\(wildcard $\(LIBUSB_INC_DIR\)/*.h\)) s
+5 7 M
+(# Define objects) s
+_R
+S
+%%Page: (2) 42
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (Makefile) def
+/fdir (.) def
+/ftail (Makefile) def
+% User defined strings:
+/fmodstr (Mon Dec 17 12:12:15 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (Makefile) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(OBJS := $\(SRCSASM:%.s=$\(BIN_DIR\)/%.o\) $\(SRCS:%.c=$\(BIN_DIR\)/%.o\)) s
+5 697 M
+(# Define the target file) s
+5 687 M
+(TARGET = $\(BIN_DIR\)/main) s
+5 667 M
+(all: $\(TARGET\)) s
+5 647 M
+(# Link the objects into the target) s
+5 637 M
+($\(TARGET\): $\(OBJS\) $\(HDRS\)) s
+5 627 M
+(        $\(CC\) -o $@ $\(OBJS\) $\(LINKER_FLAGS\)) s
+5 607 M
+(# Compile c files) s
+5 597 M
+($\(BIN_DIR\)/%.o: %.c) s
+5 587 M
+(        $\(MKDIR\) -p $\(dir $@\) 2> /dev/null) s
+5 577 M
+(        $\(CC\) $\(COMPILER_FLAGS\) $< -o $@) s
+5 557 M
+(# Compile assembly files) s
+5 547 M
+($\(BIN_DIR\)/%.o: %.s) s
+5 537 M
+(        $\(MKDIR\) -p $\(dir $@\) 2> /dev/null) s
+5 527 M
+(        $\(CC\) $\(ASSEMBLER_FLAGS\) $< -o $@) s
+5 507 M
+(# Remove only src directory object files) s
+5 497 M
+(clean:) s
+5 487 M
+(        $\(RM\) $\(wildcard $\(BIN_DIR\)/$\(SRC_DIR\)/*.o\)) s
+5 467 M
+(# Remove all object files and the target) s
+5 457 M
+(cleaner:) s
+5 447 M
+(        $\(RM\) $\(OBJS\) $\(TARGET\)) s
+_R
+S
+%%Page: (1) 43
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 1 def
+/fname (readdata.py) def
+/fdir (.) def
+/ftail (readdata.py) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:31:20 2018) def
+/pagenumstr (1) def
+/user_header_p true def
+/user_header_left_str (readdata.py) def
+/user_header_center_str () def
+/user_header_right_str (Page 1 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(import serial) s
+5 707 M
+(import struct) s
+5 697 M
+(import statistics as stat) s
+5 687 M
+(import matplotlib.pyplot as plt) s
+5 677 M
+(import matplotlib.animation as anim) s
+5 667 M
+(from collections import deque) s
+5 647 M
+(# Connect to the USB serial device) s
+5 637 M
+(ser = serial.Serial\('/dev/ttyUSB0'\)) s
+5 627 M
+(ser.baudrate = 115200) s
+5 617 M
+(ser.flushInput\(\)) s
+5 597 M
+(# Create the lambda and temp arrays for graphing) s
+5 587 M
+(lamb = deque\([0] * 100\);) s
+5 577 M
+(temp = deque\([0] * 100\);) s
+5 567 M
+(pwmv = deque\([0] * 100\);) s
+5 557 M
+(x = range\(100\);) s
+5 537 M
+(# Create the plots) s
+5 527 M
+(fig, ax1 = plt.subplots\(\)) s
+5 507 M
+(# Plot Lambda) s
+5 497 M
+(ax1.set_xlabel\('time \(s\)'\)) s
+5 487 M
+(ax1.set_ylabel\('Lambda \(mLam\)', color='tab:blue'\)) s
+5 477 M
+(ax1.plot\(x, lamb, color='tab:blue'\)) s
+5 467 M
+(ax1.tick_params\(axis='y', labelcolor='tab:blue'\)) s
+5 457 M
+(ax1.set_ylim\(0, 10200\)) s
+5 437 M
+(# Create a second axes) s
+5 427 M
+(ax2 = ax1.twinx\(\)) s
+5 417 M
+(# Plot Temperature) s
+5 407 M
+(ax2.set_ylabel\('Temperature \(C\)', color='tab:red'\)) s
+5 397 M
+(ax2.plot\(x, temp, color='tab:red'\)) s
+5 387 M
+(ax2.tick_params\(axis='y', labelcolor='tab:red'\)) s
+5 377 M
+(ax2.set_ylim\(0, 1200\)) s
+5 357 M
+(# Create a third axes) s
+5 347 M
+(ax3 = ax1.twinx\(\)) s
+5 337 M
+(# Plot Temperature) s
+5 327 M
+(ax3.set_ylabel\('PWM Vrms\(V\)', color='tab:green'\)) s
+5 317 M
+(ax3.plot\(x, pwmv, color='tab:green'\)) s
+5 307 M
+(ax3.tick_params\(axis='y', labelcolor='tab:green'\)) s
+5 297 M
+(ax3.set_ylim\(0, 12\)) s
+5 287 M
+(ax3.spines["right"].set_position\(\("axes", 1.2\)\)) s
+5 277 M
+(ax3.spines["right"].set_visible\(True\)) s
+5 257 M
+(fig.tight_layout\(\)) s
+5 247 M
+(fig.show\(\)) s
+5 227 M
+(# Flush the serial input of buffered data) s
+5 217 M
+(ser.flushInput\(\)) s
+5 207 M
+(# Graph data forever) s
+5 197 M
+(while True:) s
+5 187 M
+(    # Check for preamble) s
+5 177 M
+(    while True:) s
+5 167 M
+(        rdbytes = ser.read\(1\)) s
+5 157 M
+(        if rdbytes == b'\\xff':) s
+5 147 M
+(            rdbytes = ser.read\(1\)) s
+5 137 M
+(            if rdbytes == b'\\xff':) s
+5 127 M
+(                break) s
+5 117 M
+(    # Read data) s
+5 107 M
+(    rdbytes = ser.read\(6\)) s
+5 97 M
+(    # Convert bytes to integers) s
+5 87 M
+(    values = struct.unpack\('<HHH', rdbytes\)) s
+5 77 M
+(    # Insert the lambda value into the array) s
+5 67 M
+(    lamb.popleft\(\)) s
+5 57 M
+(    lamb.append\(values[0]/1000\)) s
+5 47 M
+(    # Insert the temperature value into the array) s
+5 37 M
+(    temp.popleft\(\)) s
+5 27 M
+(    temp.append\(values[1]\)) s
+5 17 M
+(    # Insert the PWM Vrms value into the array) s
+5 7 M
+(    pwmv.popleft\(\)) s
+_R
+S
+%%Page: (2) 44
+%%BeginPageSetup
+_S
+38 24 translate
+/pagenum 2 def
+/fname (readdata.py) def
+/fdir (.) def
+/ftail (readdata.py) def
+% User defined strings:
+/fmodstr (Thu Dec 20 11:31:20 2018) def
+/pagenumstr (2) def
+/user_header_p true def
+/user_header_left_str (readdata.py) def
+/user_header_center_str () def
+/user_header_right_str (Page 2 of 2) def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 717 M
+(    pwmv.append\(values[2]/1000\)) s
+5 707 M
+(    # Print the lambda value the temperature and the PWM Vrms) s
+5 697 M
+(    print\(values\)) s
+5 687 M
+(    # Clear the plots and replot) s
+5 677 M
+(    ax1.cla\(\)) s
+5 667 M
+(    ax2.cla\(\)) s
+5 657 M
+(    ax3.cla\(\)) s
+5 647 M
+(    ax1.set_ylabel\('Lambda Value', color='tab:blue'\)) s
+5 637 M
+(    ax2.set_ylabel\('Temperature \(C\)', color='tab:red'\)) s
+5 627 M
+(    ax3.set_ylabel\('PWM Vrms \(V\)', color='tab:green'\)) s
+5 617 M
+(    ax1.plot\(x, lamb, color='tab:blue'\)) s
+5 607 M
+(    ax2.plot\(x, temp, color='tab:red'\)) s
+5 597 M
+(    ax3.plot\(x, pwmv, color='tab:green'\)) s
+5 587 M
+(    # Reset the axes) s
+5 577 M
+(    ax1.set_ylim\(0, max\(lamb\)+0.5\)) s
+5 567 M
+(    ax2.set_ylim\(0, max\(temp\)+200\)) s
+5 557 M
+(    ax3.set_ylim\(0, max\(pwmv\)+1\)) s
+5 547 M
+(    ax3.spines["right"].set_position\(\("axes", 1.2\)\)) s
+5 537 M
+(    ax3.spines["right"].set_visible\(True\)) s
+5 527 M
+(    # Print imformation about each plot) s
+5 517 M
+(    ax1.text\(0.01, 0.04, 'Current Lambda: ' + str\(lamb[-1]\), verticalalignment='bottom', horizont) s
+5 507 M
+(alalignment='left', transform=ax2.transAxes, color='blue', fontsize=12\)) s
+5 497 M
+(    ax1.text\(0.01, 0.01, 'Mean Lambda: ' + str\(stat.mean\(lamb\)\), verticalalignment='bottom', hori) s
+5 487 M
+(zontalalignment='left', transform=ax2.transAxes, color='blue', fontsize=12\)) s
+5 477 M
+(    ax2.text\(0.01, 0.13, 'Current Temp: ' + str\(temp[-1]\) + 'C', verticalalignment='bottom', hori) s
+5 467 M
+(zontalalignment='left', transform=ax2.transAxes, color='red', fontsize=12\)) s
+5 457 M
+(    ax2.text\(0.01, 0.10, 'Max Temp: ' + str\(max\(temp\)\) + 'C', verticalalignment='bottom', horizon) s
+5 447 M
+(talalignment='left', transform=ax2.transAxes, color='red', fontsize=12\)) s
+5 437 M
+(    ax2.text\(0.01, 0.07, 'Min Temp: ' + str\(min\(temp\)\) + 'C', verticalalignment='bottom', horizon) s
+5 427 M
+(talalignment='left', transform=ax2.transAxes, color='red', fontsize=12\)) s
+5 417 M
+(    ax3.text\(0.01, 0.16, 'Current PWM Vrms: ' + str\(pwmv[-1]\) + 'V', verticalalignment='bottom', ) s
+5 407 M
+(horizontalalignment='left', transform=ax2.transAxes, color='green', fontsize=12\)) s
+5 397 M
+(    # Draw the updated plot) s
+5 387 M
+(    fig.canvas.draw\(\)) s
+5 377 M
+(    fig.canvas.flush_events\(\)) s
+_R
+S
+%%Trailer
+%%Pages: 44
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF
