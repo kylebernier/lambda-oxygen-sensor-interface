@@ -106,8 +106,8 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
 
     // Enable ADC interrupts
     // Set the ADC IRQ to a greater priority than the DMA IRQ
-    NVIC_SetPriority(ADC_BAT_IRQ, 0);
-    NVIC_EnableIRQ(ADC_BAT_IRQ);
+    NVIC_SetPriority(ADCx_IRQ, 0);
+    NVIC_EnableIRQ(ADCx_IRQ);
 
     // Enable the ADC clock
     ADCx_CLK_ENABLE();
@@ -125,12 +125,13 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
         i--;
     }
 
-    // Set the ADC to have a software trigger source
+    // Set the ADC to have a external timer trigger source
     LL_ADC_REG_SetTriggerSource(ADCx_BASE, LL_ADC_REG_TRIG_EXT_TIM8_TRGO);
 
+    // Set the ADC to trigger on the rising edge
     LL_ADC_REG_SetTriggerEdge(ADCx_BASE, LL_ADC_REG_TRIG_EXT_RISING);
 
-    // Set the ADC to convert continuously
+    // Set the ADC to perform a single conversion 
     LL_ADC_REG_SetContinuousMode(ADCx_BASE, LL_ADC_REG_CONV_SINGLE);
 
     // Set the ADC conversion data transfer
@@ -146,7 +147,7 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     for (i = 0, j = 0; i < ADC_NUM_CHANNELS; i++) {
         if (channels & (1 << i)) {
             LL_ADC_REG_SetSequencerRanks(ADCx_BASE, ADC_RANKS[j], ADC_CHANNELS[i]);
-            LL_ADC_SetChannelSamplingTime(ADCx_BASE, ADC_CHANNELS[i], ADC_BAT_SAMPLETIME);
+            LL_ADC_SetChannelSamplingTime(ADCx_BASE, ADC_CHANNELS[i], ADCx_SAMPLERATE);
             j++;
         }
         if (j >= numValues || j >= 16) break;
@@ -188,7 +189,7 @@ void Init_ADC(uint32_t channels, uint16_t * values, int numValues)
     // Wait for the ADC to be ready
     while (LL_ADC_IsActiveFlag_ADRDY(ADCx_BASE) == 0);
 
-    // Start the continous ADC conversion
+    // Start the ADC conversion
     LL_ADC_REG_StartConversion(ADCx_BASE);
 }
 
@@ -196,14 +197,14 @@ static void ADC_Init_DMA(uint16_t *values, int numValues)
 {
     // Enable DMA interrupts
     // Set the DMA IRQ to a lower priority than the ADC IRQ
-    NVIC_SetPriority(DMA_IRQ, 1);
-    NVIC_EnableIRQ(DMA_IRQ);
+    NVIC_SetPriority(DMAx_IRQ, 1);
+    NVIC_EnableIRQ(DMAx_IRQ);
 
     // Enable the DMA clock
     DMAx_CLK_ENABLE();
 
     // Configure the DMA transfer
-    LL_DMA_ConfigTransfer(DMA_BASE, DMA_CHANNEL,
+    LL_DMA_ConfigTransfer(DMAx_BASE, DMAx_CHANNEL,
         LL_DMA_DIRECTION_PERIPH_TO_MEMORY |
         LL_DMA_MODE_CIRCULAR |
         LL_DMA_PERIPH_NOINCREMENT |
@@ -213,24 +214,24 @@ static void ADC_Init_DMA(uint16_t *values, int numValues)
         LL_DMA_PRIORITY_HIGH );
 
     // Select ADCx_BASE as the DMA transfer request
-    LL_DMA_SetPeriphRequest(DMA_BASE, DMA_CHANNEL, LL_DMA_REQUEST_0);
+    LL_DMA_SetPeriphRequest(DMAx_BASE, DMAx_CHANNEL, LL_DMA_REQUEST_0);
 
     // Set the DMA transfer address source and destination
-    LL_DMA_ConfigAddresses(DMA_BASE, DMA_CHANNEL,
+    LL_DMA_ConfigAddresses(DMAx_BASE, DMAx_CHANNEL,
         LL_ADC_DMA_GetRegAddr(ADCx_BASE, LL_ADC_DMA_REG_REGULAR_DATA),
         (uint32_t)values, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
     // Set the DMA transfer size
-    LL_DMA_SetDataLength(DMA_BASE, DMA_CHANNEL, numValues);
+    LL_DMA_SetDataLength(DMAx_BASE, DMAx_CHANNEL, numValues);
 
     // Enable DMA transfer complete interrupts
-    LL_DMA_EnableIT_TC(DMA_BASE, DMA_CHANNEL);
+    LL_DMA_EnableIT_TC(DMAx_BASE, DMAx_CHANNEL);
 
     // Enable DMA transfer error interrupts
-    LL_DMA_EnableIT_TE(DMA_BASE, DMA_CHANNEL);
+    LL_DMA_EnableIT_TE(DMAx_BASE, DMAx_CHANNEL);
 
     // Enable the DMA channel
-    LL_DMA_EnableChannel(DMA_BASE, DMA_CHANNEL);
+    LL_DMA_EnableChannel(DMAx_BASE, DMAx_CHANNEL);
 }
 
 /* DMA transfer complete callback */

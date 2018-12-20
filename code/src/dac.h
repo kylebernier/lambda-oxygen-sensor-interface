@@ -17,7 +17,6 @@
 /**
  * @brief Initialize the DAC interface 
  * @retval None
- * @details
  */
 int Init_DAC(void);
 
@@ -25,7 +24,6 @@ int Init_DAC(void);
  * @brief Adjust the DAC output value 
  * @param value Value to set the DAC output to
  * @retval None
- * @details
  */
 void DAC_SetValue(uint32_t value);
 

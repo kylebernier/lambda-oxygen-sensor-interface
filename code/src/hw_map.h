@@ -35,6 +35,20 @@
  */
 #define ADCx_BASE ADC1
 
+/** 
+ * @def ADCx_SAMPLERATE
+ * @ingroup ADC
+ * @brief ADC sample rate
+ */
+#define ADCx_SAMPLERATE LL_ADC_SAMPLINGTIME_640CYCLES_5
+
+/** 
+ * @def ADCx_IRQ
+ * @ingroup ADC
+ * @brief STM ADC interrupt 
+ */
+#define ADCx_IRQ ADC1_2_IRQn
+
 /**
  * @defgroup ADC_BAT ADC Battery Voltage Monitor
  * @ingroup ADC
@@ -44,18 +58,12 @@
  * 
  * @{
  */
-/** @brief STM ADC */
-#define ADC_BAT_BASE ADC1
 /** @brief STM ADC GPIO Pin*/
 #define ADC_BAT_GPIO_PIN LL_GPIO_PIN_3
 /** @brief STM ADC GPIO Port*/
 #define ADC_BAT_GPIO_PORT GPIOA
 /** @brief STM ADC Channel*/
 #define ADC_BAT_CHANNEL LL_ADC_CHANNEL_8
-/** @brief ADC sample rate*/
-#define ADC_BAT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
-/** @brief STM ADC interrupt */
-#define ADC_BAT_IRQ ADC1_2_IRQn
 /** @} */
 
 /**
@@ -67,16 +75,12 @@
  * 
  * @{
  */ 
-/** @brief STM ADC*/
-#define ADC_LMD_BASE ADC1
 /** @brief STM ADC GPIO Pin*/
 #define ADC_LMD_GPIO_PIN LL_GPIO_PIN_6
 /** @brief STM ADC GPIO Port*/
 #define ADC_LMD_GPIO_PORT GPIOA
 /** @brief STM ADC Channel*/
 #define ADC_LMD_CHANNEL LL_ADC_CHANNEL_11
-/** @brief STM ADC sample rate*/
-#define ADC_LMD_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
@@ -89,16 +93,12 @@
  * 
  * @{
  */
-/** @brief STM ADC */
-#define ADC_RES_BASE ADC1
 /** @brief STM ADC GPIO Pin */
 #define ADC_RES_GPIO_PIN LL_GPIO_PIN_7
 /** @brief STM ADC GPIO Port */
 #define ADC_RES_GPIO_PORT GPIOA
 /** @brief STM ADC Channel */
 #define ADC_RES_CHANNEL LL_ADC_CHANNEL_12
-/** @brief STM ADC sample rate */
-#define ADC_RES_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
@@ -108,16 +108,12 @@
  * 
  * @{
  */
-/** @brief STM ADC */
-#define ADC_CRNT_BASE ADC1
 /** @brief STM ADC GPIO Pin */
 #define ADC_CRNT_GPIO_PIN LL_GPIO_PIN_1
 /** @brief STM ADC GPIO Port */
 #define ADC_CRNT_GPIO_PORT GPIOB
 /** @brief STM ADC Channel */
 #define ADC_CRNT_CHANNEL LL_ADC_CHANNEL_16
-/** @brief STM ADC sample rate */
-#define ADC_CRNT_SAMPLETIME LL_ADC_SAMPLINGTIME_640CYCLES_5
 /** @} */
 
 /**
@@ -137,11 +133,11 @@
  * @{
  */
 /** @brief STM DMA */
-#define DMA_BASE DMA1
+#define DMAx_BASE DMA1
 /** @brief STM DMA Channel */
-#define DMA_CHANNEL LL_DMA_CHANNEL_1
+#define DMAx_CHANNEL LL_DMA_CHANNEL_1
 /** @brief DMA Interrupt */
-#define DMA_IRQ DMA1_Channel1_IRQn
+#define DMAx_IRQ DMA1_Channel1_IRQn
 /** @} */
 
 /**
@@ -156,13 +152,18 @@
  * @defgroup DAC DAC Definitions
  */
 
+/** 
+ * @def DACx_BASE
+ * @ingroup DAC
+ * @brief STM DAC 
+ */
+#define DACx_BASE DAC1
+
 /**
  * @defgroup DAC_LMD DAC Lambda Output 
  * @ingroup DAC
  * @{
  */
-/** @brief STM DAC */
-#define DAC_LMD_BASE DAC1
 /** @brief STM DAC GPIO Pin */
 #define DAC_LMD_GPIO_PIN LL_GPIO_PIN_5
 /** @brief STM DAC GPIO Port */

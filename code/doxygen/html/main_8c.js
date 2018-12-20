@@ -5,6 +5,7 @@ var main_8c =
     [ "Ki", "main_8c.html#a6ccd383fe0d82309eac500d9bd3b825b", null ],
     [ "Kp", "main_8c.html#a75bcee4b28157d51fa12c57a1a5d321a", null ],
     [ "PREAMBLE", "main_8c.html#a8aac8c5098aaf915463fb31715efa09f", null ],
+    [ "Vbat3V3", "main_8c.html#ade67ff03555d7261438738499220f7e5", null ],
     [ "Generate_Lookup_Tables", "main_8c.html#a588dfda8db1db2ac70ffb689ad1f8fda", null ],
     [ "Initialize_Heater", "main_8c.html#acc35a55c29ce8fb40d17b9fb77cc563f", null ],
     [ "main", "main_8c.html#a840291bc02cba5474a4cb46a9b9566fe", null ],

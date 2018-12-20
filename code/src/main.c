@@ -4,7 +4,13 @@
  * @author Daeghan Elkin
  * @date 2018 May 27
  *
- * @brief Runs overall control for the CJ125 and LSU4.9 sensor
+ * @brief Runs overall control for the CJ125 and LSU4.9 sensor.
+ * 
+ * This program uses the values provided by the CJ125 to maintain the temperature of
+ * the LSU4.9 sensor. It utilizes the calibration values seen by the CJ125 to generate a
+ * lookup table for both Lambda and Temperature values. This removes the need for 
+ * hard-coding a lookup table, at the expense of speed. This, however, results in more 
+ * accurate readings and control.
  */
 
 
@@ -28,37 +34,50 @@ void Initialize_Heater(void);
 void SystemClock_Config(void);
 void Generate_Lookup_Tables(void);
 
-/** @brief ADC values array 
- * Battery voltage, lambda value, sensor resistance, current sense 
+/** 
+ * @brief ADC values array. 
+ * 
+ * Array index pertains to: @n
+ * 0: Internal 3V3 reference @n
+ * 1: Battery voltage @n
+ * 2: Lambda value from CJ125 @n
+ * 3: Sensor resistance from CJ125 @n
+ * 4: Current sense 
  */
 uint16_t adc_vals[5] = {0, 0, 0, 0, 0};
 
 /**
  * @brief Lookup table for lambda values.
  * 
- * Values are calculated and inserted into array based on all possible ADC values
+ * Values are calculated and inserted into array based on all possible ADC values.
  */
 uint16_t lambda_Lookup[4096];
 
 /**
  * @brief Lookup table for temperature values.
  * 
- * Values are calculated and inserted into array based on all possible ADC values
+ * Values are calculated and inserted into array based on all possible ADC values.
  */
 uint16_t temp_Lookup[4096];
 
 /**
  * @brief The optimal ADC resistance value the CJ125 outputs during calibration.
+ * 
+ * This value is used to generate the temperature lookup table and as the control for the PID.
  */
 uint16_t optimal_resistance;
 
 /**
  * @brief The optimal ADC resistance value the CJ125 outputs during calibration.
+ * 
+ * This value is used to generate the lambda lookup table.
  */
 uint16_t optimal_lambda;
 
 /**
  * @brief The current voltage the PWM signal is using.
+ * 
+ * Used as a reference during the PID control of the PWM signal
  */
 uint32_t currentV;
 
@@ -125,7 +144,6 @@ uint32_t VDDA;
  */
 int main(void)
 {
-    uint8_t *data_out;
     uint8_t i = 0;
     uint16_t response = 0;
     uint16_t lambda, lambda_adc, temp, temp_adc;
@@ -155,14 +173,14 @@ int main(void)
 
     // Determine actual value of the 3.3V the STM is using.
     LL_mDelay(500);
+    __disable_irq();
     VDDA = VREFINT_CAL_VREF*(*VREFINT_CAL_ADDR)/adc_vals[0];
+    __enable_irq();
 
-    /*
-    // Enable cycle counter; Use for timing
-    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-    DWT->CYCCNT = 0;
-    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-    */
+    // Enable cycle counter; Used for timing
+    //CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    //DWT->CYCCNT = 0;
+    //DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
     
     // Loop until CJ125 is ready. When CJ125 responds OK move on.
     while (response != CJ125_DIAG_REG_OK) {
@@ -172,13 +190,22 @@ int main(void)
 
     // Enter CJ125 calibration mode
     response = SPI_Transfer(CJ125_CALIBRATE_MODE);
+    // Delay to allow CJ125 to properly calibrate
     LL_mDelay(2000);
 
     // Store optimal resistance the CJ125 sees for the sensor
-    optimal_resistance = adc_vals[3];
+    do {
+        __disable_irq();
+        optimal_resistance = adc_vals[3];
+        __enable_irq();
+    } while (optimal_resistance > 830 || optimal_resistance < 780);
 
-    // Store optimal lambda the CJ125 sees for the sensor; The result of this is close to 1
-    optimal_lambda = adc_vals[2];
+    // Store optimal lambda the CJ125 sees for the sensor
+    do {
+        __disable_irq();
+        optimal_lambda = adc_vals[2];
+        __enable_irq();
+    } while (optimal_lambda > 1300 || optimal_lambda < 1100);
 
     // Set CJ125 into normal operation mode with an amplification of 8
     response = SPI_Transfer(CJ125_V8_MODE);
@@ -198,8 +225,10 @@ int main(void)
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
         // Read lambda and temp values from CJ125
+        __disable_irq();
         lambda_adc = adc_vals[2];
         temp_adc = adc_vals[3];
+        __enable_irq();
 
         // Find lambda and temp values in lookup table
         lambda = lambda_Lookup[lambda_adc];
@@ -215,31 +244,10 @@ int main(void)
             DAC_SetValue(0);
         }
 
-        // Transmit over UART every 100ms
-        if (i == 20) {
-            // Turn on LED before UART Transmit
-            SET_BIT(GPIOC->ODR, GPIO_ODR_OD9_Msk);
-            
-            // Transmit preamble before data
-            USART_Transmit((uint8_t *)PREAMBLE, 2);
-
-            // Transmit lambda value over UART
-            data_out = (uint8_t *)(&lambda);
-            USART_Transmit(data_out, 2);
-            
-            // Transmit temperature value over UART
-            data_out = (uint8_t *)(&temp);
-            USART_Transmit(data_out, 2);
-
-            // Turn off LED after UART transmission
-            CLEAR_BIT(GPIOC->ODR, GPIO_ODR_OD9_Msk);
-
-            i = 0;
-        }
-
-
         // Determine battery voltage
-        Vbat = (adc_vals[1] * 3286 / 4096) * 955 / 187;
+        __disable_irq();
+        Vbat = (adc_vals[1] * Vbat3V3 / 4096) * 955 / 187;
+        __enable_irq();
 
         // Determine error between desired value and current value
         error = optimal_resistance - temp_adc;
@@ -247,13 +255,13 @@ int main(void)
         // Set integral term
         integral = integral + error;
 
-        // Set derivative term; Found not required for this setup
+        // Set derivative term
         derivative = error - last_error;
         
         // Calculate desired change to result in 0 error
         change = (Kp * error) + (Ki * integral) + (Kd * derivative);
 
-        // Set current error to last error for next loop through; Found not required for this setup
+        // Set current error to last error for next loop through
         last_error = error;
 
         // Set voltage based on desired change
@@ -263,6 +271,29 @@ int main(void)
             desiredV = 0;
         } else {
             desiredV = currentV - change;
+        }
+
+        // Transmit over UART every 200ms
+        if (i == 20) {
+            // Turn on LED before UART Transmit
+            SET_BIT(GPIOC->ODR, GPIO_ODR_OD9_Msk);
+            
+            // Transmit preamble before data
+            USART_Transmit((uint8_t *)PREAMBLE, 2);
+
+            // Transmit lambda value over UART
+            USART_Transmit((uint8_t *)(&lambda), 2);
+            
+            // Transmit temperature value over UART
+            USART_Transmit((uint8_t *)(&temp), 2);
+
+            // Transmit Current PWM voltage
+            USART_Transmit((uint8_t *)(&desiredV), 2);
+
+            // Turn off LED after UART transmission
+            CLEAR_BIT(GPIOC->ODR, GPIO_ODR_OD9_Msk);
+
+            i = 0;
         }
 
         // Calculate PWM duty cycle
@@ -343,7 +374,9 @@ void Initialize_Heater(void) {
     // Uses the current sense value to determine when condensation phase is over
     do {
         // Calculate the battery voltage from the ADC
-        Vbat = (adc_vals[1] * 3286 / 4096) * 955 / 187;
+        __disable_irq();
+        Vbat = (adc_vals[1] * Vbat3V3 / 4096) * 955 / 187;
+        __enable_irq();
 
         // Set initial "warm-up" voltage to 2V
         currentV = 2000;
@@ -356,10 +389,14 @@ void Initialize_Heater(void) {
 
         // Sample current sense ADC to determine the maximum value
         for (i= 0; i < 50; i++) {
+            __disable_irq();
             CurADC = adc_vals[4];
+            __enable_irq();
             if (CurADC > maxCurADC) {
                 maxCurADC = CurADC;
+                __disable_irq();
                 VbatADC = adc_vals[1];
+                __enable_irq();
             }
             // Delay 10ms
             LL_mDelay(10);
@@ -369,7 +406,7 @@ void Initialize_Heater(void) {
         maxCur = (maxCurADC * VDDA / 4096);
 
         // Determine the actual voltage at highest ADC value
-        Vbat = (VbatADC * 3286 / 4096) * 955 / 187;
+        Vbat = (VbatADC * Vbat3V3 / 4096) * 955 / 187;
 
         // Determine sensor resisitance
         res = Vbat * 7 * 50 / maxCur - 23;
@@ -385,10 +422,36 @@ void Initialize_Heater(void) {
     Generate_Lookup_Tables();
 
     //currentV = 8500;
-    // Set initial ramp up voltage to 8.5Vrms and ramp up at 0.4V/s
+    // Ramp up voltage at a rate of 
+    i = 0;
     do {
         // Get the current battery voltage
-        Vbat = (adc_vals[1] * 3286 / 4096) * 955 / 187;
+        __disable_irq();
+        Vbat = (adc_vals[1] * Vbat3V3 / 4096) * 955 / 187;
+        __enable_irq();
+
+        // Transmit over UART every 200ms
+        if (i == 40) {
+            // Turn on LED before UART Transmit
+            SET_BIT(GPIOC->ODR, GPIO_ODR_OD9_Msk);
+            
+            // Transmit preamble before data
+            USART_Transmit((uint8_t *)PREAMBLE, 2);
+
+            // Transmit lambda value over UART
+            USART_Transmit((uint8_t *)(&lambda_Lookup[optimal_lambda]), 2);
+            
+            // Transmit temperature value over UART
+            USART_Transmit((uint8_t *)(&temp_Lookup[optimal_resistance]), 2);
+
+            // Transmit Current PWM voltage
+            USART_Transmit((uint8_t *)(&currentV), 2);
+
+            // Turn off LED after UART transmission
+            CLEAR_BIT(GPIOC->ODR, GPIO_ODR_OD9_Msk);
+
+            i = 0;
+        }
 
         // Calculate duty cycle, equation from LSU 4.9 datasheet
         pwm_duty_cycle = pow((float)currentV / Vbat, 2);
@@ -396,12 +459,18 @@ void Initialize_Heater(void) {
         // Set PWM signal to equivalent of ramp up voltage RMS
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
+        // Read resistance value of sensor; Won't be valid till 780C is hit
+        __disable_irq();
         UR = adc_vals[3];
+        __enable_irq();
 
         // Ramp up voltage by 200mV/s
         currentV += 1;
-        // Delay 25ms
+
+        // Delay 5ms
         LL_mDelay(5);
+
+        i++;
     } while (currentV < 11000 && UR > optimal_resistance);
 }
 
@@ -415,9 +484,9 @@ void Initialize_Heater(void) {
  */
 void Generate_Lookup_Tables(void) {
     uint16_t i;
-    uint32_t uacal, ua, urcal, ur;
-    int32_t lambda, temp;
+    int32_t uacal, ua, urcal, ur, lambda, temp;
     float ip, o2, ri;
+
     // Determine resistance calibration value for calculations further on
     ur = optimal_resistance * VDDA * (365 + 187) / 365 / 4096;
     urcal = -((15.5 * 0.000158 * 301) * 1000 - ur) * 17;
@@ -427,10 +496,12 @@ void Generate_Lookup_Tables(void) {
 
     for (i = 0; i < 4096; i++) {
         // Calculate the Lambda value
-        ua = i * VDDA * (365 + 187) / 365 / 4096;      // mV
-        ip = (ua - uacal) * 1000 / (61.9 * 8);         // mA
+        ua = i * VDDA * (365 + 187) / 365 / 4096;
+        ip = (ua - uacal) * 1000 / (61.9 * 8); // / 1000;
         o2 = ip * 0.2095 / 2540;
         lambda = (o2 / 3 + 1) / (1 - 4.77 * o2) * 1000;
+        //lambda = (492.3 * exp(-pow((ip - 3.869) / 0.772, 2)) + 2.183 * exp(-pow((ip - 2.288) / 0.714, 2)) + 1.09 * exp(-pow((ip - 2.8) / 6.656, 2)) + 1.011 * exp(-pow((ip - 1.697) / 1.112, 2))) * 1000;
+
         if (lambda >= 10119 || lambda <= 0) {
             lambda = 10119;
         }
@@ -441,6 +512,7 @@ void Generate_Lookup_Tables(void) {
         ur = i * VDDA * (365 + 187) / 365 / 4096;
         ri = (ur - urcal / 17) / (15.5 * 0.158);
         temp = 4445 * pow(ri, -0.4449) + 428.6;
+
         if (temp >= 7049|| temp <= 0) {
             temp = 7049;
         }

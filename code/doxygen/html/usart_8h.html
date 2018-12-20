@@ -104,7 +104,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a55950f7ddca396654bece214dfaa7c23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the USART.  <a href="#a55950f7ddca396654bece214dfaa7c23">More...</a><br /></td></tr>
 <tr class="separator:a55950f7ddca396654bece214dfaa7c23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0525806a87d27331be8e52d66e53fab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="usart_8h.html#ad0525806a87d27331be8e52d66e53fab">USART_Transmit</a> (uint8_t *send, uint8_t size)</td></tr>
-<tr class="memdesc:ad0525806a87d27331be8e52d66e53fab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfers data.  <a href="#ad0525806a87d27331be8e52d66e53fab">More...</a><br /></td></tr>
+<tr class="memdesc:ad0525806a87d27331be8e52d66e53fab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfers data over the transmit line.  <a href="#ad0525806a87d27331be8e52d66e53fab">More...</a><br /></td></tr>
 <tr class="separator:ad0525806a87d27331be8e52d66e53fab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -132,6 +132,7 @@ Daeghan Elkin </dd></dl>
 </div><div class="memdoc">
 
 <p>Initializes the USART. </p>
+<p>The USART initialization sets the UART to a TX/RX transmisson. The UART has the typical 8 data, 1 start, and 1 stop bits with no parity. The baudrate for the UART is set to 115200.</p>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
     <tr><td class="paramname">None</td><td></td></tr>
@@ -169,7 +170,8 @@ Daeghan Elkin </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Transfers data. </p>
+<p>Transfers data over the transmit line. </p>
+<p>The UART is set up to handle both transmit and receive, however, nothing is done with the received data. The receive line is available for future changes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">send</td><td>Array of desired send data </td></tr>

@@ -15,26 +15,32 @@
 /**
  * @brief Initialize PWM
  * 
- * Sets up the PWM peripheral. The PWM has a pre-scalar of 10kHz and
- * a counter rate of 100Hz. Because the PWM signal is used to control the 
- * sensor heater, it is initialized to 0% duty cycle. 
+ * Sets up the PWM peripheral. The PWM has a counter rate of 100Hz.
+ * Because the PWM signal is used to control the sensor heater, it 
+ * is initialized to a 0% duty cycle. The Timer for PWM is also used
+ * to trigger ADC conversions so the Capture/Compare Channel 1 is set
+ * accordingly.
  * 
  * @retval None
  */
 void Init_PWM(void);
 
 /**
-* @brief  This function handles timer Compare/Capture 1 interrupt.
-
-* @retval None
-*/
+ * @brief This function handles timer Compare/Capture 1 interrupt.
+ * 
+ * This handler simply turns on the LED on PA8.
+ * 
+ * @retval None
+ */
 void TimerCC1_Callback(void);
 
 /**
-* @brief  This function handles timer Compare/Capture 2 interrupt.
-
-* @retval None
-*/
+ * @brief  This function handles timer Compare/Capture 2 interrupt.
+ * 
+ * This handler simply turns off the LED on PA8.
+ * 
+ * @retval None
+ */
 void TimerCC2_Callback(void);
 
 #endif /* __PWM_H */

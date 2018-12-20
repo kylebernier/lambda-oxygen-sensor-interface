@@ -81,18 +81,18 @@ void ADC1_2_IRQHandler(void) {
 /* This function handles DMA1 interrupts requests */
 void DMA1_Channel1_IRQHandler(void) {
     // Check if the DMA transfer is complete
-    if (LL_DMA_IsActiveFlag_TC1(DMA_BASE) == 1) {
+    if (LL_DMA_IsActiveFlag_TC1(DMAx_BASE) == 1) {
         // Clear the DMA interupt flag
-        LL_DMA_ClearFlag_GI1(DMA_BASE);
+        LL_DMA_ClearFlag_GI1(DMAx_BASE);
 
         // Call the DMA transfer complete callback
         ADC_DMA_TransferComplete_Callback();
     }
 
     // Check if the DMA transfer casused an error
-    if (LL_DMA_IsActiveFlag_TE1(DMA_BASE) == 1) {
+    if (LL_DMA_IsActiveFlag_TE1(DMAx_BASE) == 1) {
         // Clear the DMA error flag
-        LL_DMA_ClearFlag_TE1(DMA_BASE);
+        LL_DMA_ClearFlag_TE1(DMAx_BASE);
 
         // Call the DMA transfer error callback
         ADC_DMA_TransferError_Callback();

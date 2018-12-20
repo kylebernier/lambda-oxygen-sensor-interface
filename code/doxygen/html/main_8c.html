@@ -130,6 +130,10 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a8aac8c5098aaf915463fb31715efa09f">PREAMBLE</a>&#160;&#160;&#160;0xFFFF</td></tr>
 <tr class="memdesc:a8aac8c5098aaf915463fb31715efa09f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preamble signifies the start of a UART transmission. <br /></td></tr>
 <tr class="separator:a8aac8c5098aaf915463fb31715efa09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade67ff03555d7261438738499220f7e5"><td class="memItemLeft" align="right" valign="top"><a id="ade67ff03555d7261438738499220f7e5"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ade67ff03555d7261438738499220f7e5">Vbat3V3</a>&#160;&#160;&#160;3286</td></tr>
+<tr class="memdesc:ade67ff03555d7261438738499220f7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual measured value for the 3V3 line on the PCB. This value is required to make acurate readings of the battery voltage. <br /></td></tr>
+<tr class="separator:ade67ff03555d7261438738499220f7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -149,9 +153,8 @@ MATLAB was used to fit the plots.  <a href="#a588dfda8db1db2ac70ffb689ad1f8fda">
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a44f55761c6b2ea09753ac15d3dd731aa"><td class="memItemLeft" align="right" valign="top"><a id="a44f55761c6b2ea09753ac15d3dd731aa"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a44f55761c6b2ea09753ac15d3dd731aa">adc_vals</a> [5] = {0, 0, 0, 0, 0}</td></tr>
-<tr class="memdesc:a44f55761c6b2ea09753ac15d3dd731aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC values array Battery voltage, lambda value, sensor resistance, current sense. <br /></td></tr>
+<tr class="memitem:a44f55761c6b2ea09753ac15d3dd731aa"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a44f55761c6b2ea09753ac15d3dd731aa">adc_vals</a> [5] = {0, 0, 0, 0, 0}</td></tr>
+<tr class="memdesc:a44f55761c6b2ea09753ac15d3dd731aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC values array.  <a href="#a44f55761c6b2ea09753ac15d3dd731aa">More...</a><br /></td></tr>
 <tr class="separator:a44f55761c6b2ea09753ac15d3dd731aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fe4379726af48186acfdcd0c5fd3c1c"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a6fe4379726af48186acfdcd0c5fd3c1c">lambda_Lookup</a> [4096]</td></tr>
 <tr class="memdesc:a6fe4379726af48186acfdcd0c5fd3c1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lookup table for lambda values.  <a href="#a6fe4379726af48186acfdcd0c5fd3c1c">More...</a><br /></td></tr>
@@ -159,17 +162,14 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <tr class="memitem:af3267a335c27b7203eabc26d554e28a2"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#af3267a335c27b7203eabc26d554e28a2">temp_Lookup</a> [4096]</td></tr>
 <tr class="memdesc:af3267a335c27b7203eabc26d554e28a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lookup table for temperature values.  <a href="#af3267a335c27b7203eabc26d554e28a2">More...</a><br /></td></tr>
 <tr class="separator:af3267a335c27b7203eabc26d554e28a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21da8ea764573261998bc78a9d69e1ee"><td class="memItemLeft" align="right" valign="top"><a id="a21da8ea764573261998bc78a9d69e1ee"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a21da8ea764573261998bc78a9d69e1ee">optimal_resistance</a></td></tr>
-<tr class="memdesc:a21da8ea764573261998bc78a9d69e1ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The optimal ADC resistance value the CJ125 outputs during calibration. <br /></td></tr>
+<tr class="memitem:a21da8ea764573261998bc78a9d69e1ee"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a21da8ea764573261998bc78a9d69e1ee">optimal_resistance</a></td></tr>
+<tr class="memdesc:a21da8ea764573261998bc78a9d69e1ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The optimal ADC resistance value the CJ125 outputs during calibration.  <a href="#a21da8ea764573261998bc78a9d69e1ee">More...</a><br /></td></tr>
 <tr class="separator:a21da8ea764573261998bc78a9d69e1ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3595ed0b02fcd9e0ad12c9149c94bdb8"><td class="memItemLeft" align="right" valign="top"><a id="a3595ed0b02fcd9e0ad12c9149c94bdb8"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a3595ed0b02fcd9e0ad12c9149c94bdb8">optimal_lambda</a></td></tr>
-<tr class="memdesc:a3595ed0b02fcd9e0ad12c9149c94bdb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The optimal ADC resistance value the CJ125 outputs during calibration. <br /></td></tr>
+<tr class="memitem:a3595ed0b02fcd9e0ad12c9149c94bdb8"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a3595ed0b02fcd9e0ad12c9149c94bdb8">optimal_lambda</a></td></tr>
+<tr class="memdesc:a3595ed0b02fcd9e0ad12c9149c94bdb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The optimal ADC resistance value the CJ125 outputs during calibration.  <a href="#a3595ed0b02fcd9e0ad12c9149c94bdb8">More...</a><br /></td></tr>
 <tr class="separator:a3595ed0b02fcd9e0ad12c9149c94bdb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6b74d1ed1a894d12518a97d0aa306ed"><td class="memItemLeft" align="right" valign="top"><a id="ab6b74d1ed1a894d12518a97d0aa306ed"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ab6b74d1ed1a894d12518a97d0aa306ed">currentV</a></td></tr>
-<tr class="memdesc:ab6b74d1ed1a894d12518a97d0aa306ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current voltage the PWM signal is using. <br /></td></tr>
+<tr class="memitem:ab6b74d1ed1a894d12518a97d0aa306ed"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ab6b74d1ed1a894d12518a97d0aa306ed">currentV</a></td></tr>
+<tr class="memdesc:ab6b74d1ed1a894d12518a97d0aa306ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current voltage the PWM signal is using.  <a href="#ab6b74d1ed1a894d12518a97d0aa306ed">More...</a><br /></td></tr>
 <tr class="separator:ab6b74d1ed1a894d12518a97d0aa306ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cb6cba4ae9cd3c7f4fda53ce6239baa"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a8cb6cba4ae9cd3c7f4fda53ce6239baa">VDDA</a></td></tr>
 <tr class="memdesc:a8cb6cba4ae9cd3c7f4fda53ce6239baa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal reference voltage of STM32.  <a href="#a8cb6cba4ae9cd3c7f4fda53ce6239baa">More...</a><br /></td></tr>
@@ -180,7 +180,8 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <dl class="section author"><dt>Author</dt><dd>Kyle Bernier </dd>
 <dd>
 Daeghan Elkin </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2018 May 27 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2018 May 27</dd></dl>
+<p>This program uses the values provided by the CJ125 to maintain the temperature of the LSU4.9 sensor. It utilizes the calibration values seen by the CJ125 to generate a lookup table for both Lambda and Temperature values. This removes the need for hard-coding a lookup table, at the expense of speed. This, however, results in more accurate readings and control. </p>
 
 <p class="definition">Definition in file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
@@ -199,7 +200,7 @@ Daeghan Elkin </dd></dl>
 <p>Sensor resistance once condensation point has been reached. </p>
 <p>This value represents the resistance of the actual sensor as it heats up. The higher the resistance, the hotter the sensor. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00079">79</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00098">98</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -219,7 +220,7 @@ Daeghan Elkin </dd></dl>
 <p>The derivative control is used to prevent overshoot from the P control. <br />
 In general the derivative component is used to prevent the system from overshooting the desired result. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00106">106</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00125">125</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -239,7 +240,7 @@ In general the derivative component is used to prevent the system from overshoot
 <p>The integral control is used to overcome steady state error for the P control. <br />
 In general the integral component is used for accumulating the running errors until the system stabilizes. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00097">97</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00116">116</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -258,7 +259,7 @@ In general the integral component is used for accumulating the running errors un
 <p>Proportional coefficient for the PID controller. </p>
 <p>The proportional control is proportional to the error between the desired sensor resistance and the current resistance. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00088">88</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00107">107</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -288,7 +289,7 @@ MATLAB was used to fit the plots. </p>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00405">405</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00485">485</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -317,7 +318,7 @@ MATLAB was used to fit the plots. </p>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00326">326</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00366">366</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -340,7 +341,7 @@ MATLAB was used to fit the plots. </p>
 <p>Main program entrypoint. </p>
 <dl class="section return"><dt>Returns</dt><dd>Should not return. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00119">119</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00145">145</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -379,11 +380,54 @@ MATLAB was used to fit the plots. </p>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00289">289</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00329">329</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a44f55761c6b2ea09753ac15d3dd731aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f55761c6b2ea09753ac15d3dd731aa">&#9670;&nbsp;</a></span>adc_vals</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t adc_vals[5] = {0, 0, 0, 0, 0}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ADC values array. </p>
+<p>Array index pertains to: <br />
+0: Internal 3V3 reference <br />
+1: Battery voltage <br />
+2: Lambda value from CJ125 <br />
+3: Sensor resistance from CJ125 <br />
+4: Current sense </p>
+
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00047">47</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+<a id="ab6b74d1ed1a894d12518a97d0aa306ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b74d1ed1a894d12518a97d0aa306ed">&#9670;&nbsp;</a></span>currentV</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t currentV</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current voltage the PWM signal is using. </p>
+<p>Used as a reference during the PID control of the PWM signal </p>
+
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00082">82</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
 <a id="a6fe4379726af48186acfdcd0c5fd3c1c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6fe4379726af48186acfdcd0c5fd3c1c">&#9670;&nbsp;</a></span>lambda_Lookup</h2>
 
@@ -397,9 +441,47 @@ MATLAB was used to fit the plots. </p>
 </div><div class="memdoc">
 
 <p>Lookup table for lambda values. </p>
-<p>Values are calculated and inserted into array based on all possible ADC values </p>
+<p>Values are calculated and inserted into array based on all possible ADC values. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00041">41</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00054">54</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+<a id="a3595ed0b02fcd9e0ad12c9149c94bdb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3595ed0b02fcd9e0ad12c9149c94bdb8">&#9670;&nbsp;</a></span>optimal_lambda</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t optimal_lambda</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The optimal ADC resistance value the CJ125 outputs during calibration. </p>
+<p>This value is used to generate the lambda lookup table. </p>
+
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00075">75</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+<a id="a21da8ea764573261998bc78a9d69e1ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21da8ea764573261998bc78a9d69e1ee">&#9670;&nbsp;</a></span>optimal_resistance</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t optimal_resistance</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The optimal ADC resistance value the CJ125 outputs during calibration. </p>
+<p>This value is used to generate the temperature lookup table and as the control for the PID. </p>
+
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00068">68</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -416,9 +498,9 @@ MATLAB was used to fit the plots. </p>
 </div><div class="memdoc">
 
 <p>Lookup table for temperature values. </p>
-<p>Values are calculated and inserted into array based on all possible ADC values </p>
+<p>Values are calculated and inserted into array based on all possible ADC values. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00048">48</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00061">61</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -437,7 +519,7 @@ MATLAB was used to fit the plots. </p>
 <p>Internal reference voltage of STM32. </p>
 <p>This calculation is highlighted on page 583 of the RM0351 Reference Manual. </p>
 
-<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00070">70</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="main_8c_source.html#l00089">89</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>

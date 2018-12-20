@@ -64,10 +64,12 @@ void Init_PWM(void)
 
 /* Callback for Compare/Capture 1 Interrupt */
 void TimerCC1_Callback(void) {
+    // Turn on LED 
     SET_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 }
 
 /* Callback for Compare/Capture 2 Interrupt */
 void TimerCC2_Callback(void) {
+    // Turn off LED
     CLEAR_BIT(GPIOA->ODR, GPIO_ODR_OD8_Msk);
 }

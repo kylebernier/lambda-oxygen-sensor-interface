@@ -40,7 +40,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "adc_8c.html",
-"pwm_8c.html#ad3fb1d1447cea1607a394127a4668d0e"
+"stm32l4xx__it_8c.html#a2bffc10d5bd4106753b7c30e86903bea"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
