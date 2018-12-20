@@ -6,12 +6,12 @@ v17 = [nan, nan, 0.192, 0.525, 0.658, 0.814, 1.074, 1.307, 1.388, 1.458, 1.5, 1.
 mlambdavalues = [650, 700, 750, 800, 822, 850, 900, 950, 970, 990, 1003, 1010, 1050, 1100, 1132, 1179, 1429, 1701, 1990, 2434, 3413, 5391, 7506, 10119];
 mip = [-2000, -1602, -1243, -927, -800, -652, -405, -183, -106, -40, 0, 15, 97, 193, 250, 329, 671, 938, 1150, 1385, 1700, 2000, 2150, 2250];
 
-figure(1);
-plot(lambdavalues, v8, lambdavalues, v17);
-title("Lambda vs Voltage(V=8)");
-xlabel("Lambda Value");
-ylabel("Voltage(V)");
-grid on;
+%figure(1);
+%plot(lambdavalues, v8, lambdavalues, v17);
+%title("Lambda vs Voltage(V=8)");
+%xlabel("Lambda Value");
+%ylabel("Voltage(V)");
+%grid on;
 
 %ip = -1.603
 %lambda = 492.3 * exp(-((ip - 3.869) / 0.772)^2) + 2.183 * exp(-((ip - 2.288) / 0.714)^2) + 1.09 * exp(-((ip - 2.8) / 6.656)^2) + 1.011 * exp(-((ip - 1.697) / 1.112)^2)
@@ -31,10 +31,13 @@ Ri = 6.212e5.*exp(-0.01054.*Temp)+754.2.*exp(-0.002204.*Temp);
 Temp = 4445.*Ri.^-0.4449+428.6;
 
 figure(2);
-plot(Temp, Ri);
+semilogy(Temp, Ri);
+xlim([600 1100])
+ylim([10 1000])
 title("Temperature vs Resistance");
 xlabel("Temperature(C)");
 ylabel("Resistance(Ohms)");
+
 grid on;
 
 VIN = round(linspace(0,5000,4096));

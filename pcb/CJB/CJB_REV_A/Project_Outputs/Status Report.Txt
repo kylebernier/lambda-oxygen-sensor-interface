@@ -1,0 +1,21 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [cjb.PrjPCB]
+   Generated File[cjb.GTO]
+   Generated File[cjb.GTS]
+   Generated File[cjb.GTL]
+   Generated File[cjb.GBL]
+   Generated File[cjb.GBS]
+   Generated File[cjb.GBO]
+   Generated File[cjb.GM1]
+   Generated File[cjb.GM15]
+   Generated File[cjb.GKO]
+   Generated File[cjb.RUL]
+   Generated File[cjb.EXTREP]
+   Generated File[cjb.REP]
+
+
+Files Generated   : 12
+Documents Printed : 0
+
+Finished Output Generation At 9:01:24 PM On 9/25/2018
