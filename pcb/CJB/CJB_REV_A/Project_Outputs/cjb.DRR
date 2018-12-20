@@ -1,0 +1,19 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: cjb.PcbDoc   9/25/2018  8:59:23 PM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : cjb-RoundHoles.TXT
+ASCII SlotHoles File : cjb-SlotHoles.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      15mil (0.381mm)                                           Round             153       PTH        0.00inch (0.00mm)
+T2      26mil (0.65mm)                                            Slot              2         PTH        0.00inch (0.00mm)
+T3      32mil (0.825mm)                                           Slot              2         PTH        0.00inch (0.00mm)
+T4      35mil (0.9mm)                                             Round             62        PTH        0.00inch (0.00mm)
+T5      40mil (1.016mm)                                           Round             34        PTH        0.00inch (0.00mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              253
+
+Total Processing Time (hh:mm:ss) : 00:00:00

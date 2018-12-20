@@ -1,0 +1,663 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 8em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD18\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">10/1/2018</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">9:02:52 PM</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:01</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc" class="file"><acronym title="C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc">C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">106</td></tr>
+</table>
+</td>
+</table><a name="ID0PQ2W5OIOHY45JZAXV4HWYZZOMCPT4BW40CY5OQPRLSX1ABAYG"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDCDGDRYNHRWE5G0MJ23P354TNPOLIEHNM1GEXYIOS1EG43IH0ZILN">Clearance Constraint (Gap=6mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID1FTSSHMQO4M5EZOSNZENIJZQNEJTPKT5BJ2VXYCZEVEA1KM1A0KO">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDVQYGHDU5OS1XKB4OS3R45SUFOJFST2IBUMM3DTM3I5ZQPA3ES50G">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDP4PKOI4NAAR12RDJWVOAEHQLKJUB2BCZLWBEQM1X3ZXJUIDCGHO">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDN3SWTMMS2KP4JGYKCMU4ZOKVBGQRBIN0VF5PUMFTCRTOAGATB30O">Width Constraint (Min=6mil) (Max=100mil) (Preferred=10mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID2WTVXLCJRRF4B5FNJOGADAUXUNWEMZYJ2E45UCCRBQ1UHO1FGFAM">Power Plane Connect Rule(Direct Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDXVUOFCFCAUMLCW3VVZSLNAVRNVEADEQ4L4CIDNYVURRMP514KOL">Minimum Annular Ring (Minimum=5mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDWTKWMX1HQNIIHGDKJPJ10SAUTLV1FFZJ1HDLW2CROK3K4IWNU32B">Hole Size Constraint (Min=10mil) (Max=200mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDUQSRDX1T0SSIGQKLGWQUD55WUFWDXYWPEE5XT1DTTEWCCI2KMFDB">Hole To Hole Clearance (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAIHDYUSJQ1Q3KX0QZRIQCRAFLEVNFIBHCXQVXSIVMWOBHKE3BV3K">Minimum Solder Mask Sliver (Gap=4mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDF3QP2A2D2ZDAF5N0BUK33SFITNAYG1FU20HQLCN5XGPTXMFGE43O">Silk To Solder Mask (Clearance=6mil) (IsPad),(All)</a></td>
+<td class="column2">49</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDIQVIW10J3L25L2BYPPJFOY1RCCLQOEV0KZLT1WRVE1IGM1W0TDB">Silk to Silk (Clearance=10mil) (All),(All)</a></td>
+<td class="column2">38</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDWDM4R2JQ1GNVGE4LU3QMHU34FEF0XZERBY3X5YLBJ0G5W5NVMXXC">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDQM1LWY2OW1DEHBPHSEF5XB2RWPNL1CQDFKZTB4KL1LE0TI004X1E">Board Clearance Constraint (Gap=0mil) (All)</a></td>
+<td class="column2">19</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID3M4R4OCYYQIZ2ZDP330ULVPTKR2JQFKFKVTC3B0K5TXSXZSRTCG">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">106</td>
+</tr>
+</table><br><a name="IDF3QP2A2D2ZDAF5N0BUK33SFITNAYG1FU20HQLCN5XGPTXMFGE43O"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk To Solder Mask (Clearance=6mil) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2664.14mil|Location2.X=2669.14mil|Location1.Y=3369.695mil|Location2.Y=3374.695mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2664.14mil|Location2.X=2669.14mil|Location1.Y=3369.695mil|Location2.Y=3374.695mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad C10-2(2685mil,2855.354mil) on Top Layer And Text "C10" (2576.669mil,2836.197mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3497.087mil|Location2.X=3502.087mil|Location1.Y=3567.215mil|Location2.Y=3572.215mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3497.087mil|Location2.X=3502.087mil|Location1.Y=3567.215mil|Location2.Y=3572.215mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad C1-1(3525mil,3050.354mil) on Top Layer And Text "C3" (3463.598mil,3057.709mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3494.597mil|Location2.X=3499.597mil|Location1.Y=3523.08mil|Location2.Y=3528.08mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3494.597mil|Location2.X=3499.597mil|Location1.Y=3523.08mil|Location2.Y=3528.08mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad C1-2(3525mil,2969.646mil) on Top Layer And Text "C3" (3463.598mil,3057.709mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3157.471mil|Location2.X=3162.471mil|Location1.Y=2786.481mil|Location2.Y=2791.481mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3157.471mil|Location2.X=3162.471mil|Location1.Y=2786.481mil|Location2.Y=2791.481mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad C12-1(3182.063mil,2283.44mil) on Top Layer And Text "C12" (3070mil,2224.991mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2023.381mil|Location2.X=2030.631mil|Location1.Y=2825.523mil|Location2.Y=2832.773mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2023.381mil|Location2.X=2030.631mil|Location1.Y=2825.523mil|Location2.Y=2832.773mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.728mil &lt; 6mil) Between Pad C14-2(2019mil,2268.725mil) on Top Layer And Text "C16" (2045mil,2342mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.728mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3322.481mil|Location2.X=3327.481mil|Location1.Y=2633.498mil|Location2.Y=2638.498mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3322.481mil|Location2.X=3327.481mil|Location1.Y=2633.498mil|Location2.Y=2638.498mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad C34-1(3350mil,2079.646mil) on Top Layer And Text "C35" (3265mil,2100mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3320.483mil|Location2.X=3325.483mil|Location1.Y=2663.488mil|Location2.Y=2668.488mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3320.483mil|Location2.X=3325.483mil|Location1.Y=2663.488mil|Location2.Y=2668.488mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad C34-2(3350mil,2160.354mil) on Top Layer And Text "C35" (3265mil,2100mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3204.436mil|Location2.X=3211.686mil|Location1.Y=2715.635mil|Location2.Y=2722.885mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3204.436mil|Location2.X=3211.686mil|Location1.Y=2715.635mil|Location2.Y=2722.885mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.693mil &lt; 6mil) Between Pad C35-2(3215mil,2160.354mil) on Top Layer And Text "C34" (3202.063mil,2194.606mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [2.693mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1824.829mil|Location2.X=1829.829mil|Location1.Y=4077.776mil|Location2.Y=4082.776mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1824.829mil|Location2.X=1829.829mil|Location1.Y=4077.776mil|Location2.Y=4082.776mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad D2-2(1845mil,3567.992mil) on Top Layer And Text "R21" (1745.354mil,3527.402mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3994.956mil|Location2.X=4002.206mil|Location1.Y=3520.563mil|Location2.Y=3527.813mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3994.956mil|Location2.X=4002.206mil|Location1.Y=3520.563mil|Location2.Y=3527.813mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.876mil &lt; 6mil) Between Pad J1-1(4008.5mil,2937.126mil) on Multi-Layer And Track (3726.5mil,3002.126mil)(4048.5mil,3002.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.876mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3994.956mil|Location2.X=4002.206mil|Location1.Y=3076.439mil|Location2.Y=3083.689mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3994.956mil|Location2.X=4002.206mil|Location1.Y=3076.439mil|Location2.Y=3083.689mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.876mil &lt; 6mil) Between Pad J1-3(4008.5mil,2607.126mil) on Multi-Layer And Track (3726.5mil,2542.126mil)(4048.5mil,2542.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.876mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3730.413mil|Location2.X=3737.663mil|Location1.Y=3460.179mil|Location2.Y=3467.429mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3730.413mil|Location2.X=3737.663mil|Location1.Y=3460.179mil|Location2.Y=3467.429mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.075mil &lt; 6mil) Between Pad J1-4(3791.5mil,2937.126mil) on Multi-Layer And Track (3726.5mil,2542.126mil)(3726.5mil,3002.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.075mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3777.956mil|Location2.X=3785.206mil|Location1.Y=3520.563mil|Location2.Y=3527.813mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3777.956mil|Location2.X=3785.206mil|Location1.Y=3520.563mil|Location2.Y=3527.813mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.876mil &lt; 6mil) Between Pad J1-4(3791.5mil,2937.126mil) on Multi-Layer And Track (3726.5mil,3002.126mil)(4048.5mil,3002.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.876mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3730.413mil|Location2.X=3737.663mil|Location1.Y=3295.179mil|Location2.Y=3302.429mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3730.413mil|Location2.X=3737.663mil|Location1.Y=3295.179mil|Location2.Y=3302.429mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.075mil &lt; 6mil) Between Pad J1-5(3791.5mil,2772.126mil) on Multi-Layer And Track (3726.5mil,2542.126mil)(3726.5mil,3002.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.075mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3730.413mil|Location2.X=3737.663mil|Location1.Y=3130.179mil|Location2.Y=3137.429mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3730.413mil|Location2.X=3737.663mil|Location1.Y=3130.179mil|Location2.Y=3137.429mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.075mil &lt; 6mil) Between Pad J1-6(3791.5mil,2607.126mil) on Multi-Layer And Track (3726.5mil,2542.126mil)(3726.5mil,3002.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.075mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3777.956mil|Location2.X=3785.206mil|Location1.Y=3076.439mil|Location2.Y=3083.689mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3777.956mil|Location2.X=3785.206mil|Location1.Y=3076.439mil|Location2.Y=3083.689mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.876mil &lt; 6mil) Between Pad J1-6(3791.5mil,2607.126mil) on Multi-Layer And Track (3726.5mil,2542.126mil)(4048.5mil,2542.126mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.876mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=973.515mil|Location2.X=978.515mil|Location1.Y=3845.767mil|Location2.Y=3850.767mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=973.515mil|Location2.X=978.515mil|Location1.Y=3845.767mil|Location2.Y=3850.767mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad P1-2(950mil,3305mil) on Multi-Layer And Text "R20" (974.646mil,3400mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=830.466mil|Location2.X=835.466mil|Location1.Y=3679.669mil|Location2.Y=3684.669mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=830.466mil|Location2.X=835.466mil|Location1.Y=3679.669mil|Location2.Y=3684.669mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad P3-3(850mil,3170mil) on Multi-Layer And Text "J3" (818.228mil,3116.181mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3121.414mil|Location2.X=3126.414mil|Location1.Y=3511.078mil|Location2.Y=3516.078mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3121.414mil|Location2.X=3126.414mil|Location1.Y=3511.078mil|Location2.Y=3516.078mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R10-1(3145mil,2973.991mil) on Top Layer And Text "R10" (3047.937mil,2947.589mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2621.086mil|Location2.X=2626.086mil|Location1.Y=2740.668mil|Location2.Y=2745.668mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2621.086mil|Location2.X=2626.086mil|Location1.Y=2740.668mil|Location2.Y=2745.668mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R12-1(2627.402mil,2233.071mil) on Top Layer And Text "R17" (2659.575mil,2195.174mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2430.494mil|Location2.X=2435.494mil|Location1.Y=2748.79mil|Location2.Y=2753.79mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2430.494mil|Location2.X=2435.494mil|Location1.Y=2748.79mil|Location2.Y=2753.79mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R13-2(2452.921mil,2231.435mil) on Top Layer And Text "R18" (2415mil,2185.302mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3625.553mil|Location2.X=3632.803mil|Location1.Y=3221.968mil|Location2.Y=3229.218mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3625.553mil|Location2.X=3632.803mil|Location1.Y=3221.968mil|Location2.Y=3229.218mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.706mil &lt; 6mil) Between Pad R14-1(3652.685mil,2682.402mil) on Top Layer And Text "R14" (3533.354mil,2677.598mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.706mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2527.189mil|Location2.X=2532.189mil|Location1.Y=2689.98mil|Location2.Y=2694.98mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2527.189mil|Location2.X=2532.189mil|Location1.Y=2689.98mil|Location2.Y=2694.98mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R17-2(2552.598mil,2141.607mil) on Top Layer And Text "R12" (2497mil,2189.425mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2223.998mil|Location2.X=2228.998mil|Location1.Y=3778.941mil|Location2.Y=3783.941mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2223.998mil|Location2.X=2228.998mil|Location1.Y=3778.941mil|Location2.Y=3783.941mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R19-1(2219.658mil,3250mil) on Top Layer And Text "U7" (2220.5mil,3251.441mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1806.087mil|Location2.X=1811.087mil|Location1.Y=3949.506mil|Location2.Y=3954.506mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1806.087mil|Location2.X=1811.087mil|Location1.Y=3949.506mil|Location2.Y=3954.506mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R21-2(1810mil,3402.598mil) on Top Layer And Text "R22" (1772.598mil,3440mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3818.5mil|Location2.X=3823.5mil|Location1.Y=2355.847mil|Location2.Y=2360.847mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3818.5mil|Location2.X=3823.5mil|Location1.Y=2355.847mil|Location2.Y=2360.847mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R24-1(3842.402mil,1850mil) on Top Layer And Text "R25" (3817mil,1784.339mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3739.035mil|Location2.X=3746.285mil|Location1.Y=2381.751mil|Location2.Y=2389.001mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3739.035mil|Location2.X=3746.285mil|Location1.Y=2381.751mil|Location2.Y=2389.001mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.632mil &lt; 6mil) Between Pad R24-2(3767.598mil,1850mil) on Top Layer And Text "C36" (3737.345mil,1849.378mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [2.632mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3788.72mil|Location2.X=3793.72mil|Location1.Y=2371.82mil|Location2.Y=2376.82mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3788.72mil|Location2.X=3793.72mil|Location1.Y=2371.82mil|Location2.Y=2376.82mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R24-2(3767.598mil,1850mil) on Top Layer And Text "R25" (3817mil,1784.339mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3801.144mil|Location2.X=3806.144mil|Location1.Y=2728.396mil|Location2.Y=2733.396mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3801.144mil|Location2.X=3806.144mil|Location1.Y=2728.396mil|Location2.Y=2733.396mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R26-1(3825mil,2177.598mil) on Top Layer And Text "C33" (3767.655mil,2251.976mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3804.14mil|Location2.X=3809.14mil|Location1.Y=2686.498mil|Location2.Y=2691.498mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3804.14mil|Location2.X=3809.14mil|Location1.Y=2686.498mil|Location2.Y=2691.498mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R26-1(3825mil,2177.598mil) on Top Layer And Text "R29" (3788.646mil,2123.01mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3801.144mil|Location2.X=3806.144mil|Location1.Y=2761.482mil|Location2.Y=2766.482mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3801.144mil|Location2.X=3806.144mil|Location1.Y=2761.482mil|Location2.Y=2766.482mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R26-2(3825mil,2252.402mil) on Top Layer And Text "C33" (3767.655mil,2251.976mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3887.343mil|Location2.X=3894.593mil|Location1.Y=2680.086mil|Location2.Y=2687.336mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3887.343mil|Location2.X=3894.593mil|Location1.Y=2680.086mil|Location2.Y=2687.336mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (4.786mil &lt; 6mil) Between Pad R27-2(3915mil,2177.598mil) on Top Layer And Text "R29" (3788.646mil,2123.01mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [4.786mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.205mil|Location2.X=3850.455mil|Location1.Y=2615.387mil|Location2.Y=2622.637mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3843.205mil|Location2.X=3850.455mil|Location1.Y=2615.387mil|Location2.Y=2622.637mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.354mil &lt; 6mil) Between Pad R29-1(3825mil,2077.756mil) on Top Layer And Text "R27" (3946.976mil,2125mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.354mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3826.365mil|Location2.X=3833.615mil|Location1.Y=2628.419mil|Location2.Y=2635.669mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3826.365mil|Location2.X=3833.615mil|Location1.Y=2628.419mil|Location2.Y=2635.669mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (1.332mil &lt; 6mil) Between Pad R29-1(3825mil,2077.756mil) on Top Layer And Text "R30" (3871.976mil,2142.699mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [1.332mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3926.482mil|Location2.X=3931.482mil|Location1.Y=2616.512mil|Location2.Y=2621.512mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3926.482mil|Location2.X=3931.482mil|Location1.Y=2616.512mil|Location2.Y=2621.512mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R30-2(3915mil,2077.756mil) on Top Layer And Text "R27" (3946.976mil,2125mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3398.524mil|Location2.X=3403.524mil|Location1.Y=2438.481mil|Location2.Y=2443.481mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3398.524mil|Location2.X=3403.524mil|Location1.Y=2438.481mil|Location2.Y=2443.481mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R31-2(3377.402mil,1895mil) on Top Layer And Text "C32" (3394mil,1851mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3399.486mil|Location2.X=3404.486mil|Location1.Y=3834.331mil|Location2.Y=3839.331mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3399.486mil|Location2.X=3404.486mil|Location1.Y=3834.331mil|Location2.Y=3839.331mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R32-1(3417.047mil,3325.744mil) on Top Layer And Text "R16" (3360mil,3270.842mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3475.595mil|Location2.X=3480.595mil|Location1.Y=3124.488mil|Location2.Y=3129.488mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3475.595mil|Location2.X=3480.595mil|Location1.Y=3124.488mil|Location2.Y=3129.488mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R7-1(3460mil,2607.598mil) on Top Layer And Text "R11" (3478.095mil,2561mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3435.847mil|Location2.X=3440.847mil|Location1.Y=3158.72mil|Location2.Y=3163.72mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3435.847mil|Location2.X=3440.847mil|Location1.Y=3158.72mil|Location2.Y=3163.72mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad R7-1(3460mil,2607.598mil) on Top Layer And Text "R9" (3437.134mil,2632.331mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3433.537mil|Location2.X=3440.787mil|Location1.Y=2950.351mil|Location2.Y=2957.601mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3433.537mil|Location2.X=3440.787mil|Location1.Y=2950.351mil|Location2.Y=2957.601mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.37mil &lt; 6mil) Between Pad R9-1(3460mil,2447.598mil) on Top Layer And Text "C11" (3360mil,2394.991mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [2.37mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2203.327mil|Location2.X=2210.577mil|Location1.Y=2898.869mil|Location2.Y=2906.119mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2203.327mil|Location2.X=2210.577mil|Location1.Y=2898.869mil|Location2.Y=2906.119mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (5.097mil &lt; 6mil) Between Pad TP4-1(2193.579mil,2400mil) on Multi-Layer And Text "U3" (2214.5mil,2362.5mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [5.097mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3076.302mil|Location2.X=3083.552mil|Location1.Y=2377.167mil|Location2.Y=2384.417mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3076.302mil|Location2.X=3083.552mil|Location1.Y=2377.167mil|Location2.Y=2384.417mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (2.1mil &lt; 6mil) Between Pad TP5-1(3105mil,1835mil) on Multi-Layer And Text "TP7" (3013mil,1845mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [2.1mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3075.743mil|Location2.X=3080.743mil|Location1.Y=2497.169mil|Location2.Y=2502.169mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3075.743mil|Location2.X=3080.743mil|Location1.Y=2497.169mil|Location2.Y=2502.169mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad TP7-1(3105mil,1955mil) on Multi-Layer And Text "TP6" (2983mil,1964.397mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3171.579mil|Location2.X=3176.579mil|Location1.Y=3807.5mil|Location2.Y=3812.5mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3171.579mil|Location2.X=3176.579mil|Location1.Y=3807.5mil|Location2.Y=3812.5mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad U10-2(3182.598mil,3315mil) on Top Layer And Text "R34" (3170.079mil,3249.158mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3209.566mil|Location2.X=3214.566mil|Location1.Y=3812.646mil|Location2.Y=3817.646mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3209.566mil|Location2.X=3214.566mil|Location1.Y=3812.646mil|Location2.Y=3817.646mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad U10-3(3220mil,3315mil) on Top Layer And Text "R34" (3170.079mil,3249.158mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1201.017mil|Location2.X=1206.017mil|Location1.Y=2957.595mil|Location2.Y=2962.595mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1201.017mil|Location2.X=1206.017mil|Location1.Y=2957.595mil|Location2.Y=2962.595mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad U4-1(1220.855mil,2441.862mil) on Top Layer And Text "C15" (1116.716mil,2408.932mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1206.157mil|Location2.X=1214.142mil|Location1.Y=2938.21mil|Location2.Y=2946.265mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1206.157mil|Location2.X=1214.142mil|Location1.Y=2938.21mil|Location2.Y=2946.265mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.754mil &lt; 6mil) Between Pad U4-2(1234.774mil,2427.943mil) on Top Layer And Text "C15" (1116.716mil,2408.932mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.754mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3551.448mil|Location2.X=3556.448mil|Location1.Y=2378.5mil|Location2.Y=2383.5mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3551.448mil|Location2.X=3556.448mil|Location1.Y=2378.5mil|Location2.Y=2383.5mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad U8-4(3559mil,1862.402mil) on Top Layer And Text "C32" (3394mil,1851mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3531.373mil|Location2.X=3536.373mil|Location1.Y=2774.358mil|Location2.Y=2779.358mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3531.373mil|Location2.X=3536.373mil|Location1.Y=2774.358mil|Location2.Y=2779.358mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 6mil) Between Pad U9-8(3541.614mil,2207.646mil) on Top Layer And Text "R15" (3440mil,2209.991mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDIQVIW10J3L25L2BYPPJFOY1RCCLQOEV0KZLT1WRVE1IGM1W0TDB"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk to Silk (Clearance=10mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1195.742mil|Location2.X=1206.992mil|Location1.Y=2974.588mil|Location2.Y=2985.838mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1195.742mil|Location2.X=1206.992mil|Location1.Y=2974.588mil|Location2.Y=2985.838mil|Absolute=True">Silk To Silk Clearance Constraint: (2.587mil &lt; 10mil) Between Arc (1201.367mil,2461.349mil) on Top Overlay And Text "C15" (1116.716mil,2408.932mil) on Top Overlay Silk Text to Silk Clearance [2.587mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2164.944mil|Location2.X=2172.611mil|Location1.Y=2882.751mil|Location2.Y=2890.418mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2164.944mil|Location2.X=2172.611mil|Location1.Y=2882.751mil|Location2.Y=2890.418mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (2193.579mil,2400mil) on Top Overlay And Text "C13" (2100mil,2323.795mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2204.489mil|Location2.X=2215.739mil|Location1.Y=2978.244mil|Location2.Y=2989.494mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2204.489mil|Location2.X=2215.739mil|Location1.Y=2978.244mil|Location2.Y=2989.494mil|Absolute=True">Silk To Silk Clearance Constraint: (4.826mil &lt; 10mil) Between Arc (2193.579mil,2400mil) on Top Overlay And Text "TP3" (2200mil,2460mil) on Top Overlay Silk Text to Silk Clearance [4.826mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2221.446mil|Location2.X=2229.113mil|Location1.Y=2887.717mil|Location2.Y=2895.384mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2221.446mil|Location2.X=2229.113mil|Location1.Y=2887.717mil|Location2.Y=2895.384mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (2193.579mil,2400mil) on Top Overlay And Text "U3" (2214.5mil,2362.5mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2294.599mil|Location2.X=2302.265mil|Location1.Y=3015.702mil|Location2.Y=3023.368mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2294.599mil|Location2.X=2302.265mil|Location1.Y=3015.702mil|Location2.Y=3023.368mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (2350mil,2480mil) on Top Overlay And Text "TP3" (2200mil,2460mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2296.29mil|Location2.X=2303.957mil|Location1.Y=3011.052mil|Location2.Y=3018.718mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2296.29mil|Location2.X=2303.957mil|Location1.Y=3011.052mil|Location2.Y=3018.718mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (2350mil,2480mil) on Top Overlay And Text "TP4" (2149mil,2485mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3048.581mil|Location2.X=3056.248mil|Location1.Y=2370.555mil|Location2.Y=2378.222mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3048.581mil|Location2.X=3056.248mil|Location1.Y=2370.555mil|Location2.Y=2378.222mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (3105mil,1835mil) on Top Overlay And Text "TP7" (3013mil,1845mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3154.775mil|Location2.X=3162.442mil|Location1.Y=2477.42mil|Location2.Y=2485.087mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3154.775mil|Location2.X=3162.442mil|Location1.Y=2477.42mil|Location2.Y=2485.087mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (3105mil,1955mil) on Top Overlay And Text "R31" (3162.402mil,1915mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3075.729mil|Location2.X=3083.395mil|Location1.Y=2525.518mil|Location2.Y=2533.185mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3075.729mil|Location2.X=3083.395mil|Location1.Y=2525.518mil|Location2.Y=2533.185mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Arc (3105mil,1955mil) on Top Overlay And Text "TP6" (2983mil,1964.397mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2015.711mil|Location2.X=2023.377mil|Location1.Y=2836.521mil|Location2.Y=2844.188mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2015.711mil|Location2.X=2023.377mil|Location1.Y=2836.521mil|Location2.Y=2844.188mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "C14" (1970mil,2308.795mil) on Top Overlay And Text "C16" (2045mil,2342mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2336.525mil|Location2.X=2347.775mil|Location1.Y=4038.611mil|Location2.Y=4049.861mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2336.525mil|Location2.X=2347.775mil|Location1.Y=4038.611mil|Location2.Y=4049.861mil|Absolute=True">Silk To Silk Clearance Constraint: (8.304mil &lt; 10mil) Between Text "C28" (2246.414mil,3520mil) on Top Overlay And Text "C29" (2346.433mil,3477mil) on Top Overlay Silk Text to Silk Clearance [8.304mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3495.96mil|Location2.X=3503.627mil|Location1.Y=3539.028mil|Location2.Y=3546.694mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3495.96mil|Location2.X=3503.627mil|Location1.Y=3539.028mil|Location2.Y=3546.694mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "C3" (3463.598mil,3057.709mil) on Top Overlay And Track (3500mil,3010mil)(3550mil,3010mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3557.184mil|Location2.X=3568.434mil|Location1.Y=2422.295mil|Location2.Y=2433.545mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3557.184mil|Location2.X=3568.434mil|Location1.Y=2422.295mil|Location2.Y=2433.545mil|Absolute=True">Silk To Silk Clearance Constraint: (7.721mil &lt; 10mil) Between Text "C32" (3394mil,1851mil) on Top Overlay And Text "U8" (3570.669mil,1891.922mil) on Top Overlay Silk Text to Silk Clearance [7.721mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3555.095mil|Location2.X=3566.345mil|Location1.Y=2414.783mil|Location2.Y=2426.033mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3555.095mil|Location2.X=3566.345mil|Location1.Y=2414.783mil|Location2.Y=2426.033mil|Absolute=True">Silk To Silk Clearance Constraint: (3.594mil &lt; 10mil) Between Text "C32" (3394mil,1851mil) on Top Overlay And Track (3565.5mil,1890mil)(3644.5mil,1890mil) on Top Overlay Silk Text to Silk Clearance [3.594mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3799.811mil|Location2.X=3807.477mil|Location1.Y=2686.668mil|Location2.Y=2694.335mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3799.811mil|Location2.X=3807.477mil|Location1.Y=2686.668mil|Location2.Y=2694.335mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "C33" (3767.655mil,2251.976mil) on Top Overlay And Text "R29" (3788.646mil,2123.01mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3786.023mil|Location2.X=3797.273mil|Location1.Y=2673.728mil|Location2.Y=2684.978mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3786.023mil|Location2.X=3797.273mil|Location1.Y=2673.728mil|Location2.Y=2684.978mil|Absolute=True">Silk To Silk Clearance Constraint: (5.308mil &lt; 10mil) Between Text "C33" (3767.655mil,2251.976mil) on Top Overlay And Text "R30" (3871.976mil,2142.699mil) on Top Overlay Silk Text to Silk Clearance [5.308mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3799.575mil|Location2.X=3807.242mil|Location1.Y=2739.575mil|Location2.Y=2747.242mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3799.575mil|Location2.X=3807.242mil|Location1.Y=2739.575mil|Location2.Y=2747.242mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "C33" (3767.655mil,2251.976mil) on Top Overlay And Track (3805mil,2215mil)(3845mil,2215mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3321.157mil|Location2.X=3328.824mil|Location1.Y=2648.163mil|Location2.Y=2655.829mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3321.157mil|Location2.X=3328.824mil|Location1.Y=2648.163mil|Location2.Y=2655.829mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "C35" (3265mil,2100mil) on Top Overlay And Track (3325mil,2120mil)(3375mil,2120mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1134.029mil|Location2.X=1141.696mil|Location1.Y=4581.167mil|Location2.Y=4588.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1134.029mil|Location2.X=1141.696mil|Location1.Y=4581.167mil|Location2.Y=4588.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "D1" (1140mil,4055mil) on Top Overlay And Track (1134.724mil,3662.716mil)(1134.724mil,4355.039mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1130.891mil|Location2.X=1138.558mil|Location1.Y=4743.027mil|Location2.Y=4750.694mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1130.891mil|Location2.X=1138.558mil|Location1.Y=4743.027mil|Location2.Y=4750.694mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "GND" (1050mil,4216.86mil) on Top Overlay And Track (1134.724mil,3662.716mil)(1134.724mil,4355.039mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=832.389mil|Location2.X=840.056mil|Location1.Y=3647.225mil|Location2.Y=3654.891mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=832.389mil|Location2.X=840.056mil|Location1.Y=3647.225mil|Location2.Y=3654.891mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "J3" (818.228mil,3116.181mil) on Top Overlay And Track (800mil,3120mil)(1100mil,3120mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3501.194mil|Location2.X=3512.444mil|Location1.Y=3977.52mil|Location2.Y=3988.77mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3501.194mil|Location2.X=3512.444mil|Location1.Y=3977.52mil|Location2.Y=3988.77mil|Absolute=True">Silk To Silk Clearance Constraint: (3.731mil &lt; 10mil) Between Text "Q2" (3512.685mil,3446.86mil) on Top Overlay And Text "R32" (3404.984mil,3453.145mil) on Top Overlay Silk Text to Silk Clearance [3.731mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3493.754mil|Location2.X=3505.004mil|Location1.Y=3129.668mil|Location2.Y=3140.918mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3493.754mil|Location2.X=3505.004mil|Location1.Y=3129.668mil|Location2.Y=3140.918mil|Absolute=True">Silk To Silk Clearance Constraint: (9.866mil &lt; 10mil) Between Text "R11" (3478.095mil,2561mil) on Top Overlay And Text "R7" (3502.669mil,2613.598mil) on Top Overlay Silk Text to Silk Clearance [9.866mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3471.775mil|Location2.X=3479.442mil|Location1.Y=3104.515mil|Location2.Y=3112.181mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3471.775mil|Location2.X=3479.442mil|Location1.Y=3104.515mil|Location2.Y=3112.181mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R11" (3478.095mil,2561mil) on Top Overlay And Text "R9" (3437.134mil,2632.331mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2501.138mil|Location2.X=2508.804mil|Location1.Y=2719.528mil|Location2.Y=2727.195mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2501.138mil|Location2.X=2508.804mil|Location1.Y=2719.528mil|Location2.Y=2727.195mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R12" (2497mil,2189.425mil) on Top Overlay And Text "R18" (2415mil,2185.302mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=970.812mil|Location2.X=978.479mil|Location1.Y=3881.167mil|Location2.Y=3888.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=970.812mil|Location2.X=978.479mil|Location1.Y=3881.167mil|Location2.Y=3888.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R20" (974.646mil,3400mil) on Top Overlay And Track (800mil,3355mil)(1100mil,3355mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1786.167mil|Location2.X=1793.833mil|Location1.Y=3966.167mil|Location2.Y=3973.833mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1786.167mil|Location2.X=1793.833mil|Location1.Y=3966.167mil|Location2.Y=3973.833mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R22" (1772.598mil,3440mil) on Top Overlay And Track (1790mil,3440mil)(1830mil,3440mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3793.381mil|Location2.X=3804.631mil|Location1.Y=2412.574mil|Location2.Y=2423.824mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3793.381mil|Location2.X=3804.631mil|Location1.Y=2412.574mil|Location2.Y=2423.824mil|Absolute=True">Silk To Silk Clearance Constraint: (7.782mil &lt; 10mil) Between Text "R24" (3755.669mil,1896.09mil) on Top Overlay And Text "R25" (3817mil,1784.339mil) on Top Overlay Silk Text to Silk Clearance [7.782mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3801.167mil|Location2.X=3808.833mil|Location1.Y=2358.494mil|Location2.Y=2366.161mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3801.167mil|Location2.X=3808.833mil|Location1.Y=2358.494mil|Location2.Y=2366.161mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R25" (3817mil,1784.339mil) on Top Overlay And Track (3805mil,1830mil)(3805mil,1870mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3881.565mil|Location2.X=3889.232mil|Location1.Y=2652.764mil|Location2.Y=2660.43mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3881.565mil|Location2.X=3889.232mil|Location1.Y=2652.764mil|Location2.Y=2660.43mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R27" (3946.976mil,2125mil) on Top Overlay And Text "R29" (3788.646mil,2123.01mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3868.143mil|Location2.X=3875.809mil|Location1.Y=2642.145mil|Location2.Y=2649.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3868.143mil|Location2.X=3875.809mil|Location1.Y=2642.145mil|Location2.Y=2649.812mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R27" (3946.976mil,2125mil) on Top Overlay And Text "R30" (3871.976mil,2142.699mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3781.492mil|Location2.X=3789.159mil|Location1.Y=2668.866mil|Location2.Y=2676.532mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3781.492mil|Location2.X=3789.159mil|Location1.Y=2668.866mil|Location2.Y=2676.532mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R29" (3788.646mil,2123.01mil) on Top Overlay And Text "R30" (3871.976mil,2142.699mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3722.667mil|Location2.X=3730.333mil|Location1.Y=3392.096mil|Location2.Y=3399.762mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3722.667mil|Location2.X=3730.333mil|Location1.Y=3392.096mil|Location2.Y=3399.762mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R6" (3699.598mil,2865.929mil) on Top Overlay And Track (3726.5mil,2542.126mil)(3726.5mil,3002.126mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3434.375mil|Location2.X=3445.625mil|Location1.Y=3163.04mil|Location2.Y=3174.29mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3434.375mil|Location2.X=3445.625mil|Location1.Y=3163.04mil|Location2.Y=3174.29mil|Absolute=True">Silk To Silk Clearance Constraint: (4.67mil &lt; 10mil) Between Text "R9" (3437.134mil,2632.331mil) on Top Overlay And Track (3440mil,2645mil)(3480mil,2645mil) on Top Overlay Silk Text to Silk Clearance [4.67mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2205.147mil|Location2.X=2212.814mil|Location1.Y=3022.155mil|Location2.Y=3029.822mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2205.147mil|Location2.X=2212.814mil|Location1.Y=3022.155mil|Location2.Y=3029.822mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "TP3" (2200mil,2460mil) on Top Overlay And Text "TP4" (2149mil,2485mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2252.941mil|Location2.X=2260.608mil|Location1.Y=3777.608mil|Location2.Y=3785.274mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2252.941mil|Location2.X=2260.608mil|Location1.Y=3777.608mil|Location2.Y=3785.274mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "U7" (2220.5mil,3251.441mil) on Top Overlay And Track (2257.06mil,3230mil)(2257.06mil,3270mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3572.834mil|Location2.X=3580.501mil|Location1.Y=2416.628mil|Location2.Y=2424.294mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3572.834mil|Location2.X=3580.501mil|Location1.Y=2416.628mil|Location2.Y=2424.294mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "U8" (3570.669mil,1891.922mil) on Top Overlay And Track (3565.5mil,1890mil)(3644.5mil,1890mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1126.517mil|Location2.X=1134.184mil|Location1.Y=4213.093mil|Location2.Y=4220.76mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1126.517mil|Location2.X=1134.184mil|Location1.Y=4213.093mil|Location2.Y=4220.76mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "VBAT" (1055mil,3686.926mil) on Top Overlay And Track (1134.724mil,3662.716mil)(1134.724mil,4355.039mil) on Top Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDQM1LWY2OW1DEHBPHSEF5XB2RWPNL1CQDFKZTB4KL1LE0TI004X1E"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Board Clearance Constraint (Gap=0mil) (All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3797mil|Location2.X=3808mil|Location1.Y=1511.361mil|Location2.Y=1522.361mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3797mil|Location2.X=3808mil|Location1.Y=1511.361mil|Location2.Y=1522.361mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Area Fill (3490mil,821.861mil) (4115mil,1151.861mil) on Top Overlay And Board Edge </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4159.386mil|Location2.X=4175.636mil|Location1.Y=4080.412mil|Location2.Y=4096.662mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4159.386mil|Location2.X=4175.636mil|Location1.Y=4080.412mil|Location2.Y=4096.662mil|Absolute=True">Board Outline Clearance(Outline Edge): (14.98mil &lt; 15mil) Between Board Edge And Polygon Region (19 hole(s)) Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4159.443mil|Location2.X=4175.693mil|Location1.Y=4545.412mil|Location2.Y=4561.662mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4159.443mil|Location2.X=4175.693mil|Location1.Y=4545.412mil|Location2.Y=4561.662mil|Absolute=True">Board Outline Clearance(Outline Edge): (14.864mil &lt; 15mil) Between Board Edge And Polygon Region (42 hole(s)) Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4389.485mil|Location2.X=4400.485mil|Location1.Y=4228.882mil|Location2.Y=4239.882mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4389.485mil|Location2.X=4400.485mil|Location1.Y=4228.882mil|Location2.Y=4239.882mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "12V" (4350mil,3686.388mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3275.45mil|Location2.X=3286.45mil|Location1.Y=1524.355mil|Location2.Y=1535.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3275.45mil|Location2.X=3286.45mil|Location1.Y=1524.355mil|Location2.Y=1535.355mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "CJB-REV-A" (3125mil,981.861mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4631.506mil|Location2.X=4642.506mil|Location1.Y=2526.341mil|Location2.Y=2537.341mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4631.506mil|Location2.X=4642.506mil|Location1.Y=2526.341mil|Location2.Y=2537.341mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "DAC1" (4655mil,1941.861mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4631.506mil|Location2.X=4642.506mil|Location1.Y=2332.339mil|Location2.Y=2343.339mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4631.506mil|Location2.X=4642.506mil|Location1.Y=2332.339mil|Location2.Y=2343.339mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "DAC2" (4655mil,1741.861mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4377.484mil|Location2.X=4388.484mil|Location1.Y=4764.42mil|Location2.Y=4775.42mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4377.484mil|Location2.X=4388.484mil|Location1.Y=4764.42mil|Location2.Y=4775.42mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "GND" (4335mil,4221.926mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3398.512mil|Location2.Y=3409.512mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3398.512mil|Location2.Y=3409.512mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "H-" (4625mil,2856.018mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3494.355mil|Location2.Y=3505.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3494.355mil|Location2.Y=3505.355mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "H+" (4625mil,2951.86mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4646.491mil|Location2.X=4657.491mil|Location1.Y=3194.111mil|Location2.Y=3205.111mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4646.491mil|Location2.X=4657.491mil|Location1.Y=3194.111mil|Location2.Y=3205.111mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "IP" (4625mil,2651.616mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=581.484mil|Location2.X=592.484mil|Location1.Y=5263.49mil|Location2.Y=5274.49mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=581.484mil|Location2.X=592.484mil|Location1.Y=5263.49mil|Location2.Y=5274.49mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "J2" (537mil,4709mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3859.905mil|Location2.X=3870.905mil|Location1.Y=5264.99mil|Location2.Y=5275.99mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3859.905mil|Location2.X=3870.905mil|Location1.Y=5264.99mil|Location2.Y=5275.99mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "J4" (3815.421mil,4710.5mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4394.428mil|Location2.X=4405.428mil|Location1.Y=1511.743mil|Location2.Y=1522.743mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4394.428mil|Location2.X=4405.428mil|Location1.Y=1511.743mil|Location2.Y=1522.743mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "Kyle Bernier
+Daeghan Elkin" (4170mil,916.861mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3091.756mil|Location2.Y=3102.756mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3091.756mil|Location2.Y=3102.756mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "RC" (4625mil,2549.262mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=2994.355mil|Location2.Y=3005.355mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=2994.355mil|Location2.Y=3005.355mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "VM" (4625mil,2451.86mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3297.449mil|Location2.Y=3308.449mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4649.49mil|Location2.X=4660.49mil|Location1.Y=3297.449mil|Location2.Y=3308.449mil|Absolute=True">Board Outline Clearance(Outline Edge): (Collision &lt; 15mil) Between Board Edge And Text "VS" (4625mil,2754.955mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=775.016mil|Location2.X=791.266mil|Location1.Y=4165.592mil|Location2.Y=4181.842mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=775.016mil|Location2.X=791.266mil|Location1.Y=4165.592mil|Location2.Y=4181.842mil|Absolute=True">Board Outline Clearance(Outline Edge): (6.284mil &lt; 15mil) Between Board Edge And Track (791.283mil,3643.716mil)(896.795mil,3643.716mil) on Top Overlay </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=775.615mil|Location2.X=791.865mil|Location1.Y=4896.599mil|Location2.Y=4912.849mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Kyle\Documents\Storage\School\College\lambda-oxygen-sensor-interface\pcb\CJB\CJB_REV_B\cjb.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=775.615mil|Location2.X=791.865mil|Location1.Y=4896.599mil|Location2.Y=4912.849mil|Absolute=True">Board Outline Clearance(Outline Edge): (7.481mil &lt; 15mil) Between Board Edge And Track (792.48mil,4374.724mil)(897.992mil,4374.724mil) on Top Overlay </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>
