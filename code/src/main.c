@@ -173,9 +173,7 @@ int main(void)
 
     // Determine actual value of the 3.3V the STM is using.
     LL_mDelay(500);
-    __disable_irq();
     VDDA = VREFINT_CAL_VREF*(*VREFINT_CAL_ADDR)/adc_vals[0];
-    __enable_irq();
 
     // Enable cycle counter; Used for timing
     //CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
@@ -195,16 +193,12 @@ int main(void)
 
     // Store optimal resistance the CJ125 sees for the sensor
     do {
-        __disable_irq();
         optimal_resistance = adc_vals[3];
-        __enable_irq();
     } while (optimal_resistance > 830 || optimal_resistance < 780);
 
     // Store optimal lambda the CJ125 sees for the sensor
     do {
-        __disable_irq();
         optimal_lambda = adc_vals[2];
-        __enable_irq();
     } while (optimal_lambda > 1300 || optimal_lambda < 1100);
 
     // Set CJ125 into normal operation mode with an amplification of 8
@@ -225,10 +219,8 @@ int main(void)
     // Continuous loop to read in values from CJ125, adjust heater, and output data.
     while(1) {
         // Read lambda and temp values from CJ125
-        __disable_irq();
         lambda_adc = adc_vals[2];
         temp_adc = adc_vals[3];
-        __enable_irq();
 
         // Find lambda and temp values in lookup table
         lambda = lambda_Lookup[lambda_adc];
@@ -245,9 +237,7 @@ int main(void)
         }
 
         // Determine battery voltage
-        __disable_irq();
         Vbat = (adc_vals[1] * Vbat3V3 / 4096) * 955 / 187;
-        __enable_irq();
 
         // Determine error between desired value and current value
         error = optimal_resistance - temp_adc;
@@ -374,9 +364,7 @@ void Initialize_Heater(void) {
     // Uses the current sense value to determine when condensation phase is over
     do {
         // Calculate the battery voltage from the ADC
-        __disable_irq();
         Vbat = (adc_vals[1] * Vbat3V3 / 4096) * 955 / 187;
-        __enable_irq();
 
         // Set initial "warm-up" voltage to 2V
         currentV = 2000;
@@ -389,14 +377,10 @@ void Initialize_Heater(void) {
 
         // Sample current sense ADC to determine the maximum value
         for (i= 0; i < 50; i++) {
-            __disable_irq();
             CurADC = adc_vals[4];
-            __enable_irq();
             if (CurADC > maxCurADC) {
                 maxCurADC = CurADC;
-                __disable_irq();
                 VbatADC = adc_vals[1];
-                __enable_irq();
             }
             // Delay 10ms
             LL_mDelay(10);
@@ -426,9 +410,7 @@ void Initialize_Heater(void) {
     i = 0;
     do {
         // Get the current battery voltage
-        __disable_irq();
         Vbat = (adc_vals[1] * Vbat3V3 / 4096) * 955 / 187;
-        __enable_irq();
 
         // Transmit over UART every 200ms
         if (i == 40) {
@@ -460,9 +442,7 @@ void Initialize_Heater(void) {
         LL_TIM_OC_SetCompareCH2(PWMx_BASE, LL_TIM_GetAutoReload(PWMx_BASE)*pwm_duty_cycle);
 
         // Read resistance value of sensor; Won't be valid till 780C is hit
-        __disable_irq();
         UR = adc_vals[3];
-        __enable_irq();
 
         // Ramp up voltage by 200mV/s
         currentV += 1;
