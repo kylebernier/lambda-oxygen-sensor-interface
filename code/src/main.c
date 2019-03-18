@@ -228,6 +228,8 @@ int main(void)
 
         // Output lambda value via DAC 
         // Contract specification only calls for 0.65 to 1.36, so all other values are capped
+        // For verification of lambda value:
+        // Read Voltage/5V*710+650
         if (lambda >= 650 && lambda < 1360) {
             DAC_SetValue((lambda-650)*4096/710);
         } else if (lambda >= 1360) {
@@ -263,6 +265,9 @@ int main(void)
             desiredV = currentV - change;
         }
 
+        // Set desired voltage here for fixed values
+        //desiredV = 12000;
+       
         // Transmit over UART every 200ms
         if (i == 20) {
             // Turn on LED before UART Transmit
