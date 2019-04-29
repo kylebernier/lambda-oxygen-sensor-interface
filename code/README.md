@@ -5,11 +5,13 @@
 The code controls a STM32L4 microcontroller on a Lambda Oxygen Sensor Interface board.
 
 ### Modules Being Used
-* ADC1 CH 5 6 7
-* DMA1 CH 1
-* SPI1
-* DAC1 CH 2
-* GPIO A0 A1 A2
+All modules and their respective GPIO pins can be found in `hw_map.h`
+* ADC: ADC1 on channels 8, 11, 12, 16 
+* DMA: DMA1 on channel 1
+* SPI: SPI2
+* DAC: DAC1 on channel 2
+* PWM: TIM8 on channel 2, IRQ on channel 1
+* UART: USART1
 
 ## Build Instructions
 
