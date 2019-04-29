@@ -2,6 +2,12 @@
 
 This repository contains all code, pcb design, and verification scripts performed for the Lambda Oxygen Sensor Interface. This device uses a Bosch LSU 4.9 paired with a Bosch CJ125 to measure the oxygen content of an engine's exhaust. The value output by the device is the lambda value, which is the ratio between the stoichiometric air/fuel ratio and the air/fuel ratio measured by the sensor. The values output are between 0.65 and 1.36 and are proportional to 0 to 5V DC. A serial UART interface also outputs the lambda value, the temperature, and the voltage the sensor is being set to.  
 
+## Repository Structure
+- All code for the actual device can be found in the `code` folder.
+- All simulations for hardware and software algortihms can be found in the `sim` folder.
+- All PCB design files can be found in the `pcb` folder.
+- All scripts and data for verifying results can be found in the `verification` folder.
+
 ## Reference Documents
 
 * [STM32L476VG Datasheet](https://www.st.com/resource/en/datasheet/stm32l476vg.pdf)
